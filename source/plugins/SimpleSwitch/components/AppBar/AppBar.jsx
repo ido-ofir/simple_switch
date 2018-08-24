@@ -32,7 +32,7 @@ module.exports = {
             styles(s) {
                 let styles = {
                     root: {
-                        background: core.theme('colors.fusionPrimary'),
+                        background: core.theme('colors.primary'),
                         position: 'relative',
                     },
                     toolbar: {
@@ -52,6 +52,7 @@ module.exports = {
                         alignItems: 'center',
                         margin: '0px 25px 0 15px',
                         width: 270,
+                        overflow: 'hidden'
                     },
                     imgLogo: {
                         width: 125,

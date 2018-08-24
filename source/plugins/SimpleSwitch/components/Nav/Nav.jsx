@@ -38,7 +38,8 @@ const styles = {
             width: navMaxWidth,
             padding: '0',
             height: 40,
-            cursor: 'pointer'
+            cursor: 'pointer',
+            zIndex: 1
         },
         inner: {
             display: 'flex',
@@ -61,8 +62,8 @@ const styles = {
 
 module.exports = {
     name: 'Nav',
-    dependencies: ['mui.FusionIcon'],
-    get(FusionIcon) {
+    dependencies: [],
+    get() {
 
         var core = this;
 
@@ -143,6 +144,7 @@ module.exports = {
                         return(
                             <ListItem
                                 key={key}
+
                                 title={item.label}
                                 button={true}
                                 onClick={() => this.setActiveItem(item.label, view)}
@@ -154,12 +156,12 @@ module.exports = {
                                         <Icon style={{
                                           ...styles.navRow.icon,
                                           fontSize: iconSize,
-                                          color: (activeView === item.view) ? core.theme("colors.fusionSecondary") : core.theme("colors.gray3") }} >
+                                          color: (activeView === item.view) ? core.theme("colors.secondary") : core.theme("colors.gray3") }} >
                                         {item.icon}
                                         </Icon>
                                     </ListItemIcon>
                                     <ListItemText
-                                        primary={<span style={{...styles.navRow.label, color: item.disabled ? core.theme('colors.gray3') : (activeView === item.view) ? core.theme("colors.fusionSecondary") : core.theme('colors.gray3') }}>{item.label}</span>}
+                                        primary={<span style={{...styles.navRow.label, color: item.disabled ? core.theme('colors.gray3') : (activeView === item.view) ? core.theme("colors.secondary") : core.theme('colors.gray3') }}>{item.label}</span>}
                                     />
                                 </div>
                             </ListItem>
@@ -195,7 +197,7 @@ module.exports = {
                                                   fontSize: iconSize,
                                                   margin: 0, transform: isPinned ? 'rotate(0deg)' : 'rotate(-90deg)',
                                                   transition: 'transform 0.25s ease-out',
-                                                  color: isPinned ? core.theme("colors.fusionSecondary") : core.theme("colors.gray3")}}>
+                                                  color: isPinned ? core.theme("colors.secondary") : core.theme("colors.gray3")}}>
                                             {core.icons('pin')}
                                         </Icon>
                                         </ListItemIcon>

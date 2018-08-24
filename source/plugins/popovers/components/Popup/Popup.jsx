@@ -111,7 +111,7 @@ module.exports = {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         height: 40,  
-                        background: core.theme('colors.fusionPrimary')
+                        background: core.theme('colors.primary')
                     }
 
                 }

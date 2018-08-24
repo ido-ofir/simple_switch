@@ -32,7 +32,7 @@
         close={this.props.close}
         leftActionsContainerChildren={
             <div style={{display: 'flex', alignItems: 'center'}}>
-                <span style={{fontSize: 12, fontWeight: 500, color: core.theme('colors.fusionPrimary')}}>{core.translate("ddm-manager.createEntity.active", 'Active')}:</span>
+                <span style={{fontSize: 12, fontWeight: 500, color: core.theme('colors.primary')}}>{core.translate("ddm-manager.createEntity.active", 'Active')}:</span>
                 <Switch value={this.state.isActive} onChange={isActive => this.setState({isActive})}/>
             </div>
         }
