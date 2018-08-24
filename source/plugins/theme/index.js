@@ -12,8 +12,6 @@ module.exports = {
                 lightPrimary: '#2b73ab',
                 error: "#ff0000",
                 secondary: '#2979ff',
-                fusionPrimary: '#3c596b',
-                fusionSecondary: '#36bcee',
                 white: '#ffffff',
                 black: '#000000',
                 dark: '#333333',
@@ -62,7 +60,6 @@ module.exports = {
             },
 
             backgrounds: {
-                webintPrimary: '#3C596B',
                 primary: '#004175',
                 secondary: '#e4f4ff',
                 blue: '#0288D1',
@@ -141,7 +138,6 @@ module.exports = {
             },
             images: {
                 backLoginImage: "/resources/images/bgLogin.jpg",
-                // favicon: "/resources/images/favicons/webint_favicon.ico"
             }
         }
     },

@@ -217,7 +217,7 @@ module.exports = {
                             size="small"
                             variant="flat"
                             color="primary"
-                            style={ {...styles.button, color: core.theme('colors.webintSecondary') } }
+                            style={ {...styles.button, color: core.theme('colors.secondary') } }
                             onClick={ this.clear }
                             onKeyPress={ pressEnter }
                         >
@@ -227,7 +227,7 @@ module.exports = {
                             size="small"
                             variant="contained"
                             // color="primary"
-                            style={ {...styles.button, color: core.theme('colors.white'),  backgroundColor: core.theme('colors.webintSecondary')} }
+                            style={ {...styles.button, color: core.theme('colors.white'),  backgroundColor: core.theme('colors.secondary')} }
                             onClick={ this.logIn }
                             onKeyPress={ pressEnter }
                             disabled={ disabled }
@@ -242,7 +242,7 @@ module.exports = {
                 return(
                     <CardActions style={ styles.forgetPwdLine }>
                         <Button size="small" variant="flat" color="primary" onClick={ this.forgotPwd } style={ styles.ForgotPasswordButton } >
-                            <span style={ {...styles.forgetPwdText, color: core.theme('colors.webintSecondary') } } >
+                            <span style={ {...styles.forgetPwdText, color: core.theme('colors.secondary') } } >
                                 { core.translate('forgotYourPassword', 'Forgot your password?') }
                             </span>
                         </Button>
