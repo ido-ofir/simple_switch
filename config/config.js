@@ -1,5 +1,5 @@
 module.exports = {
-  "appTitle": "M y Name",
+  "appTitle": "SimpleSwitch",
   "moreSettings": {
     "even": "a",
     "more": "b",
