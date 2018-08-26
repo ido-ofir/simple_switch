@@ -1,5 +1,6 @@
 # simple_switch
-### a core / react template.
+### a core / react / nodejs template.
+#### based on https://github.com/ido-ofir/core
 
 1. npm i --save
 2. open another command line.
