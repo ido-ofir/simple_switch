@@ -11,7 +11,45 @@ module.exports = {
                 if(context.isUnmounted) return;
                 context.setState(state, callback);
             },
+            CopyTopClipboard(textToCopy){
 
+                const handleError = (err) => {
+
+                    let notify = {
+                        title: 'Could not copy text',
+                        text: err,
+                        alertKind: 'error'
+                    }
+
+                    core.emit('notify',notify);
+                };
+                if (!textToCopy) return handleError('missing text to copy...')
+                const handleSuccess = () => {
+                    var text = core.translate('Copied to clipboard successfully!');
+
+                    let notify = {
+                        title: textToCopy,
+                        text: text,
+                        alertKind: 'info'
+                    }
+
+                    core.emit('notify',notify);
+                };
+
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy).then( handleSuccess, handleError );
+                } else {
+                  const el = document.createElement('textarea');
+                  el.value = textToCopy;
+                  el.style.display = 'none';
+                  document.body.appendChild(el);
+                  el.select();
+                  document.execCommand('copy');
+                  document.body.removeChild(el);
+                  handleSuccess()
+                }
+
+            },
             capitalizeFirstLetter(string) {
                 if(!string) return '';
                 else if(!isNaN(string) ) return string;
