@@ -16,7 +16,12 @@ module.exports = {
             core.request.get('/languages/en.json').then( ({results,error}) => {
 
                 if(error){
-                 
+                    let notify = {
+                        title: core.translate('missing language file'),
+                        text: core.translate(`en.json is missing`),
+                        alertKind: 'error'
+                    }
+                
                     core.emit('notify',notify);
                     promise.reject(error);
                     return;

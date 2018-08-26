@@ -39,10 +39,13 @@ module.exports = {
             },
 
             componentWillMount () {
+                document.title = 'Loading..'
                 core.plugins.SimpleSwitch.run('getConfiguration').then((config)=>{
-                  core.plugins.SimpleSwitch.set('config', JSON.stringify(config));
-                  let parsed = JSON.parse(config);
-                  document.title = config && parsed.appTitle || 'Loading..';
+                  core.plugins.SimpleSwitch.set('config', config);
+                //   core.plugins.SimpleSwitch.set('config', JSON.stringify(config));
+                //   let parsed = JSON.parse(config);
+                //   console.log('parsed -> ',parsed);
+                  document.title = config && config.asObject.appTitle ? config.asObject.appTitle : 'Loading..';
                 })
                 core.plugins.SimpleSwitch.run('getLanguage').then(()=>{
                     this.setState({start:true});

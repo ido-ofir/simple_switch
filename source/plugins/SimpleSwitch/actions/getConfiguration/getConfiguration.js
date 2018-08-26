@@ -21,11 +21,16 @@ module.exports = {
 
                 var res = results.replace('module.exports = ', '');
                 var theme = core.tree.get(['plugins', 'theme', 'theme']);
-                var full = JSON.stringify({
+                var str = JSON.stringify({
                     ...JSON.parse(res),
                     theme
                 }, null, 4)
-                promise.resolve(full);
+                var obj = {
+                    ...JSON.parse(res),
+                    theme
+                }
+                // console.debug('obj => ', obj);
+                promise.resolve({ asString: str, asObject: obj });
             });
         };
     }
