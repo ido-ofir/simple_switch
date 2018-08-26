@@ -71,52 +71,15 @@ module.exports = {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const hanleError = (err) => {
-
-                    let notify = {
-                        title: 'Could not copy text',
-                        text: err,
-                        alertKind: 'error'
-                    }
-
-                    core.emit('notify',notify);
-                };
-
-                const handleSuccess = () => {
-                    var text = core.translate('Copied to clipboard successfully!');
-
-                    let notify = {
-                        title: copyNode,
-                        text: text,
-                        alertKind: 'info'
-                    }
-
-                    core.emit('notify',notify);
-                };
-
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(copyNode).then( handleSuccess, hanleError );
-                } else {
-                  const el = document.createElement('textarea');
-                  el.value = copyNode;
-                  el.style.display = 'none';
-                  document.body.appendChild(el);
-                  el.select();
-                  document.execCommand('copy');
-                  document.body.removeChild(el);
-                  handleSuccess()
-                }
+                Helper.CopyTopClipboard(copyNode)
 
             },
-            handleClose(){
-                this.setState({ snackbarOpen: false, snackbarText: '' });
-            },
+
             render() {
 
                 let { tooltipText } = this.props;
                 return (
                     <div>
-
                         <Button
                             size={ "small" }
                             mini={ true }
