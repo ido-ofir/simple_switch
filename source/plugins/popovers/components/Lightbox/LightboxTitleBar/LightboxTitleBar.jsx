@@ -11,45 +11,51 @@ module.exports = {
 
         return {
             propsTypes: {
-                hasInfo: PropTypes.bool.isRequired,
-                hasTitle: PropTypes.bool,
+                hasInfo:      PropTypes.bool,
+                title:        PropTypes.string,
+                buttons:      PropTypes.array,
+                rootStyle:    PropTypes.object,
+                toolbarStyle: PropTypes.object,
             },
 
             getDefaultProps(){
                 return {
-                    hasInfo: true,
-                    hasTitle: true
+                    hasInfo: false,
+                    title: core.translate('Lightbox Default Title'),
+                    buttons: [],
+                    rootStyle: {},
+                    toolbarStyle: {},
                 };
             },
             
-            getInitialState() {
-                return {};
-            },
-
             styles(s) {
+                let {rootStyle, toolbarStyle} = this.props;
+
                 let styles = {
                     root: {
                         background: core.theme('colors.primary'),
                         position: 'relative',
                         paddingLeft: 15,
+                        ...rootStyle,
                     },
                     toolbar: {
                         minHeight: 48,
                         maxHeight: 48,
-                        justifyContent: 'space-between',
+                        justifyContent: 'flex-start',
+                        ...toolbarStyle,
                     },
                     buttons: {
                         position: 'absolute',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        right: 5,
-                        top: 0,
+                        left: 5,
+                        top: 5,
                         width: 'auto', 
                         paddingRight: 0,
                         height: 40
                     },
-                    closeButton: {
+                    buttonStyle: {
                         height: 30,
                         width: 30,
                         display: 'flex',
@@ -57,7 +63,7 @@ module.exports = {
                         justifyContent: 'center',
                         color: core.theme('colors.white'),
                     },
-                    closeIcon: { 
+                    iconStyle: { 
                         color: core.theme('colors.white'),
                         cursor: 'pointer',
                         fontSize: 24,
@@ -66,55 +72,60 @@ module.exports = {
                 return(styles[s]);
             },
 
-            infoButton() {
+            buttonToggleInfo() {
                 let {hasInfo} = this.props;
                 let title = core.translate('Info Panel');
 
                 if (!hasInfo) return null;
 
                 return (
-                    <IconButton style={ this.styles('closeButton')} onClick={ ()=>{core.emit('Lightbox.toggleInfo')} }>
-                        <Icon key={ 'infoPanel' } title={ title } style={ this.styles('closeIcon')}>
-                            { core.icons('info') }
-                        </Icon>
+                    <IconButton style={ this.styles('buttonStyle')} onClick={ ()=>{core.emit('LightboxInfo.toggle')} }>
+                        <Icon key={ 'infoPanel' } title={ title } style={ this.styles('iconStyle')}>{ core.icons('info') }</Icon>
                     </IconButton>
                 );
             },
 
-            closeLightbox() {
+            buttonCloseLightbox() {
                 let title = core.translate('Close Lightbox');
 
                 return (
-                    <IconButton style={ this.styles('closeButton')} onClick={ ()=>{core.emit('Root.closeLightbox')} }>
-                        <Icon key={ 'close' } title={ title } style={ this.styles('closeIcon')}>
-                            { core.icons('close') }
-                        </Icon>
+                    <IconButton style={ this.styles('buttonStyle')} onClick={ ()=>{core.emit('Lightbox.close')} }>
+                        <Icon key={ 'close' } title={ title } style={ this.styles('iconStyle')}>{ core.icons('close') }</Icon>
                     </IconButton>
+                );
+            },
+
+            closeButton() {
+                return(
+                    <div style={ this.styles('buttons') } >
+                        { this.buttonCloseLightbox() }
+                    </div>
                 );
             },
 
             actionButtons() {
                 let { buttons } = this.props;
+
+                let rightButtonsStyle = {...this.styles('buttons')};
+                    rightButtonsStyle.left = 'auto';
+                    rightButtonsStyle.right = 25;
+
                 return(
-                    <div style={ this.styles('buttons') } >
+                    <div style={ rightButtonsStyle } >
                         { buttons }
-                        { this.infoButton() }
-                        { this.closeLightbox() }
+                        { this.buttonToggleInfo() }
                     </div>
                 );
             },
 
             render() {
-                let {hasTitle} = this.props;
-
-                if (!hasTitle) return null;
-
-                let title = core.translate('Default Title');
+                let {title} = this.props;
                 
                 return (
                     <AppBar id={'LightboxTitleBar.root'} position={ 'static' } style={ this.styles('root') }>
                         <Toolbar id={'LightboxTitleBar.toolbar'} disableGutters={ true } variant={ 'dense' } style={ this.styles('toolbar') }>
-                            <div id={'LightboxTitleBar.title'}>{ title }</div>
+                            <div id={'LightboxTitleBar.title'} style={{ paddingLeft: 50, }}>{ title }</div>
+                            <div id={'LightboxTitleBar.closeButton'}>{ this.closeButton() }</div>
                             <div id={'LightboxTitleBar.actionButtons'}>{ this.actionButtons() }</div>
                         </Toolbar>
                     </AppBar>

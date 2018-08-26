@@ -14,10 +14,11 @@ module.exports = {
         'popovers.Notify',
         'popovers.Popup',
         'popovers.Caution',
+        'popovers.Lightbox',
         'SimpleSwitch.Login',
         'SimpleSwitch.Loader'
     ],
-    get(AppBar,Nav, Notify, Popup, Caution, Login, Loader) {
+    get(AppBar,Nav, Notify, Popup, Caution, Lightbox, Login, Loader) {
 
         var core = this;
         var { React, PropTypes } = core.imports;
@@ -140,7 +141,6 @@ module.exports = {
                 return(styles[s]);
             },
 
-
             render() {
                 let { navIsOpen, activeView, start } = this.state;
                 let { isLoggedIn } = this.props;
@@ -160,6 +160,7 @@ module.exports = {
                 }
                 else return(
                     <div style={ this.styles('root') }>
+                        <Lightbox />
                         <AppBar user={ currentUser } />
                         <Nav handleViews={this.handleNav} isOpen={ navIsOpen } activeView={activeView} />
                         <Notify />

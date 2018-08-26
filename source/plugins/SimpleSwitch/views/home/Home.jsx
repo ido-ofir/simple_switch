@@ -50,27 +50,35 @@ module.exports = {
                     error: null,
                 };
             },
-            openPopup(){
-                  core.plugins.popovers.openPopup({
-                      title: core.translate('Popup test', 'Popup test'),
-                      body: <div>i am popup test :) </div>,
-                      bodyStyle: { minWidth: 530, minHeight: 'unset', padding: '0px 22px' },
-                      showButtons: false,
-                      okButton: {
-                          btnTitle: null,
-                          btnFunc: null
-                      }
-                  });
 
+            openPopup(){
+                core.plugins.popovers.openPopup({
+                    title: core.translate('Popup test', 'Popup test'),
+                    body: <div>i am popup test :) </div>,
+                    bodyStyle: { minWidth: 530, minHeight: 'unset', padding: '0px 22px' },
+                    showButtons: false,
+                    okButton: {
+                        btnTitle: null,
+                        btnFunc: null
+                    }
+                });
             },
+
+            openLightbox() {
+                core.emit('Lightbox.open');
+            },
+
             render() {
 
 
                 return (
 
-                    <div id={'root.home'} style={{ height: '100%', width: '100%', display: 'flex', padding: 15 }}>
+                    <div id={'root.home'} style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', padding: 15 }}>
                       <Typography>
                         I am the home of your <a href="/#/home" onClick={ this.openPopup }>template!</a>
+                      </Typography>
+                      <Typography>
+                        I am a <a href="/#/home" onClick={ this.openLightbox }>lightbox</a>!
                       </Typography>
                     </div>
                 )

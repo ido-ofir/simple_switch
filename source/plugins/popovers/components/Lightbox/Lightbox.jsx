@@ -1,9 +1,7 @@
-
-
 module.exports = {
     name: "Lightbox",
     description: '',
-    dependencies: ['SimpleSwitch.LightboxTitleBar', 'SimpleSwitch.LightboxInfo'],    
+    dependencies: ['popovers.LightboxTitleBar', 'popovers.LightboxInfo'],    
 
     get(LightboxTitleBar, LightboxInfo) {
         var core = this;
@@ -11,75 +9,61 @@ module.exports = {
 
         return {
             propsTypes: {
-                isOpen:   PropTypes.bool.isRequired,
-                hasTitle: PropTypes.bool,
-                hasInfo:  PropTypes.bool,
+                title:         PropTypes.object,
+                info:          PropTypes.object,
+                rootStyle:     PropTypes.object,
+                innerStyle:    PropTypes.object,
+                bodyStyle:     PropTypes.object,
+                childrenStyle: PropTypes.object,
             },
 
             getDefaultProps(){
                 return {
-                    isOpen: false,
-                    hasTitle: true,
-                    // hasInfo: true,
-                    hasInfo: false,
-                    children: 'children',
+                    title: <LightboxTitleBar hasInfo={true}/>,
+                    info: <LightboxInfo />,
+                    children: <div>Lightbox default children</div>,
+                    rootStyle: {},
+                    innerStyle: {},
+                    bodyStyle: {},
+                    childrenStyle: {},
                 };
             },
             
             getInitialState() {
                 return {
-                    isOpen: false,
-                    showInfo: false,
+                    showLightbox: false,
                 };
             },
 
             componentDidMount() {
-                core.on('Lightbox.showInfo', this.handleShowInfo);
-                core.on('Lightbox.hideInfo', this.handleHideInfo);
-                core.on('Lightbox.toggleInfo', this.handleToggleInfo);
+                core.on('Lightbox.open', this.openLightbox);
+                core.on('Lightbox.close', this.closeLightbox);
             },
             
             componentWillUnmount() {
-                core.off('Lightbox.showInfo', this.handleShowInfo);
-                core.off('Lightbox.hideInfo', this.handleHideInfo);
-                core.off('Lightbox.toggleInfo', this.handleToggleInfo);
-            },
-
-            componentWillReceiveProps(nextProps) {
-                if (nextProps.isOpen !== this.state.isOpen) {
-                    this.setState({isOpen: nextProps.isOpen});
-                };
-            },
-
-            handleToggleInfo() {
-                let {showInfo} = this.state;
-                if (showInfo === true) this.handleHideInfo();
-                else this.handleShowInfo();
-            },
-
-            handleShowInfo() {
-                this.setState({showInfo: true});
-            },
-
-            handleHideInfo() {
-                this.setState({showInfo: false});
+                core.off('Lightbox.open', this.openLightbox);
+                core.off('Lightbox.close', this.closeLightbox);
             },
 
             styles(s) {
+                let {rootStyle, innerStyle, bodyStyle, childrenStyle} = this.props;
+                
                 let styles = {
                     root: {
                         position: 'absolute',
-                        zIndex: 1500,
-                        width: '100%', 
+                        zIndex:  1500,
+                        width:  '100%', 
                         height: '100%',
                         background: core.theme('backgrounds.lightbox'),
                         overflow: 'hidden',
+                        ...rootStyle
                     },
                     inner: {
                         position: 'relative',
                         width: '100%', 
-                        height: '100%',
+                        height: 'calc(100% - 15px)',
                         overflow: 'hidden',
+                        ...innerStyle
                     },
                     bodyStyle: {
                         display: 'flex',
@@ -87,30 +71,43 @@ module.exports = {
                         width: '100%', 
                         height: '100%',
                         color: core.theme('colors.white'),
+                        ...bodyStyle
                     },
                     children: {
                         width: '100%',
                         margin: 15,
+                        position: 'relative',
+                        ...childrenStyle
                     },
                 }
                 return(styles[s]);
             },
+
+            openLightbox() {
+                this.setState({showLightbox: true});
+            },
+
+            closeLightbox() {
+                this.setState({showLightbox: false});
+            },
             
             render() {
-                let { isOpen, showInfo } = this.state;
-                let {childern, hasTitle, hasInfo} = this.props;
+                let { showLightbox } = this.state;
+                let { children, title, info } = this.props;
 
-                if (!isOpen) return null;
+                if (!showLightbox) return null;
 
                 return (
                     <div id={'Lightbox.root'} style={ this.styles('root') }>
                         <div id={'Lightbox.inner'} style={ this.styles('inner') }>
-                            <LightboxTitleBar hasTitle={ hasTitle } hasInfo={ hasInfo } />
+                            <div id={'Lightbox.title'} >
+                                { title }
+                            </div>
                             <div id={'Lightbox.body'} style={ this.styles('bodyStyle') } >
                                 <div id={'Lightbox.children'} style={ this.styles('children') }>
-                                    { childern }
+                                    { children }
                                 </div>
-                                <LightboxInfo hasInfo={ hasInfo } showInfo={ showInfo } />
+                                { info }
                             </div>
                         </div>
                     </div>

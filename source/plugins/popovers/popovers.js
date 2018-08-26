@@ -9,6 +9,10 @@ module.exports = {
         require('./components/Caution'),
         require('./components/Notify'),
         require('./components/Popup'),
+        require('./components/Lightbox'),
+        // require('./components/Lightbox/Gallery'),
+        require('./components/Lightbox/LightboxInfo'),
+        require('./components/Lightbox/LightboxTitleBar'),
     ],
 
     init(definition, done) {
@@ -29,7 +33,14 @@ module.exports = {
 
             Caution(text,title,func) {
                 core.emit('Caution', {text, title, func} );
-            }
+            },
+
+            openLightbox() {
+                core.emit
+            },
+
+            openGallery() {},
+
         };
 
         done(notifications);
