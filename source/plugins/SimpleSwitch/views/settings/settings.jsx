@@ -122,14 +122,11 @@ module.exports = {
                                 }
                             </Tabs>
                         </AppBar>
-                        <Paper style={{ padding: 16, height: '100%', width: '100%' }}>
-                            <Typography component="div" >
-                                Settings for { tabs[tabValue].label }
-                            </Typography>
+                        <div style={{ position: 'absolute', top: '55px', left: '15px', right: '0', bottom: '15px', padding: '1px 16px 1px 1px', overflow: 'auto' }}>
                             {
                                 this.getTabContent(tabs[tabValue])
                             }
-                        </Paper>
+                        </div>
 
                     </div>
                 )

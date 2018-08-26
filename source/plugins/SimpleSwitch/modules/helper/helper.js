@@ -3,7 +3,7 @@ module.exports = {
     dependencies: [],
 
     get() {
-       
+
 
         return {
 
@@ -16,6 +16,18 @@ module.exports = {
                 if(!string) return '';
                 else if(!isNaN(string) ) return string;
                 else return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+            },
+
+            mapObject(obj){
+              if (obj && !_.isEmpty(obj)) {
+                  return _.map(Object.keys(obj), key => {
+                      return {
+                          key: key,
+                          data: typeof obj[key] === 'object' ? this.mapObject(obj[key]) : obj[key],
+                          title: this.openCamelCase(key)
+                      }
+                  });
+              }
             },
 
             openCamelCase(str) {

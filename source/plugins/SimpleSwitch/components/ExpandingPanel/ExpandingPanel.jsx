@@ -28,7 +28,7 @@ module.exports = {
           propsTypes: {
             sectionKey: PropTypes.string.isRequired,
             childRender: PropTypes.func.isRequired,
-            loadContent: PropTypes.func.isRequired,
+            loadContent: PropTypes.func,
             iconSize: PropTypes.number,
             badge: PropTypes.number,
             badgePlacement: PropTypes.string, // left or right
@@ -60,7 +60,8 @@ module.exports = {
                 forceOpen: false,
                 openSearch: false,
                 onSearch: () => {},
-                onClose: () => {}
+                onClose: () => {},
+                loadContent: () => {},
               };
           },
 
@@ -177,14 +178,12 @@ module.exports = {
 
           renderSearch(){
             let { headerStyle, customClassName, openSearch } = this.props;
-            let borderBottom = `1px solid ${core.theme('colors.border')}`;
 
             if(!openSearch) return;
 
-            if (customClassName == 'profileInfo_expansion') borderBottom = 'none';
 
             return(
-              <div style={{ ...styles.summary, ...headerStyle, borderBottom: borderBottom, background: core.theme('colors.gray11')  }} >
+              <div style={{ ...styles.summary, ...headerStyle, background: core.theme('colors.gray11')  }} >
                 <div style={ styles.searchCont }>
                     { this.renderGoBack() }
                     { this.renderInput() }
@@ -195,9 +194,10 @@ module.exports = {
 
           renderName(){
             let { name, icon } = this.props;
-
+            let { expanded } = this.state;
             return(
-              <Typography style={{ color: core.theme('colors.sectionsHeadLine'), fontWeight: 500, fontSize: 13, paddingLeft: icon && !_.isEmpty(icon) ? 0 : 30 }}>
+              <Typography style={{ color: core.theme('colors.sectionsHeadLine'),
+              fontWeight: expanded ? 600 : 500, fontSize: 13, paddingLeft: icon && !_.isEmpty(icon) ? 0 : 30 }}>
                  { name }
               </Typography>
             )
@@ -229,15 +229,13 @@ module.exports = {
           renderHeadline(){
             let { headerStyle, customClassName, openSearch } = this.props;
             let { expanded } = this.state;
-            let borderBottom = `1px solid ${core.theme('colors.border')}`;
 
             if(openSearch) return;
 
-            // if (customClassName == 'profileInfo_expansion') borderBottom = 'none';
 
             return(
-              <ExpansionPanelSummary style={{ ...styles.summary, ...headerStyle, borderBottom: borderBottom  }} >
-                <div style={{ ...styles.expandButton, height: headerStyle.maxHeight || 40 }} onClick={ this.handleChange }>
+              <ExpansionPanelSummary style={{ ...styles.summary, ...headerStyle  }} >
+                <div style={{ ...styles.expandButton, height: headerStyle && headerStyle.maxHeight ? headerStyle.maxHeight : 40 }} onClick={ this.handleChange }>
                   { this.renderExpandMoreIcon(expanded) }
                 </div>
 
@@ -332,8 +330,8 @@ let styles = {
     padding: '0 10px',
     display: 'flex',
     alignItems:'center',
-    maxHeight: 50,
-    minHeight: 50,
+    maxHeight: 40,
+    minHeight: 40,
     textTransform: 'uppercase'
   },
 
