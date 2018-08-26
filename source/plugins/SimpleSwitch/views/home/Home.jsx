@@ -80,6 +80,7 @@ module.exports = {
                       <Typography>
                         I am a <a href="/#/home" onClick={ this.openLightbox }>lightbox</a>!
                       </Typography>
+                      <span>123</span>
                     </div>
                 )
 
