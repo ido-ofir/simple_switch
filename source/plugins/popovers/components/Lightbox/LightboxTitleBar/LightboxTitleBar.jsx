@@ -14,7 +14,7 @@ module.exports = {
                 hasInfo:      PropTypes.bool,
                 title:        PropTypes.string,
                 buttons:      PropTypes.array,
-                rootStyle:    PropTypes.object,
+                titleRootStyle: PropTypes.object,
                 toolbarStyle: PropTypes.object,
             },
 
@@ -23,20 +23,20 @@ module.exports = {
                     hasInfo: false,
                     title: core.translate('Lightbox Default Title'),
                     buttons: [],
-                    rootStyle: {},
+                    titleRootStyle: {},
                     toolbarStyle: {},
                 };
             },
             
             styles(s) {
-                let {rootStyle, toolbarStyle} = this.props;
+                let {titleRootStyle, toolbarStyle} = this.props;
 
                 let styles = {
                     root: {
                         background: core.theme('colors.primary'),
                         position: 'relative',
                         paddingLeft: 15,
-                        ...rootStyle,
+                        ...titleRootStyle,
                     },
                     toolbar: {
                         minHeight: 48,

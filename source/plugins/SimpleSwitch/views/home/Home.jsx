@@ -65,7 +65,11 @@ module.exports = {
             },
 
             openLightbox() {
-                core.emit('Lightbox.open');
+                core.plugins.popovers.openLightbox();
+            },
+
+            openGallery() {
+                core.plugins.popovers.openGallery();
             },
 
             render() {
@@ -79,6 +83,9 @@ module.exports = {
                       </Typography>
                       <Typography>
                         I am a <a href="/#/home" onClick={ this.openLightbox }>lightbox</a>!
+                      </Typography>
+                      <Typography>
+                        I am a <a href="/#/home" onClick={ this.openGallery }>gallery</a>!
                       </Typography>
                       <span>123</span>
                     </div>
