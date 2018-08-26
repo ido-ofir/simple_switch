@@ -15,24 +15,20 @@ module.exports = {
     bindings: {
       config: ['config'],
     },
-    dependencies: ['SimpleSwitch.NoResults','SimpleSwitch.Loader'],
+    dependencies: ['SimpleSwitch.NoResults','SimpleSwitch.Loader' ],
 
     get(NoResults, Loader) {
 
         var core = this;
 
         var { React, PropTypes } = core.imports;
-        const styles = theme => ({
-            root: {
-                minHeight: 40, height: 40, maxHeight: 40
-            },
-            
-        });
+
         return {
             propsTypes: {
                 path: PropTypes.array,
                 testEdit: PropTypes.bool,
             },
+
             getDefaultProps(){
                 return {
 
@@ -45,17 +41,26 @@ module.exports = {
 
             componentWillUnmount() {
                 this.isUnmounted = true;
-
             },
 
+            componentWillReceiveProps(nextProps) {
+                if (nextProps.config && (!_.isEqual(nextProps.config, this.props.config))) {
+                  this.setTabData(this.state.activeTab, nextProps.config)
+                }
+            },
+
+
             getInitialState() {
+
                 return {
                     error: null,
                     tabValue: 0,
+                    activeTab: { key: 'theme', label: 'theme' },
                     tabs: [{
                         label: 'theme',
                         key: 'theme',
-                        data: null
+                        data: null,
+                        ui: 'SimpleSwitch.ThemeEditor'
                     },{
                         label: 'icons',
                         key: 'icons',
@@ -63,35 +68,38 @@ module.exports = {
                     }]
                 };
             },
+
             renderTab(tab, i){
                 return <Tab key={ i } label={ tab.label } style={{ minHeight: 40, maxHeight: 40, height: 40 }}/>
             },
-            
-            setTabData({ key, label }){
-                let { config } = this.props;
+
+            setTabData({ key, label }, config){
                 let { tabs } = this.state;
                 if (config) {
+                    let activeTab = null;
                     let { asObject } = config;
-                    this.setState({
-                        tabs: [
-                            ...this.state.tabs,
-                            
-                        ]
-                    })
-                    console.debug(`${key} config => `, asObject[key]);
+                    for (let i = 0; i < tabs.length; i++) {
+                        if (tabs[i].key == key) {
+                            tabs[i].data = asObject[key];
+                            activeTab = tabs[i];
+                        }
+                    }
+                    this.setState({ tabs, activeTab })
                 }
             },
 
             getTabContent({ key, label }){
-                // var parsed = JSON.parse(this.props.config);
-               
+                let { activeTab } = this.state;
+                let { data, ui } = activeTab;
+                var Ui = core.components[ui];
+                if (Ui) return <Ui data={ data } />
             },
 
             handleChange  (event, tabValue) {
                 this.setState({ tabValue });
-                this.setTabData(this.state.tabs[tabValue])
+                this.setTabData(this.state.tabs[tabValue], this.props.config)
             },
-            
+
             render() {
 
                 let { config } = this.props;
@@ -122,7 +130,7 @@ module.exports = {
                                 this.getTabContent(tabs[tabValue])
                             }
                         </Paper>
-                     
+
                     </div>
                 )
 

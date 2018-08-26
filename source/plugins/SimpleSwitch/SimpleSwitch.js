@@ -22,6 +22,7 @@ module.exports = {
         require('./components/Loader'),
         require('./components/Nav'),
         require('./components/NoResults'),
+        require('./components/ThemeEditor'),
     ],
     views: [
         require('./views/login'),
