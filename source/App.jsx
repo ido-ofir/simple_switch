@@ -15,7 +15,6 @@ const theme = createMuiTheme({
 core.injector.loadContext('SimpleSwitch', require.context('./', true, /.*\.module\./));
 
 core.plugin([
-    require('./plugins/accessibleTo'),
     require('./plugins/icons'),
     require('./plugins/theme'),
     require('./plugins/translate'),
