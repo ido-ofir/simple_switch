@@ -5,6 +5,7 @@ module.exports = {
         require('./actions/getLanguage'),
         require('./actions/getConfiguration'),
         require('./actions/logIn'),
+        require('./actions/settings/save'),
     ],
     modules: [
         require('./modules/helper'),
@@ -23,6 +24,7 @@ module.exports = {
         require('./components/Nav'),
         require('./components/NoResults'),
         require('./components/ThemeEditor'),
+        require('./components/ThemeEditor/ColorBox'),
     ],
     views: [
         require('./views/login'),

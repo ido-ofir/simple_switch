@@ -12,9 +12,9 @@ module.exports = {
     name: "ThemeEditor",
     description: '',
     propTypes: {},
-    dependencies: ['SimpleSwitch.helper', 'SimpleSwitch.NoResults', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel'],
+    dependencies: ['SimpleSwitch.helper', 'SimpleSwitch.NoResults', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel', 'SimpleSwitch.ColorBox'],
 
-    get(Helper, NoResults, Loader, ExpandingPanel) {
+    get(Helper, NoResults, Loader, ExpandingPanel, ColorBox) {
 
         var core = this;
 
@@ -68,15 +68,15 @@ module.exports = {
               var width = 90;
               var height = 40;
               if (this.colorContainer.current) {
-                width = Math.round(this.colorContainer.current.clientWidth / 6) - 30;
+                width = Math.round(this.colorContainer.current.clientWidth / 8) - 30;
               }
 
               return (
-                <div style={{ padding: '15px', maxHeight: 200, overflow: 'auto',  display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gridGap: '15px' }}
+                <div style={{ padding: '15px', maxHeight: 200, overflow: 'auto',  display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gridGap: '15px' }}
                 ref={ this.colorContainer }>
                 {
                   _.map(data, (item, i)=>{
-                    return (<Paper key={i} style={{ flex: 1, height: height, background: item.data }}>{item.title}</Paper>)
+                    return (<ColorBox key={ i } colorItem={ item } />)
                   })
                 }
                 </div>
@@ -91,10 +91,8 @@ module.exports = {
 </Paper>
 */
             renderThemeSection(themeSection, idx) {
-              console.debug('themeSection > ', themeSection);
               let { title, data } = themeSection;
               return (
-
                 <ExpandingPanel item={ themeSection }
                   name={ title }
                   badge={ data.length }

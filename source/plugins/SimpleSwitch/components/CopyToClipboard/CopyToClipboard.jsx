@@ -139,7 +139,7 @@ module.exports = {
 
 let styles = {
     button: {
-        minWidth: 32,
+        minWidth: 25,
         borderRadius: '50%',
         cursor: 'pointer'
     }

@@ -20,6 +20,7 @@ module.exports = {
         filter: 'filter_list',
         help: 'help_outline',
         upload: 'cloud_upload',
+        save: 'file_download',
         download: 'file_download',
         alphabetical: 'sort_by_alpha',
         event: 'event_note',

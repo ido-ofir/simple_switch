@@ -29,14 +29,6 @@ module.exports = {
             },
 
             componentDidMount() {
-                // let email = 'yotam@verint.com';
-                // let password = 'Verint1!';
-                // let email = 'yair.saban@verint.com';
-                // let password = '1234';
-                // let email = 'ziv.zalostzer@verint.com';
-                // let password = 'Verint1!';
-
-                // this.setState({email, password});
 
             },
 

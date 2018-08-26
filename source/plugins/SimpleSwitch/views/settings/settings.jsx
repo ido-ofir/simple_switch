@@ -1,5 +1,5 @@
 
-import { Typography, AppBar, Paper, Tabs, Tab } from '@material-ui/core';
+import { Typography, AppBar, Button, Paper, Tabs, IconButton, Tab, Icon } from '@material-ui/core';
 
 import brace from 'brace';
 import AceEditor from 'react-ace';
@@ -37,6 +37,7 @@ module.exports = {
 
             componentDidMount() {
                 this.isUnmounted = false;
+                if (this.props.config) this.setTabData(this.state.activeTab, this.props.config)
             },
 
             componentWillUnmount() {
@@ -100,10 +101,16 @@ module.exports = {
                 this.setTabData(this.state.tabs[tabValue], this.props.config)
             },
 
+            handleSave(){
+              let { activeTab } = this.state;
+              core.plugins.SimpleSwitch.run('saveSettings',activeTab)
+
+
+            },
             render() {
 
                 let { config } = this.props;
-                let { tabValue, tabs } = this.state;
+                let { tabValue, tabs, activeTab } = this.state;
                 return (
 
                     <div id={'root.settings'} style={{ height: '100%', width: '100%', display: 'flex',  flexDirection: 'column' }}>
@@ -128,6 +135,11 @@ module.exports = {
                             }
                         </div>
 
+                        <Button variant="contained" size="small" aria-label="Save" onClick={ this.handleSave } style={{
+                          position: 'absolute', bottom: '15px', right: '15px', height: '35px' }}>
+                          <Icon style={{ fontSize: 16, cursor: 'pointer', marginRight: 5 }} >{ core.icons('save') }</Icon>
+                          {  core.translate('Save')+' '+activeTab.label }
+                        </Button>
                     </div>
                 )
 
