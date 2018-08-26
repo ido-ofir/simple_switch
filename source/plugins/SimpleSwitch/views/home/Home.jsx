@@ -17,9 +17,9 @@ module.exports = {
         initLoading: ['initLoading']
     },
 
-    dependencies: ['SimpleSwitch.Panel', 'SimpleSwitch.NoResults','SimpleSwitch.Loader'],
+    dependencies: ['SimpleSwitch.NoResults','SimpleSwitch.Loader'],
 
-    get(Panel, NoResults, Loader) {
+    get(NoResults, Loader) {
 
         var core = this;
 

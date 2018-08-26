@@ -22,7 +22,6 @@ module.exports = {
         require('./components/Loader'),
         require('./components/Nav'),
         require('./components/NoResults'),
-        require('./components/Panel'),
     ],
     views: [
         require('./views/login'),
