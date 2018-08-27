@@ -44,6 +44,7 @@ module.exports = {
                     innerStyle: {},
                     bodyStyle: {},
                     childrenStyle: {},
+                    showLightbox: false,
                 };
             },
             
@@ -56,11 +57,13 @@ module.exports = {
             componentDidMount() {
                 core.on('Lightbox.open', this.openLightbox);
                 core.on('Lightbox.close', this.closeLightbox);
+                document.addEventListener("keydown", this.handleKeyPress);
             },
             
             componentWillUnmount() {
                 core.off('Lightbox.open', this.openLightbox);
                 core.off('Lightbox.close', this.closeLightbox);
+                document.removeEventListener("keydown", this.handleKeyPress);
             },
 
             styles(s) {
@@ -99,6 +102,18 @@ module.exports = {
                     },
                 }
                 return(styles[s]);
+            },
+
+            handleKeyPress(event) {
+
+                let {showLightbox} = this.state;
+
+                if (!showLightbox) return;
+
+                if (event.keyCode === 27 ) {
+                    core.emit('Lightbox.close');
+                }
+
             },
 
             getTitle(title) {

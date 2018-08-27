@@ -68,6 +68,7 @@ module.exports = {
                         overflow: 'hidden',
                         background: core.theme('colors.white'),
                         color: core.theme('colors.gray3'),
+                        zIndex: 100,
                         ...infoWrapStyle
                     },
                     inner: {

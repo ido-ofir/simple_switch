@@ -7,7 +7,7 @@ if(module.hot) {
         var LightboxTitleBar = require('./LightboxTitleBar.jsx');
         
         core.injector.revoke(LightboxTitleBar.name);
-        core.View(LightboxTitleBar);
+        core.Component(LightboxTitleBar);
         core.emit('hotUpdate');
         
     });

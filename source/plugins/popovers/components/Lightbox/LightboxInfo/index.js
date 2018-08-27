@@ -7,7 +7,7 @@ if(module.hot) {
         var LightboxInfo = require('./LightboxInfo.jsx');
         
         core.injector.revoke(LightboxInfo.name);
-        core.View(LightboxInfo);
+        core.Component(LightboxInfo);
         core.emit('hotUpdate');
         
     });

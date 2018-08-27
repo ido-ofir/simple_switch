@@ -7,12 +7,12 @@ module.exports = {
     ],
     components: [
         require('./components/Caution'),
-        require('./components/Notify'),
-        require('./components/Popup'),
+        require('./components/Gallery'),
         require('./components/Lightbox'),
-        // require('./components/Lightbox/Gallery'),
         require('./components/Lightbox/LightboxInfo'),
         require('./components/Lightbox/LightboxTitleBar'),
+        require('./components/Notify'),
+        require('./components/Popup'),
     ],
 
     init(definition, done) {
@@ -55,16 +55,6 @@ module.exports = {
                     lightInfo: lightInfo,
                 });
             },
-
-            openGallery( data ) {
-                this.openLightbox( {
-                    title: {
-                        title:'Gallery',
-                        hasInfo: true,
-                    }
-                } );
-            },
-
         };
 
         done(notifications);

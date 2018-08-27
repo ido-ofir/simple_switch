@@ -7,7 +7,7 @@ if(module.hot) {
         var Lightbox = require('./Lightbox.jsx');
         
         core.injector.revoke(Lightbox.name);
-        core.View(Lightbox);
+        core.Component(Lightbox);
         core.emit('hotUpdate');
         
     });
