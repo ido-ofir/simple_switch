@@ -79,13 +79,16 @@ module.exports = {
 
                     <div id={'root.home'} style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', padding: 15 }}>
                       <Typography>
-                        I am the home of your <a href="/#/home" onClick={ this.openPopup }>template!</a>
+                        I am the home of your template!
                       </Typography>
                       <Typography>
-                        I am a <a href="/#/home" onClick={ this.openLightbox }>lightbox</a>!
+                        I am a <a href="/#/home" onClick={ this.openPopup }>popup</a>
                       </Typography>
                       <Typography>
-                        I am a <a href="/#/home" onClick={ this.openGallery }>gallery</a>!
+                        I am a <a href="/#/home" onClick={ this.openLightbox }>lightbox</a>
+                      </Typography>
+                      <Typography>
+                        I am a <a href="/#/home" onClick={ this.openGallery }>gallery</a>
                       </Typography>
                       <span>123</span>
                     </div>

@@ -2,7 +2,6 @@ module.exports = {
     name: 'icons',
     tree: {
         menu: 'menu',
-
         home: 'home',
         folder: 'folder',
         addFolder: 'create_new_folder',
@@ -63,8 +62,8 @@ module.exports = {
         exitApp: 'exit_to_app',
         email: 'email',
         like: 'thumb_up',
-
         pdfFile: 'fas fa-file-pdf',
+        
         // social icons - material don't have ones, so we use FontAwesome
 
         defaultIcon: 'fa fa-globe',

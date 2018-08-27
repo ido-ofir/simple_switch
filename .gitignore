@@ -1,3 +1,5 @@
 node_modules/
 output/build/main.bundle.js
 package-lock.json
+
+simple_switch_combined\.log

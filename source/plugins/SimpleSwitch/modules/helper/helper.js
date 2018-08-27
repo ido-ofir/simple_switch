@@ -11,6 +11,7 @@ module.exports = {
                 if(context.isUnmounted) return;
                 context.setState(state, callback);
             },
+            
             CopyTopClipboard(textToCopy){
 
                 const handleError = (err) => {

@@ -103,10 +103,9 @@ module.exports = {
 
             handleSave(){
               let { activeTab } = this.state;
-              core.plugins.SimpleSwitch.run('saveSettings',activeTab)
-
-
+              core.plugins.SimpleSwitch.run('saveSettings', activeTab)
             },
+
             render() {
 
                 let { config } = this.props;
@@ -114,6 +113,7 @@ module.exports = {
                 return (
 
                     <div id={'root.settings'} style={{ height: '100%', width: '100%', display: 'flex',  flexDirection: 'column' }}>
+
                         <AppBar position="static" color="default">
                             <Tabs
                                 style={{ minHeight: 40, maxHeight: 40, height: 40}}
@@ -129,6 +129,7 @@ module.exports = {
                                 }
                             </Tabs>
                         </AppBar>
+
                         <div style={ styles.tabContent }>
                             {
                                 this.getTabContent(tabs[tabValue])

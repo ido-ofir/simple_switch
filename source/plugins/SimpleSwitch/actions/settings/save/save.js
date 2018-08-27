@@ -12,35 +12,19 @@ module.exports = {
 
         var core = this;
 
-        return (data, promise) => {
+        return ({ data, label }, promise) => {
             var { BaseApi } = core.plugins.SimpleSwitch;
-
-            core.request.post('/clicked', ()=>{
-
-            });
-            //     "email": data.email,
-            //     "password": data.password
-            // })
-            // .then( ({results,error}) => {
-            //
-            //     if(error){
-            //         let notify = {
-            //             title:this.translate(`log in fail`),
-            //             text:this.translate(error.data.errors[0]),
-            //             alertKind: 'error'
-            //         }
-            //
-            //         core.emit('notify',notify);
-            //         promise.reject(error);
-            //         return;
-            //     }
-            //
-            //     promise.resolve(results);
-            //     if(results && results.token && results.user){
-            //         localStorage.setItem('authToken', results.token)
-            //         localStorage.setItem('currentUser', JSON.stringify(results.user) )
-            //     }
-            // });
+            var parsed = JSON.stringify(data, null, 4)
+            core.request.post('/saveFile', { fileName: label, text: parsed }).then( ({ response, results, error }) => {
+                if (results.success) {
+                  let notify = {
+                      title: core.translate(`${label} saved`),
+                      text: results.msg,
+                      alertKind: 'success'
+                  }
+                  core.emit('notify',notify);
+                }
+            })
         };
     }
 }
