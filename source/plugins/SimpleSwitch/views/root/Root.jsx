@@ -16,9 +16,10 @@ module.exports = {
         'popovers.Caution',
         'popovers.Lightbox',
         'SimpleSwitch.Login',
-        'SimpleSwitch.Loader'
+        'SimpleSwitch.Loader',
+        'Settings.Settings'
     ],
-    get(AppBar,Nav, Notify, Popup, Caution, Lightbox, Login, Loader) {
+    get(AppBar,Nav, Notify, Popup, Caution, Lightbox, Login, Loader, Settings) {
 
         var core = this;
         var { React, PropTypes } = core.imports;
@@ -40,13 +41,7 @@ module.exports = {
 
             componentWillMount () {
                 document.title = 'Loading..'
-                core.plugins.SimpleSwitch.run('getConfiguration').then((config)=>{
-                  core.plugins.SimpleSwitch.set('config', config);
-                //   core.plugins.SimpleSwitch.set('config', JSON.stringify(config));
-                //   let parsed = JSON.parse(config);
-                //   console.log('parsed -> ',parsed);
-                  document.title = config && config.asObject.appTitle ? config.asObject.appTitle : 'Loading..';
-                })
+
                 core.plugins.SimpleSwitch.run('getLanguage').then(()=>{
                     this.setState({start:true});
                 }).catch( ()=>{

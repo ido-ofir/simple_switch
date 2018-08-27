@@ -1,13 +1,14 @@
 
-import { Paper, Icon } from '@material-ui/core';
+import { Typography, AppBar, Paper, Icon, Tabs, Tab } from '@material-ui/core';
+import { SketchPicker } from 'react-color';
 
 module.exports = {
     name: "ColorBox",
     description: '',
     propTypes: {},
-    dependencies: ['SimpleSwitch.helper', 'Settings.ColorPicker', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel', 'SimpleSwitch.CopyToClipboard'],
+    dependencies: ['SimpleSwitch.helper', 'Settings.ColorPicker', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel'],
 
-    get(Helper, ColorPicker, Loader, ExpandingPanel, CopyToClipboard) {
+    get(Helper, ColorPicker, Loader, ExpandingPanel) {
 
         var core = this;
 
@@ -22,6 +23,7 @@ module.exports = {
               return {
                 showButtons: false,
                 anchorEl: null,
+                newColor: ''
               };
             },
 
@@ -53,8 +55,9 @@ module.exports = {
             },
 
             onColorPick(newColor){
+              let { handleChange, colorItem, parentKey } = this.props;
+              if (handleChange) handleChange({...colorItem, parentKey: parentKey}, newColor);
               this.handleClosePicker();
-              console.log('newColor => ', newColor);
             },
 
             styles(field){
@@ -97,13 +100,13 @@ module.exports = {
 
             render() {
               let { colorItem } = this.props;
-              let { anchorEl, showButtons } = this.state;
+              let { anchorEl, showButtons, newColor } = this.state;
               return (
 
                 <Paper  elevation={ showButtons ? 5 : 1 }
                         onMouseEnter={ e => { this.setState({ showButtons: true }) } }
                         onMouseLeave={ e => { this.setState({ showButtons: false }) } }
-                        style={{ flex: 1, height: 60, background: this.getBackground(colorItem.data), position: 'relative' }}>
+                        style={{ flex: 1, height: 60, background: newColor || this.getBackground(colorItem.data), position: 'relative' }}>
 
                   <div style={ this.styles('iconsContainer') }>
                     <Icon title={ core.translate('Copy color to clipboard') } onClick={ this.handleCopy } style={{ ...this.styles('icon') }}>
@@ -112,13 +115,6 @@ module.exports = {
                     <Icon title={ core.translate('Change color') } onClick={ this.openColorPicker } style={{ ...this.styles('icon'), marginLeft: 15 }}>
                       { core.icons('edit') }
                     </Icon>
-
-                  {/*
-
-                    // <Icon onClick={ this.handleCopy } style={{ ...this.styles('icon'), marginRight: 5 }} >
-                    //   { core.icons('fileCopy') }
-                    // </Icon>
-                  */}
                   </div>
                   <ColorPicker
                     anchorEl={ anchorEl }

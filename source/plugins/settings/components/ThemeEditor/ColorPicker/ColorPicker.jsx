@@ -63,7 +63,6 @@ module.exports = {
 
             handleChangeComplete(color, e){
               this.setState({ pickedColor: color.hex });
-              console.log('color => ', color);
             },
 
             render() {

@@ -63,8 +63,11 @@ module.exports = {
               this.setState({ theme: newobj });
             },
 
-            renderList(data){
-              // console.debug('this.colorContainer > ', this.colorContainer);
+            handleChange(item, newValue){
+              core.plugins.SimpleSwitch.set(['config', 'asObject', 'theme', item.parentKey, item.key], newValue);
+            },
+
+            renderList(data, themeSection){
               var width = 90;
               var height = 40;
               if (this.colorContainer.current) {
@@ -78,10 +81,10 @@ module.exports = {
                   _.map(data, (item, i)=>{
                     return (
                       <div key={ i } >
-                        <Typography style={{padding: 5, fontSize: 12,}}>
+                        <Typography title={ item.title } style={{padding: 5, fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%', whiteSpace: 'nowrap' }}>
                         { item.title }
                         </Typography>
-                        <ColorBox colorItem={ item } />
+                        <ColorBox colorItem={ item } parentKey={ themeSection.key } handleChange={ this.handleChange }/>
                       </div>
                     );
                   })
@@ -104,7 +107,7 @@ module.exports = {
                   name={ title }
                   badge={ data.length }
                   badgePlacement={ 'left' }
-                  childRender={  this.renderList.bind(this, data)  }
+                  childRender={  this.renderList.bind(this, data, themeSection)  }
                   key={ idx }
                 />
               )

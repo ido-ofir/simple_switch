@@ -12,6 +12,6 @@ module.exports = [
     {
         name: 'settings',
         label: 'Settings',
-        component: 'SimpleSwitch.Settings'
+        component: 'Settings.Settings'
     },
 ]

@@ -3,9 +3,7 @@ module.exports = {
     tree: require('./tree.js'),
     actions: [
         require('./actions/getLanguage'),
-        require('./actions/getConfiguration'),
         require('./actions/logIn'),
-        require('./actions/settings/save'),
     ],
     modules: [
         require('./modules/helper'),
@@ -22,16 +20,12 @@ module.exports = {
         require('./components/IconPopover'),
         require('./components/Loader'),
         require('./components/Nav'),
-        require('./components/NoResults'),
-        require('./components/ThemeEditor'),
-        require('./components/ThemeEditor/ColorBox'),
-        require('./components/ThemeEditor/ColorPicker'),
+        require('./components/NoResults')
     ],
     views: [
         require('./views/login'),
         require('./views/root'),
-        require('./views/home'),
-        require('./views/settings'),
+        require('./views/home')
     ],
 
     init(definition, done) {

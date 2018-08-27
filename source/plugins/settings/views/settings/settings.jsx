@@ -1,6 +1,8 @@
 
-import { AppBar, Button, Tabs, Tab, Icon } from '@material-ui/core';
+import { Typography, AppBar, Button, Paper, Tabs, IconButton, Tab, Icon } from '@material-ui/core';
 
+import brace from 'brace';
+import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
 import 'brace/mode/json';
 import 'brace/theme/kr_theme';
@@ -13,9 +15,9 @@ module.exports = {
     bindings: {
       config: ['config'],
     },
-    dependencies: ['SimpleSwitch.NoResults','SimpleSwitch.Loader' ],
+    dependencies: [],
 
-    get(NoResults, Loader) {
+    get() {
 
         var core = this;
 
@@ -32,6 +34,11 @@ module.exports = {
 
                 };
             },
+            componentWillMount() {
+              core.plugins.Settings.getInitialFiles(config => {
+                console.debug('config > ', config);
+              });
+            },
 
             componentDidMount() {
                 this.isUnmounted = false;
@@ -47,7 +54,6 @@ module.exports = {
                   this.setTabData(this.state.activeTab, nextProps.config)
                 }
             },
-
 
             getInitialState() {
 
@@ -73,6 +79,7 @@ module.exports = {
             },
 
             setTabData({ key, label }, config){
+
                 let { tabs } = this.state;
                 if (config) {
                     let activeTab = null;
@@ -87,31 +94,35 @@ module.exports = {
                 }
             },
 
+            handleConfigChange(){
+
+            },
+
             getTabContent({ key, label }){
                 let { activeTab } = this.state;
                 let { data, ui } = activeTab;
+                console.log('activeTab => ', activeTab);
                 var Ui = core.components[ui];
-                if (Ui) return <Ui data={ data } />
+                if (Ui) return ( <Ui data={ data } onChange={ this.handleConfigChange }/> );
             },
 
-            handleChange  (event, tabValue) {
+            handleChange(event, tabValue) {
                 this.setState({ tabValue });
                 this.setTabData(this.state.tabs[tabValue], this.props.config)
             },
 
             handleSave(){
               let { activeTab } = this.state;
-              core.plugins.SimpleSwitch.run('saveSettings',activeTab)
-
-
+              core.plugins.SimpleSwitch.run('saveSettings', activeTab)
             },
-            render() {
 
+            render() {
                 let { config } = this.props;
                 let { tabValue, tabs, activeTab } = this.state;
                 return (
 
                     <div id={'root.settings'} style={{ height: '100%', width: '100%', display: 'flex',  flexDirection: 'column' }}>
+
                         <AppBar position="static" color="default">
                             <Tabs
                                 style={{ minHeight: 40, maxHeight: 40, height: 40}}
@@ -127,6 +138,7 @@ module.exports = {
                                 }
                             </Tabs>
                         </AppBar>
+
                         <div style={ styles.tabContent }>
                             {
                                 this.getTabContent(tabs[tabValue])

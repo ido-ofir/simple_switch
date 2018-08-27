@@ -9,7 +9,8 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use('/', express.static(path.resolve(__dirname, '../')));
 
 var config = require('../config');
-var configPath = 'config/'
+var configPath = 'config/';
+
 const logger = winston.createLogger({
   transports: [
     // new winston.transports.Console(),
@@ -23,6 +24,7 @@ app.post('/getConfigFile', (req, res) => {
 });
 
 
+
 app.post('/saveFile', (req, res) => {
   logger.log({
     level: 'info',
@@ -30,7 +32,8 @@ app.post('/saveFile', (req, res) => {
     fileBody: req.body.text
   });
 
-  fs.writeFile(`${configPath}/${req.body.fileName}.json`, req.body.text, encoding, (err) => {
+  let jsonFile = `${configPath}/${req.body.fileName}.json`;
+  fs.writeFile(jsonFile, req.body.text, encoding, (err) => {
       if (err) {
         res.status(400).send(err)
         throw err;
