@@ -40,13 +40,15 @@ module.exports = {
             },
 
             componentWillMount () {
-                document.title = 'Loading..'
-
-                core.plugins.SimpleSwitch.run('getLanguage').then(()=>{
+                core.plugins.Settings.getInitialFiles(()=>{
+                  core.plugins.SimpleSwitch.run('getLanguage').then(()=>{
                     this.setState({start:true});
-                }).catch( ()=>{
+                  }).catch( ()=>{
                     this.setState({start:true});
+                  });
                 });
+
+
             },
 
             componentDidMount() {

@@ -23,10 +23,13 @@ module.exports = {
             BaseApi: 'http://some.ip.for/api',
             getInitialFiles: (callback) => {
               core.plugins.Settings.run('getConfiguration').then((config)=>{
-                // console.debug('config > ', config);
-                // return config;
-                if (callback) callback(config)
-                // core.plugins.Settings.set('config', config);
+                if (config) {
+                  core.plugins.Settings.set(['config'], config)
+                  if (config.hasOwnProperty('theme')) {
+                    core.tree.set(['plugins', 'theme'], config.theme);
+                  }
+                  if (callback) callback()
+                } else if (callback) callback()
               })
             }
         };

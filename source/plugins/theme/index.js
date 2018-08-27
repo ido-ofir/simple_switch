@@ -6,7 +6,7 @@ module.exports = {
     name: 'theme',
     dependencies: ['core.plugin.tree'],
     tree: {
-        theme: {
+        // theme: {
             colors: {
                 primary: '#01579b',
                 lightPrimary: '#2b73ab',
@@ -134,25 +134,26 @@ module.exports = {
                 'windows live':   '#0078d7',
                 'yahoo! profile': "#7B0099",
                 'youtube':        "#E62B24",
-                
+
             },
             images: {
                 backLoginImage: "/resources/images/bgLogin.jpg",
             }
-        }
+        // }
     },
     extend: {
         theme(path) {
             var theme = this.plugins.theme;
-            if (!path) return theme.get(['theme']);
+            if (!path) return theme.get();
             if (this.isString(path)) {
                 path = path.split(/[\.,\/]/);
             }
-            var value = theme.get(['theme'].concat(path));
+            var value = theme.get(path);
             return value;
         }
     },
     init(def, done) {
+
         var core = this;
         done({
             // load(theme) {

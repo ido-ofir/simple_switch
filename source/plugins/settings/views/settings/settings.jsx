@@ -35,9 +35,10 @@ module.exports = {
                 };
             },
             componentWillMount() {
-              core.plugins.Settings.getInitialFiles(config => {
-                console.debug('config > ', config);
-              });
+              // core.plugins.Settings.getInitialFiles();
+              //   core.tree.set(['plugins', 'theme'], config.theme);
+              //   core.plugins.Settings.set(['config'], config)
+              // });
             },
 
             componentDidMount() {
@@ -65,7 +66,7 @@ module.exports = {
                         label: 'theme',
                         key: 'theme',
                         data: null,
-                        ui: 'SimpleSwitch.ThemeEditor'
+                        ui: 'Settings.ThemeEditor'
                     },{
                         label: 'icons',
                         key: 'icons',
@@ -83,10 +84,9 @@ module.exports = {
                 let { tabs } = this.state;
                 if (config) {
                     let activeTab = null;
-                    let { asObject } = config;
                     for (let i = 0; i < tabs.length; i++) {
                         if (tabs[i].key == key) {
-                            tabs[i].data = asObject[key];
+                            tabs[i].data = config[key];
                             activeTab = tabs[i];
                         }
                     }
@@ -101,7 +101,7 @@ module.exports = {
             getTabContent({ key, label }){
                 let { activeTab } = this.state;
                 let { data, ui } = activeTab;
-                var Ui = core.views['Settings.ThemeEditor'];
+                var Ui = core.views[ui];
                 if (Ui) return ( <Ui data={ data } onChange={ this.handleConfigChange }/> );
             },
 

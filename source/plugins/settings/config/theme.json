@@ -1,0 +1,8 @@
+{
+    "colors": {
+        "primary": "#000000"
+    },
+    "images": {
+        "backLoginImage": "/resources/images/bgLogin.jpg"
+    }
+}

@@ -8,8 +8,8 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use('/', express.static(path.resolve(__dirname, '../')));
 
-var config = require('../config');
-var configPath = 'config/';
+var config = require('../source/plugins/settings/config/config');
+var configPath = 'source/plugins/settings/config/';
 
 const logger = winston.createLogger({
   transports: [

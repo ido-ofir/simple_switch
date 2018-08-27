@@ -67,7 +67,7 @@ module.exports = {
             },
 
             handleChange(item, newValue){
-              core.plugins.SimpleSwitch.set(['config', 'asObject', 'theme', item.parentKey, item.key], newValue);
+              core.plugins.Settings.set(['config', 'theme', item.parentKey, item.key], newValue);
             },
 
             renderList(data, themeSection){
