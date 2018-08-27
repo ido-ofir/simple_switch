@@ -20,6 +20,7 @@ module.exports = {
                     infoWrapStyle: {},
                     infoInnerStyle: {},
                     infoChildren: (<div style={{margin: 5,}}>Info Default Children</div>),
+                    hasTitle: true,
                 };
             },
             
@@ -57,18 +58,21 @@ module.exports = {
 
             styles(s) {
                 let {showInfo} = this.state;
-                let {infoWrapStyle, infoInnerStyle} = this.props;
+                let {infoWrapStyle, infoInnerStyle, hasTitle} = this.props;
 
                 let styles = {
                     root: {
-                        position: 'absolute',
-                        right: showInfo ? 0 : -400,
+                        position: 'fixed',
+                        transform: `translateX(${showInfo ? '0px' : '300px'})`,
+                        right: 0,
                         width: 300,
-                        height: '100%',
+                        top: (hasTitle) ? 50 : 0,
+                        bottom: 0,
                         overflow: 'hidden',
                         background: core.theme('colors.white'),
                         color: core.theme('colors.gray3'),
                         zIndex: 100,
+                        transition: 'transform 0.25s ease-in-out',
                         ...infoWrapStyle
                     },
                     inner: {

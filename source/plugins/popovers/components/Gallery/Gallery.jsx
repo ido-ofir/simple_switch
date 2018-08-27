@@ -19,12 +19,7 @@ module.exports = {
             },
 
             componentWillReceiveProps(nextProps) {
-                let {selectedId, gallery} = nextProps;
-                let defaultGallery = this.defaultGallery();
-                let newId = (selectedId) ? selectedId : defaultGallery[0].id;
-                let newGallery = (gallery) ? gallery : defaultGallery;
-
-                this.setState({selectedId: newId, gallery: newGallery});
+                this.setStateFromProps(nextProps);
             },
 
             getInitialState() {
@@ -36,15 +31,23 @@ module.exports = {
                 };
             },
 
+            componentWillMount() {
+                this.setStateFromProps(this.props);
+            },
+
             componentDidMount() {
-                document.addEventListener("keydown", this.handleKeyPress);
+                document.addEventListener("keydown", this.keyboardKeyHandle);
+                document.addEventListener("onkeydown", this.keyboardKeyHandle);
             },
             
             componentWillUnmount() {
-                document.removeEventListener("keydown", this.handleKeyPress);
+                document.removeEventListener("keydown", this.keyboardKeyHandle);
+                document.removeEventListener("onkeydown", this.keyboardKeyHandle);
             },
 
             styles(s) {
+                let {gallery} = this.state;
+                let noThumbnails = gallery.length === 1;
 
                 let styles = {
                     root: {
@@ -86,7 +89,7 @@ module.exports = {
                         cursor: 'pointer',
                     },
                     pictureWrap: {
-                        height: `calc(100% - 180px)`,
+                        height: (noThumbnails) ? '100%' : `calc(100% - 180px)`,
                         position: "relative",
                         paddingBottom: 15,
                         marginLeft: 'auto',
@@ -103,22 +106,23 @@ module.exports = {
                     thumbnailsRow: {
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center",
                         height: 150,
-                        maxWidth: "calc(100% - 15px)",
                         position: "absolute",
                         bottom: 33,
                         left: 0,
                         right: 0,
                         backgroundColor: core.theme('transparent.black_80'),
                         borderRadius: 2,
+                        overflowX: 'hidden',
+                        overflowY: 'hidden',
                     },
                     thumbnail: {
-                        marginRight: 5,
+                        marginRight: 15,
                         borderRadius: 4,
                         position: "relative",
-                        height: 120,
-                        width: 120,
+                        height: 100,
+                        width: 130,
+                        minWidth: 130,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -143,7 +147,7 @@ module.exports = {
                         fontSize: 75,
                     },
                     prevArrow: {
-                        display: "flex",
+                        display: (noThumbnails) ? 'none' : "flex",
                         alignItems: "center",
                         position: 'absolute',
                         left: 0,
@@ -151,7 +155,7 @@ module.exports = {
                         height: 'calc(100% - 180px)',
                     },
                     nextArrow: {
-                        display: "flex",
+                        display: (noThumbnails) ? 'none' : "flex",
                         alignItems: "center",
                         position: 'absolute',
                         right: 0,
@@ -189,6 +193,17 @@ module.exports = {
                     }
                 }
                 return(styles[s]);
+            },
+
+            setStateFromProps(props) {
+                let {selectedId, gallery} = props;
+                let defaultGallery = this.defaultGallery();
+                let newId = (selectedId) ? selectedId
+                            : (gallery) ? gallery[0].id
+                              : defaultGallery[0].id;
+                let newGallery = (gallery) ? gallery : defaultGallery;
+
+                this.setState({selectedId: newId, gallery: newGallery});
             },
             
             defaultGallery() {
@@ -377,7 +392,7 @@ module.exports = {
                );
             },
 
-            handleKeyPress(event) {
+            keyboardKeyHandle(event) {
 
                 switch (event.keyCode) {
                     case 27: // Esc
@@ -554,11 +569,21 @@ module.exports = {
                 };
 
                 let thumbnailWrapStyle = this.styles('thumbnail');
-                    thumbnailWrapStyle.border = (imageID === selectedId) ? `2px solid ${core.theme('colors.primary')}` : `2px solid transparent`;
+                    thumbnailWrapStyle.border = (imageID === selectedId) 
+                                                ? `3px solid ${core.theme('colors.primary')}` 
+                                                : `3px solid transparent`;
                 let elementID = `ThumbnailImage.id_${key}`;
 
+                if ( imageID === selectedId && document.getElementById(elementID) ) {
+                    document.getElementById(elementID).scrollIntoView({
+                        block: 'end',
+                        behavior: 'smooth',
+                        inline: 'center'
+                    });
+                };
+
                 return(
-                    <div id={`Thumbnail.id_${key}`} key={key} style={ thumbnailWrapStyle } onClick={ thumbClick } >
+                    <div id={`Thumbnail.id_${key}`} key={key} style={ thumbnailWrapStyle } onClick={ thumbClick }>
                         <img id={ elementID }
                             src={ imageURL } 
                             onError={ ()=>{ this.imageErrorHandler(elementID) }}
@@ -571,7 +596,7 @@ module.exports = {
 
             renderThumbs() {
                 let {gallery} = this.state;
-                if( !gallery || _.isEmpty(gallery) || gallery.length === 1 ) return null; // noresult
+                if( !gallery || _.isEmpty(gallery) || gallery.length === 1 ) { return null; }
 
                 let thumbGallery = gallery;
 
@@ -587,7 +612,7 @@ module.exports = {
 
                 return (
                     <div id={'Gallery.prev'} style={ this.styles('prevArrow')}>
-                        <IconButton style={ this.styles('buttonStyle')} onClick={ this.gotoPrevImage }>
+                        <IconButton id={'Gallery.buttonPrev'} style={ this.styles('buttonStyle')} onClick={ this.gotoPrevImage }>
                             <Icon key={ 'navigatePreviousPicture' } title={ title } style={ this.styles('iconStyle')}>{ core.icons('navigatePrevious') }</Icon>
                         </IconButton>
                     </div>
@@ -599,7 +624,7 @@ module.exports = {
 
                 return (
                     <div id={'Gallery.next'} style={ this.styles('nextArrow')}>
-                        <IconButton style={ this.styles('buttonStyle')} onClick={ this.gotoNextImage }>
+                        <IconButton id={'Gallery.buttonNext'} style={ this.styles('buttonStyle')} onClick={ this.gotoNextImage }>
                             <Icon key={ 'navigateNextPicture' } title={ title } style={ this.styles('iconStyle')}>{ core.icons('navigateNext') }</Icon>
                         </IconButton>
                     </div>

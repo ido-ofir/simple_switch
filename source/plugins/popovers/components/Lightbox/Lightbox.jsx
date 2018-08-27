@@ -87,6 +87,7 @@ module.exports = {
                         ...innerStyle
                     },
                     bodyStyle: {
+                        position: 'relative',
                         display: 'flex',
                         flexDirection: 'row',
                         width: '100%', 
@@ -139,6 +140,7 @@ module.exports = {
                 else if (info && !_.isEmpty(info) ) {
                     return (
                         <LightboxInfo 
+                            hasTitle={       info.hasTitle       }
                             infoWrapStyle={  info.infoWrapStyle  }
                             infoInnerStyle={ info.infoInnerStyle }
                             infoChildren={   info.infoChildren   }
@@ -185,7 +187,7 @@ module.exports = {
             closeLightbox() {
                 let emptyState = {
                     title: <LightboxTitleBar hasInfo={true}/>,
-                    info: <LightboxInfo />,
+                    info: <LightboxInfo hasTitle={true} />,
                     children: <div>Lightbox default children</div>,
                     rootStyle: {},
                     innerStyle: {},
