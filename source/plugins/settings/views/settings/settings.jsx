@@ -101,8 +101,7 @@ module.exports = {
             getTabContent({ key, label }){
                 let { activeTab } = this.state;
                 let { data, ui } = activeTab;
-                console.log('activeTab => ', activeTab);
-                var Ui = core.components[ui];
+                var Ui = core.views['Settings.ThemeEditor'];
                 if (Ui) return ( <Ui data={ data } onChange={ this.handleConfigChange }/> );
             },
 
@@ -113,7 +112,7 @@ module.exports = {
 
             handleSave(){
               let { activeTab } = this.state;
-              core.plugins.SimpleSwitch.run('saveSettings', activeTab)
+              core.plugins.Settings.run('saveSettings', activeTab)
             },
 
             render() {

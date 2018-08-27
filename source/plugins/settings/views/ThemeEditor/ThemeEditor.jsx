@@ -13,6 +13,9 @@ module.exports = {
     description: '',
     propTypes: {},
     dependencies: ['SimpleSwitch.helper', 'SimpleSwitch.NoResults', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel', 'Settings.ColorBox'],
+    bindings: {
+      config: ['config'],
+    },
 
     get(Helper, NoResults, Loader, ExpandingPanel, ColorBox) {
 

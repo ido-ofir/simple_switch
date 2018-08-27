@@ -9,12 +9,12 @@ module.exports = {
 
     ],
     components: [
-        require('./components/ThemeEditor'),
-        require('./components/ThemeEditor/ColorBox'),
-        require('./components/ThemeEditor/ColorPicker'),
+        require('./components/ColorBox'),
+        require('./components/ColorPicker'),
     ],
     views: [
         require('./views/settings'),
+        require('./views/ThemeEditor'),
     ],
 
     init(definition, done) {
