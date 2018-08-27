@@ -31,7 +31,7 @@ module.exports = {
                 borderlight: '#eceff1',
                 blue: '#0d47a1',
                 lightBlue: '#c2ebfa',
-                lightBlueOpacity: '#c2ebfa40',
+                lightBlueOpacity: '#c2ebfa50',
                 lightBlue2: '#F4FAFE',
                 lightBlue3: '#4c8aa2',
                 editMode: '#ff9800',
