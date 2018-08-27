@@ -22,6 +22,7 @@ core.plugin([
     require('./plugins/SimpleSwitch'),
     require('./plugins/router'),
     require('./plugins/popovers'),
+    require('./plugins/Settings'),
 ])
 
 core.require(['SimpleSwitch.Root'], (Root) => {
