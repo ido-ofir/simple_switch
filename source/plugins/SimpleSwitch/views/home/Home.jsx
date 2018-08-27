@@ -17,9 +17,9 @@ module.exports = {
         initLoading: ['initLoading']
     },
 
-    dependencies: ['SimpleSwitch.NoResults','SimpleSwitch.Loader'],
+    dependencies: ['SimpleSwitch.NoResults','SimpleSwitch.Loader', 'popovers.Gallery'],
 
-    get(NoResults, Loader) {
+    get(NoResults, Loader, Gallery) {
 
         var core = this;
 
@@ -69,28 +69,49 @@ module.exports = {
             },
 
             openGallery() {
-                core.plugins.popovers.openGallery();
+                core.plugins.popovers.openLightbox({
+                    title: {
+                        title: 'Gallery',
+                        hasInfo: false,
+                    },
+                    children: <Gallery/>,
+                });
             },
 
             render() {
 
-
                 return (
 
                     <div id={'root.home'} style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', padding: 15 }}>
-                      <Typography>
-                        I am the home of your template!
-                      </Typography>
-                      <Typography>
-                        I am a <a href="/#/home" onClick={ this.openPopup }>popup</a>
-                      </Typography>
-                      <Typography>
-                        I am a <a href="/#/home" onClick={ this.openLightbox }>lightbox</a>
-                      </Typography>
-                      <Typography>
-                        I am a <a href="/#/home" onClick={ this.openGallery }>gallery</a>
-                      </Typography>
-                      <span>123</span>
+                        <Typography>
+                            I am the home of your template!
+                        </Typography>
+                        <Typography>
+                            I am a <a href="/#/home" onClick={ this.openPopup }>popup</a>
+                        </Typography>
+                        <Typography>
+                            I am a <a href="/#/home" onClick={ this.openLightbox }>lightbox</a>
+                        </Typography>
+                        <Typography>
+                            I am a <a href="/#/home" onClick={ this.openGallery }>gallery</a>
+                        </Typography>
+                        <div style={{
+                                backgroundColor: core.theme('backgrounds.lightbox'),
+                                width: "100%",
+                                height: 600,
+                                position: "relative",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "flex-start",
+                                alignItems: "flex-start",
+                                overflow: 'hidden',
+                                color: core.theme('colors.white'),
+
+                        }} >
+                            <span>I am a gallery too.</span>
+                            <Gallery />
+                        </div>
+                        <span>123</span>
                     </div>
                 )
 
