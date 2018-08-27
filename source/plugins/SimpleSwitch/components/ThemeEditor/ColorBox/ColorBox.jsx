@@ -6,9 +6,9 @@ module.exports = {
     name: "ColorBox",
     description: '',
     propTypes: {},
-    dependencies: ['SimpleSwitch.helper', 'SimpleSwitch.NoResults', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel', 'SimpleSwitch.CopyToClipboard'],
+    dependencies: ['SimpleSwitch.helper', 'SimpleSwitch.ColorPicker', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel', 'SimpleSwitch.CopyToClipboard'],
 
-    get(Helper, NoResults, Loader, ExpandingPanel, CopyToClipboard) {
+    get(Helper, ColorPicker, Loader, ExpandingPanel, CopyToClipboard) {
 
         var core = this;
 
@@ -21,7 +21,8 @@ module.exports = {
 
             getInitialState() {
               return {
-                showColorPicker: false
+                showButtons: false,
+                anchorEl: null,
               };
             },
 
@@ -39,26 +40,8 @@ module.exports = {
                 this.isUnmounted = true;
             },
 
-            toggleColorPicker(){
-              this.setState({ showColorPicker: !this.state.showColorPicker })
-            },
-
-
-            renderColorPicker(){
-              if (this.state.showColorPicker) {
-                // return (<SketchPicker />)
-                return core.plugins.popovers.openPopup({
-                    title: 'SketchPicker',
-                    body: <div><SketchPicker /></div>,
-                    bodyStyle: { minWidth: 530, minHeight: 'unset', padding: '0px 22px' },
-                    showButtons: false,
-                    okButton: {
-                        btnTitle: 'Pick',
-                        btnFunc: () => {}
-                    }
-                });
-              }
-              return null
+            openColorPicker(e){
+              this.setState({ anchorEl: e.currentTarget })
             },
 
             handleCopy(e){
@@ -66,7 +49,17 @@ module.exports = {
               Helper.CopyTopClipboard(colorItem.data)
             },
 
+            handleClosePicker(){
+               this.setState({ anchorEl: null })
+            },
+
+            onColorPick(newColor){
+              this.handleClosePicker();
+              console.log('newColor => ', newColor);
+            },
+
             styles(field){
+              let { showButtons } = this.state;
               let styles = {
                 icon: { fontSize: 13, color: core.theme('colors.white'), cursor: 'pointer' },
                 iconsContainer: {
@@ -75,25 +68,49 @@ module.exports = {
                   width: '100%',
                   display: 'flex',
                   alignItems: 'center',
-                  height: '25px',
+                  height: '30px',
                   justifyContent: 'flex-end',
                   padding: '0 5px',
-                }
+                  background: `linear-gradient(transparent 0, rgb(85, 85, 85) 100%)`,
+                  opacity: showButtons ? 1 : 0,
+                  borderBottomLeftRadius: '4px',
+                  borderBottomRightRadius: '4px',
+                  transition: 'all 0.25s linear 0.15s'
+                },
+                // subheader: {
+                //   padding: 5,
+                //   fontSize: 12,
+                //   color: core.theme('colors.white'),
+                //   borderTopLeftRadius: '2px',
+                //   borderTopRightRadius: '2px',
+                //   transition: 'all 0.25s linear',
+                //   background: `linear-gradient(rgb(85, 85, 85) 0%, transparent 100%)`
+                // }
               }
               return styles[field]
             },
+
+            getBackground(data){
+              if (data.indexOf('/') > -1) {
+                return `url("${data}") no-repeat 100%`
+              } else return data;
+            },
+
             render() {
               let { colorItem } = this.props;
+              let { anchorEl, showButtons } = this.state;
               return (
 
-                <Paper  title={ colorItem.title } elevation={ 1 } style={{ flex: 1, height: 60, background: colorItem.data, position: 'relative' }}>
-                  <Typography style={{ fontSize: 12 }}>
-                  { colorItem.title }
-                  </Typography>
-                  <div style={ this.styles('iconsContainer') }>
-                    <CopyToClipboard copyNode={ colorItem.data } size={12}/>
+                <Paper  elevation={ showButtons ? 5 : 1 }
+                        onMouseEnter={ e => { this.setState({ showButtons: true }) } }
+                        onMouseLeave={ e => { this.setState({ showButtons: false }) } }
+                        style={{ flex: 1, height: 60, background: this.getBackground(colorItem.data), position: 'relative' }}>
 
-                    <Icon onClick={ this.toggleColorPicker } style={{ ...this.styles('icon') }}>
+                  <div style={ this.styles('iconsContainer') }>
+                    <Icon title={ core.translate('Copy color to clipboard') } onClick={ this.handleCopy } style={{ ...this.styles('icon') }}>
+                      { core.icons('fileCopy') }
+                    </Icon>
+                    <Icon title={ core.translate('Change color') } onClick={ this.openColorPicker } style={{ ...this.styles('icon'), marginLeft: 15 }}>
                       { core.icons('edit') }
                     </Icon>
 
@@ -104,7 +121,11 @@ module.exports = {
                     // </Icon>
                   */}
                   </div>
-                  {this.renderColorPicker()}
+                  <ColorPicker
+                    anchorEl={ anchorEl }
+                    colorItem={ colorItem }
+                    handleClose={ this.handleClosePicker }
+                    onColorPick={ this.onColorPick } />
                 </Paper>
 
               )

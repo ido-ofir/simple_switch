@@ -129,7 +129,7 @@ module.exports = {
                                 }
                             </Tabs>
                         </AppBar>
-                        <div style={{ position: 'absolute', top: '55px', left: '15px', right: '0', bottom: '15px', padding: '1px 16px 1px 1px', overflow: 'auto' }}>
+                        <div style={ styles.tabContent }>
                             {
                                 this.getTabContent(tabs[tabValue])
                             }
@@ -147,6 +147,20 @@ module.exports = {
             }
         }
     }
+}
+let styles = {
+  tabContent: {
+    position: 'absolute',
+    top: '55px',
+    left: '15px',
+    right: '0',
+    bottom: '15px',
+    padding: '1px 16px 1px 1px',
+    overflow: 'auto',
+    display: 'flex',
+    justifyContent: 'center'
+
+  }
 }
                       {/* <AceEditor
                         ref={ 'aceEditor' }

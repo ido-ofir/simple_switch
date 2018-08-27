@@ -25,6 +25,7 @@ module.exports = {
         require('./components/NoResults'),
         require('./components/ThemeEditor'),
         require('./components/ThemeEditor/ColorBox'),
+        require('./components/ThemeEditor/ColorPicker'),
     ],
     views: [
         require('./views/login'),

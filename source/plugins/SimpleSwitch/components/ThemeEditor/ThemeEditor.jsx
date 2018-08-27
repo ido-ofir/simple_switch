@@ -72,11 +72,18 @@ module.exports = {
               }
 
               return (
-                <div style={{ padding: '15px', maxHeight: 200, overflow: 'auto',  display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gridGap: '15px' }}
+                <div style={{ padding: '15px', maxHeight: 200, overflow: 'auto',  display: 'grid', gridTemplateColumns: 'repeat(6, 2fr)', gridGap: '15px' }}
                 ref={ this.colorContainer }>
                 {
                   _.map(data, (item, i)=>{
-                    return (<ColorBox key={ i } colorItem={ item } />)
+                    return (
+                      <div key={ i } >
+                        <Typography style={{padding: 5, fontSize: 12,}}>
+                        { item.title }
+                        </Typography>
+                        <ColorBox colorItem={ item } />
+                      </div>
+                    );
                   })
                 }
                 </div>
@@ -107,7 +114,7 @@ module.exports = {
               let { theme } = this.state;
               return (
 
-                  <div id={'root.themeEditor'} style={{ height: '100%', width: '100%', display: 'flex',  flexDirection: 'column' }}>
+                  <div id={'root.themeEditor'} style={{ height: '100%', width: '70%', display: 'flex',  flexDirection: 'column' }}>
                     {
                       _.map(theme, this.renderThemeSection)
                     }
