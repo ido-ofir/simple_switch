@@ -10,16 +10,16 @@ module.exports = {
 
         return {
             propsTypes: {
-                rootStyle:  PropTypes.object,
-                innerStyle: PropTypes.object,
-                children:   PropTypes.object,
+                infoWrapStyle:  PropTypes.object,
+                infoInnerStyle: PropTypes.object,
+                infoChildren:   PropTypes.object,
             },
 
             getDefaultProps(){
                 return {
-                    rootStyle: {},
-                    innerStyle: {},
-                    children: (<div style={{margin: 5,}}>Info Default Children</div>),
+                    infoWrapStyle: {},
+                    infoInnerStyle: {},
+                    infoChildren: (<div style={{margin: 5,}}>Info Default Children</div>),
                 };
             },
             
@@ -57,7 +57,7 @@ module.exports = {
 
             styles(s) {
                 let {showInfo} = this.state;
-                let {rootStyle, innerStyle} = this.props;
+                let {infoWrapStyle, infoInnerStyle} = this.props;
 
                 let styles = {
                     root: {
@@ -68,7 +68,7 @@ module.exports = {
                         overflow: 'hidden',
                         background: core.theme('colors.white'),
                         color: core.theme('colors.gray3'),
-                        ...rootStyle
+                        ...infoWrapStyle
                     },
                     inner: {
                         position: 'relative',
@@ -76,19 +76,19 @@ module.exports = {
                         height: '100%',
                         overflowX: "hidden",
                         overflowY: "auto",
-                        ...innerStyle
+                        ...infoInnerStyle
                     },
                 }
                 return(styles[s]);
             },
 
             render() {
-                let {children} = this.props;
+                let {infoChildren} = this.props;
 
                 return (
                     <div id={'LightboxInfo.root'} style={ this.styles('root') }>
                         <div id={'LightboxInfo.inner'} style={ this.styles('inner') } >
-                            {children}
+                        {infoChildren}
                         </div>
                     </div>
                 )

@@ -18,6 +18,24 @@ module.exports = {
             },
 
             getDefaultProps(){
+                return {};
+            },
+
+            componentWillReceiveProps(nextProps) {
+                let nextData = {};
+                if (nextProps.title)         nextData['title']         = nextProps.title;
+                if (nextProps.info)          nextData['info']          = nextProps.info;
+                if (nextProps.children)      nextData['children']      = nextProps.children;
+                if (nextProps.rootStyle)     nextData['rootStyle']     = nextProps.rootStyle;
+                if (nextProps.innerStyle)    nextData['innerStyle']    = nextProps.innerStyle;
+                if (nextProps.bodyStyle)     nextData['bodyStyle']     = nextProps.bodyStyle;
+                if (nextProps.childrenStyle) nextData['childrenStyle'] = nextProps.childrenStyle;
+                if (nextProps.showLightbox)  nextData['showLightbox']  = nextProps.showLightbox;
+                
+                this.setState(nextData);
+            },
+            
+            getInitialState() {
                 return {
                     title: <LightboxTitleBar hasInfo={true}/>,
                     info: <LightboxInfo />,
@@ -46,7 +64,7 @@ module.exports = {
             },
 
             styles(s) {
-                let {rootStyle, innerStyle, bodyStyle, childrenStyle} = this.props;
+                let {rootStyle, innerStyle, bodyStyle, childrenStyle} = this.state;
                 
                 let styles = {
                     root: {
@@ -83,17 +101,89 @@ module.exports = {
                 return(styles[s]);
             },
 
-            openLightbox() {
-                this.setState({showLightbox: true});
+            getTitle(title) {
+
+                if (!title || _.isEmpty(title)) return <LightboxTitleBar hasInfo={true}/>;
+                else if (title === 'none') return null;
+                else if (title && !_.isEmpty(title) ) {
+                    return (
+                        <LightboxTitleBar 
+                            hasInfo={        title.hasInfo        }
+                            title={          title.title          }
+                            buttons={        title.buttons        }
+                            titleRootStyle={ title.titleRootStyle }
+                            toolbarStyle={   title.toolbarStyle   }
+                        />
+                    );
+                }
+            },
+
+            getInfo(info) {
+                if (!info || _.isEmpty(info)) return (<LightboxInfo />);
+                else if (info === 'none') return null; 
+                else if (info && !_.isEmpty(info) ) {
+                    return (
+                        <LightboxInfo 
+                            infoWrapStyle={  info.infoWrapStyle  }
+                            infoInnerStyle={ info.infoInnerStyle }
+                            infoChildren={   info.infoChildren   }
+                        />
+                    );
+                }
+            },
+
+            openLightbox(data) {
+                
+                let newState = {};
+                
+                if (!data || _.isEmpty(data)) {
+                    newState = {
+                        title: <LightboxTitleBar hasInfo={true}/>,
+                        info: <LightboxInfo />,
+                        children: <div>Lightbox default children</div>,
+                        rootStyle: {},
+                        innerStyle: {},
+                        bodyStyle: {},
+                        childrenStyle: {},
+                        showLightbox: true,
+                    };
+                    
+                } else {
+                    let {lightBody, lightTitle, lightInfo} = data;
+                    let { children, rootStyle, innerStyle, bodyStyle, childrenStyle } = lightBody;
+                    
+                    let title = this.getTitle(lightTitle);
+                    let info = this.getInfo(lightInfo);
+                    
+                    if (!children      || _.isEmpty(children))      children      = this.state.children;
+                    if (!rootStyle     || _.isEmpty(rootStyle))     rootStyle     = this.state.rootStyle;
+                    if (!innerStyle    || _.isEmpty(innerStyle))    innerStyle    = this.state.innerStyle;
+                    if (!bodyStyle     || _.isEmpty(bodyStyle))     bodyStyle     = this.state.bodyStyle;
+                    if (!childrenStyle || _.isEmpty(childrenStyle)) childrenStyle = this.state.childrenStyle;
+
+                    newState = { title, info, children, rootStyle, innerStyle, bodyStyle, childrenStyle, showLightbox: true };
+                }
+
+                this.setState( newState );
             },
 
             closeLightbox() {
-                this.setState({showLightbox: false});
+                let emptyState = {
+                    title: <LightboxTitleBar hasInfo={true}/>,
+                    info: <LightboxInfo />,
+                    children: <div>Lightbox default children</div>,
+                    rootStyle: {},
+                    innerStyle: {},
+                    bodyStyle: {},
+                    childrenStyle: {},
+                    showLightbox: false,
+                }
+                
+                this.setState(emptyState);
             },
             
             render() {
-                let { showLightbox } = this.state;
-                let { children, title, info } = this.props;
+                let { showLightbox, children, title, info } = this.state;
 
                 if (!showLightbox) return null;
 
