@@ -48,6 +48,7 @@ module.exports = {
             getInitialState() {
                 return {
                     error: null,
+                    showLocalGallery: false,
                 };
             },
 
@@ -78,6 +79,33 @@ module.exports = {
                 });
             },
 
+            toggleLocalGallery() {
+                let {showLocalGallery} = this.state;
+                this.setState({showLocalGallery: !showLocalGallery});
+            },
+
+            renderGallery() {
+                let {showLocalGallery} = this.state;
+                if (!showLocalGallery) return null;
+
+                return (
+                    <div  style={{
+                        backgroundColor: core.theme('backgrounds.lightbox'),
+                        width: "100%",
+                        height: 600,
+                        position: "relative",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "flex-start",
+                        alignItems: "flex-start",
+                        overflow: 'hidden',
+                        color: core.theme('colors.white'),
+                    }} >
+                        <Gallery />
+                    </div>
+                );
+            },
+
             render() {
 
                 return (
@@ -95,22 +123,10 @@ module.exports = {
                         <Typography>
                             I am a <a href="/#/home" onClick={ this.openGallery }>gallery</a>
                         </Typography>
-                        <div style={{
-                                backgroundColor: core.theme('backgrounds.lightbox'),
-                                width: "100%",
-                                height: 600,
-                                position: "relative",
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "flex-start",
-                                alignItems: "flex-start",
-                                overflow: 'hidden',
-                                color: core.theme('colors.white'),
-
-                        }} >
-                            <span>I am a gallery too.</span>
-                            <Gallery />
-                        </div>
+                        <Typography>
+                            <span>I am a <a href="/#/home" onClick={ this.toggleLocalGallery }>gallery</a> too.</span>
+                        </Typography>
+                        { this.renderGallery() }
                         <span>123</span>
                     </div>
                 )
