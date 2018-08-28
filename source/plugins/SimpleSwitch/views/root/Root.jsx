@@ -17,7 +17,7 @@ module.exports = {
         'popovers.Lightbox',
         'SimpleSwitch.Login',
         'SimpleSwitch.Loader',
-        'Settings.Settings'
+        'Settings.Settings',
     ],
     get(AppBar,Nav, Notify, Popup, Caution, Lightbox, Login, Loader, Settings) {
 

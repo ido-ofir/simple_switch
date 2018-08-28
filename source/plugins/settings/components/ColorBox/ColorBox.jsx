@@ -47,7 +47,7 @@ module.exports = {
 
             handleCopy(e){
               let { colorItem } = this.props;
-              Helper.CopyTopClipboard(colorItem.data)
+              Helper.CopyToClipboard(colorItem.data)
             },
 
             handleClosePicker(){

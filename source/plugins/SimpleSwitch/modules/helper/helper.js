@@ -12,7 +12,7 @@ module.exports = {
                 context.setState(state, callback);
             },
             
-            CopyTopClipboard(textToCopy){
+            CopyToClipboard(textToCopy){
 
                 const handleError = (err) => {
 
@@ -51,6 +51,7 @@ module.exports = {
                 }
 
             },
+
             capitalizeFirstLetter(string) {
                 if(!string) return '';
                 else if(!isNaN(string) ) return string;
@@ -117,41 +118,8 @@ module.exports = {
 
             },
 
-            setLoaderForTabsPage(bool){
-                let initLoading = core.plugins.SimpleSwitch.get(['initLoading']);
-
-                if(initLoading !== bool){
-                    core.plugins.SimpleSwitch.set(['initLoading'], bool);
-                }
-            },
-
-            setLoaderForTabsCheck(){
-                let sections = core.plugins.SimpleSwitch.get(['checkForTabsLoader']);
-                sections++;
-
-                if(sections === 3){
-                    core.plugins.SimpleSwitch.set(['initLoading'], false);
-                } else {
-                    core.plugins.SimpleSwitch.set(['checkForTabsLoader'],sections);
-                }
-
-            },
-
             handleActionError (error, promise, title) {
                 let err = '';
-
-                if(error.status === 401){
-                    core.plugins.SimpleSwitch.set(['isLoggedIn'], false);
-                }
-
-                if (!title) title = core.translate(`Can't get results`);
-
-                if(_.isEmpty(error.data))  err = core.translate(error.statusText);
-                else if(error.data.message) err = core.translate(error.data.message);
-                else if(error.data.errors instanceof Array) err = core.translate(error.data.errors[0]);
-                else if(error.data.errors && error.data.errors.status) err = core.translate(error.data.errors.status[0]);
-                else if(error.data.errors) err = core.translate(error.data.errors);
-                else err = core.translate(error.data);
 
                 if(error.status === 500){
                     err = core.translate(error.statusText);
@@ -165,20 +133,6 @@ module.exports = {
 
                 core.emit('notify',notify);
                 promise.reject({error: error, message: err});
-            },
-
-            modifySocialNames(socialNetwork) {
-              if(!socialNetwork) return null;
-
-              let social = socialNetwork.toLowerCase().trim();
-              switch ( social ) {
-                case 'fb'               : return 'facebook';
-                case 'google profiles'  : return 'google+';
-                case 'instagram.com'    : return 'instagram';
-                case 'email directory'  : return 'email';
-              }
-
-              return social;
             },
 
         };

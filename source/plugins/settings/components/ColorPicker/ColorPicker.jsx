@@ -6,9 +6,9 @@ module.exports = {
     name: "ColorPicker",
     description: '',
     propTypes: {},
-    dependencies: ['SimpleSwitch.helper', 'SimpleSwitch.NoResults', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel', 'SimpleSwitch.CopyToClipboard'],
+    dependencies: ['SimpleSwitch.helper', 'SimpleSwitch.NoResults', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel'],
 
-    get(Helper, NoResults, Loader, ExpandingPanel, CopyToClipboard) {
+    get(Helper, NoResults, Loader, ExpandingPanel) {
 
         var core = this;
 
