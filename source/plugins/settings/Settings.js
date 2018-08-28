@@ -18,20 +18,20 @@ module.exports = {
     ],
 
     init(definition, done) {
-
         var _options = {
-            BaseApi: 'http://some.ip.for/api',
-            getInitialFiles: (callback) => {
-              core.plugins.Settings.run('getConfiguration').then((config)=>{
-                if (config) {
-                  core.plugins.Settings.set(['config'], config)
-                  if (config.hasOwnProperty('theme')) {
-                    core.tree.set(['plugins', 'theme'], config.theme);
-                  }
-                  if (callback) callback()
-                } else if (callback) callback()
-              })
-            }
+          BaseApi: 'http://some.ip.for/api',
+          getInitialFiles: (callback) => {
+            core.plugins.Settings.run('getConfiguration').then((config)=>{
+              if (config) {
+                core.plugins.Settings.set(['config'], config)
+                if (config.hasOwnProperty('theme')) {
+                  core.tree.set(['plugins', 'theme'], config.theme);
+                }
+                if (callback) callback()
+              } else if (callback) callback()
+            })
+          },
+
         };
 
         done(_options);
