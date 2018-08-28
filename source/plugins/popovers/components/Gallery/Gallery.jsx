@@ -222,37 +222,37 @@ module.exports = {
             },
 
             getSourceIcon(image, size = 'big') {
-                let socialNetwork = (image && !_.isEmpty(image) && image.sources && !_.isEmpty(image.sources)) ? image.sources[0].name.toLowerCase() : false;
-                    socialNetwork = Helper.modifySocialNames(socialNetwork);
+            //     let socialNetwork = (image && !_.isEmpty(image) && image.sources && !_.isEmpty(image.sources)) ? image.sources[0].name.toLowerCase() : false;
+            //         socialNetwork = Helper.modifySocialNames(socialNetwork);
 
-                let icon = socialNetwork ? core.icons(socialNetwork) : false;
-                if (!icon) return null;
+            //     let icon = socialNetwork ? core.icons(socialNetwork) : false;
+            //     if (!icon) return null;
 
-                let iFont, iBorder, iMargin;
-                if (size === 'thumb') {
-                    iFont = 10;
-                    iBorder = 30;
-                    iMargin = 0;
-                }
-                else {
-                    iFont = 26;
-                    iBorder = 60;
-                    iMargin = 2;
-                }
+            //     let iFont, iBorder, iMargin;
+            //     if (size === 'thumb') {
+            //         iFont = 10;
+            //         iBorder = 30;
+            //         iMargin = 0;
+            //     }
+            //     else {
+            //         iFont = 26;
+            //         iBorder = 60;
+            //         iMargin = 2;
+            //     }
 
-                let iconStyle = {...this.styles('sourceIcon'), fontSize: iFont, margin: iMargin, };
+            //     let iconStyle = {...this.styles('sourceIcon'), fontSize: iFont, margin: iMargin, };
                 
-                let wrapStyle = {...this.styles('sourceWrap'),
-                    borderBottom: `${iBorder}px solid ${core.theme('socialNetwork.'+socialNetwork)}`,
-                    borderLeft: `${iBorder}px solid transparent`,
-                };
+            //     let wrapStyle = {...this.styles('sourceWrap'),
+            //         borderBottom: `${iBorder}px solid ${core.theme('socialNetwork.'+socialNetwork)}`,
+            //         borderLeft: `${iBorder}px solid transparent`,
+            //     };
 
-                return (
-                    <div>
-                        <div id={ 'socialIcon.wrap' } style={ wrapStyle }/>
-                        <Icon style={ iconStyle } className={icon} />
-                    </div>
-               );
+            //     return (
+            //         <div>
+            //             <div id={ 'socialIcon.wrap' } style={ wrapStyle }/>
+            //             <Icon style={ iconStyle } className={icon} />
+            //         </div>
+            //    );
             },
 
             keyboardKeyHandle(event) {
@@ -331,9 +331,9 @@ module.exports = {
                 return `${mediaName}-${core.translate(type)}-${selected_idx+1}.${imgExtention}`;
             },
 
-            mediaErrorHandler(elementID) {
+            mediaErrorHandler(elementID, type='image') {
                 document.getElementById(`${elementID}`)
-                        .setAttribute('src', '/resources/images/placeholder-image.png');
+                        .setAttribute('src', `/resources/images/placeholder-${type}.png`);
             },
 
             renderDownload() {
@@ -435,13 +435,28 @@ module.exports = {
 
                 let media = gallery[selected_idx];
                 let mediaURL = media.url;
-                let imgId = media.id;
-                let elementID = `Gallery.Image.id_${imgId}`;
+                let mediaId = media.id;
+                let mediaType = (media.type) ? media.type : 'image';
+                let elementID = `Gallery.Image.id_${mediaId}`;
 
-                let mediaRender = <img id={ elementID} src={ mediaURL } style={ this.styles('picture') } onError={ ()=>{ this.mediaErrorHandler(elementID) } }/>;
+                let mediaRender = <img id={ elementID} src={ mediaURL } style={ this.styles('picture') } onError={ ()=>{ this.mediaErrorHandler(elementID, mediaType) } }/>;
 
                 if ( media.type && media.mimeType && media.type === 'video' ) {
-                    mediaRender = <video controls height={800} style={ {maxHeight: '100%'} } src={ mediaURL } type={ `video/${media.mimeType}` }/>;
+                    mediaRender = <video 
+                                    controls 
+                                    height={800} 
+                                    style={ {maxHeight: '100%'} } 
+                                    src={ mediaURL } 
+                                    type={ `video/${media.mimeType}` } 
+                                    onError={ ()=>{ this.mediaErrorHandler(elementID, mediaType) } }
+                                  />;
+                } else if ( media.type && media.mimeType && media.type === 'audio' ) {
+                    mediaRender = <audio 
+                                    controls 
+                                    src={ mediaURL } 
+                                    type={ `video/${media.mimeType}` } 
+                                    onError={ ()=>{ this.mediaErrorHandler(elementID, mediaType) } }
+                                  />;
                 };
 
                 return(
@@ -451,24 +466,24 @@ module.exports = {
                 );
             },
 
-            renderThumbnailMap(image, key) {
+            renderThumbnailMap(media, key) {
                 let {selectedId} = this.state;
                 
-                let thumbSRC = (image.thumbnail) ? image.thumbnail : image.url;
+                let thumbSRC = (media.thumbnail) ? media.thumbnail : media.url;
 
-                let imageID = image.id;
+                let mediaID = media.id;
                 
                 const thumbClick = () => {
-                    this.setState({selectedId: imageID});
+                    this.setState({selectedId: mediaID});
                 };
 
                 let thumbnailWrapStyle = this.styles('thumbnail');
-                    thumbnailWrapStyle.border = (imageID === selectedId) 
+                    thumbnailWrapStyle.border = (mediaID === selectedId) 
                                                 ? `3px solid ${core.theme('colors.primary')}` 
                                                 : `3px solid transparent`;
                 let elementID = `ThumbnailImage.id_${key}`;
 
-                if ( imageID === selectedId && document.getElementById(elementID) ) {
+                if ( mediaID === selectedId && document.getElementById(elementID) ) {
                     setTimeout(() => { document.getElementById(elementID).scrollIntoView({ block: 'end', behavior: 'smooth', inline: 'center'}); }, 0);
                 };
 
@@ -476,10 +491,10 @@ module.exports = {
                     <div id={`Thumbnail.id_${key}`} key={key} style={ thumbnailWrapStyle } onClick={ thumbClick }>
                         <img id={ elementID }
                             src={ thumbSRC } 
-                            onError={ ()=>{ this.mediaErrorHandler(elementID) }}
+                            onError={ ()=>{ this.mediaErrorHandler(elementID, media.type) }}
                             style={ this.styles('thumbnailImage') }
                         />
-                        { this.getSourceIcon(image, 'thumb') }
+                        { this.getSourceIcon(media, 'thumb') }
                     </div>
                 );
             },

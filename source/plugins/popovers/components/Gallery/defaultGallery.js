@@ -121,23 +121,37 @@ module.exports = [
         type: 'video',
         mimeType: 'mp4',
         url: `${defaultPath}/big_buck_bunny.mp4`,
-        thumbnail: `${defaultPath}/big_buck_bunny_thumb.png`,
+        // thumbnail: `${defaultPath}/big_buck_bunny_thumb.png`,
         info: 'This is a example for big_buck_bunny info body text.'
+// }, {
+//     id: '25091980020',
+//     name: 'small 3pg',
+//     type: 'video',
+//     mimeType: '3gp',
+//     url: `${defaultPath}/small.3gp`,
+//     thumbnail: `${defaultPath}/small_thumb.png`,
+//     info: 'This is a example for small.3gp info body text.'
+// }, {
+//     id: '25091980021',
+//     name: 'Stephane Legar - Comme Ci Comme ça (Music Video)  סטפן לגר - קומסי קומסה',
+//     type: 'video',
+//     mimeType: 'flv',
+//     url: `${defaultPath}/Stephane Legar - Comme Ci Comme ça (Music Video)  סטפן לגר - קומסי קומסה.flv`,
+//     thumbnail: `${defaultPath}/Stephane Legar - Comme Ci Comme ça (Music Video)  סטפן לגר - קומסי קומסה_thumb.png`,
+//     info: 'This is a example for Stephane Legar - Comme Ci Comme ça (Music Video)  סטפן לגר - קומסי קומסה info body text.'
     }, {
-        id: '25091980020',
-        name: 'small 3pg',
-        type: 'video',
-        mimeType: '3gp',
-        url: `${defaultPath}/small.3gp`,
-        thumbnail: `${defaultPath}/small_thumb.png`,
-        info: 'This is a example for small.3gp info body text.'
+        id: '25091980022',
+        name: 'stephane-legar-comme-ci-comme-ca',
+        type: 'audio',
+        mimeType: 'mp3',
+        url: `${defaultPath}/stephane-legar-comme-ci-comme-ca.mp3`,
+        thumbnail: `${defaultPath}/stephane-legar-comme-ci-comme-ca_thumb.png`,
+        info: 'This is a example for stephane-legar-comme-ci-comme-ca info body text.'
     }, {
-        id: '25091980021',
-        name: 'Stephane Legar - Comme Ci Comme ça (Music Video)  סטפן לגר - קומסי קומסה',
-        type: 'video',
-        mimeType: 'flv',
-        url: `${defaultPath}/Stephane Legar - Comme Ci Comme ça (Music Video)  סטפן לגר - קומסי קומסה.flv`,
-        thumbnail: `${defaultPath}/Stephane Legar - Comme Ci Comme ça (Music Video)  סטפן לגר - קומסי קומסה_thumb.png`,
-        info: 'This is a example for Stephane Legar - Comme Ci Comme ça (Music Video)  סטפן לגר - קומסי קומסה info body text.'
+        id: '25091980023',
+        name: 'x100s',
+        url: `${defaultPath}/x100s.jpg`,
+        thumbnail: `${defaultPath}/x100s.jpg`,
+        info: 'This is a example for x100s info body text.'
     },
 ];
