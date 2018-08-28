@@ -63,6 +63,7 @@
     "downshift": "^2.0.19",
     "express": "^4.16.3",
     "keycode": "^2.2.0",
+    "klaw": "^3.0.0",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
     "react-ace": "^6.1.4",

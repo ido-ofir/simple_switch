@@ -156,12 +156,12 @@ module.exports = {
                                         <Icon style={{
                                           ...styles.navRow.icon,
                                           fontSize: iconSize,
-                                          color: (activeView === item.view) ? core.theme("colors.secondary") : core.theme("colors.gray3") }} >
+                                          color: (activeView === item.view) ? core.theme("colors.secondary") : core.theme("colors.gray") }} >
                                         {item.icon}
                                         </Icon>
                                     </ListItemIcon>
                                     <ListItemText
-                                        primary={<span style={{...styles.navRow.label, color: item.disabled ? core.theme('colors.gray3') : (activeView === item.view) ? core.theme("colors.secondary") : core.theme('colors.gray3') }}>{item.label}</span>}
+                                        primary={<span style={{...styles.navRow.label, color: item.disabled ? core.theme('colors.gray') : (activeView === item.view) ? core.theme("colors.secondary") : core.theme('colors.gray') }}>{item.label}</span>}
                                     />
                                 </div>
                             </ListItem>
@@ -197,7 +197,7 @@ module.exports = {
                                                   fontSize: iconSize,
                                                   margin: 0, transform: isPinned ? 'rotate(0deg)' : 'rotate(-90deg)',
                                                   transition: 'transform 0.25s ease-out',
-                                                  color: isPinned ? core.theme("colors.secondary") : core.theme("colors.gray3")}}>
+                                                  color: isPinned ? core.theme("colors.secondary") : core.theme("colors.gray")}}>
                                             {core.icons('pin')}
                                         </Icon>
                                         </ListItemIcon>

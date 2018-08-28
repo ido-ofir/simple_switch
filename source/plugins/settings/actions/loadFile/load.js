@@ -1,6 +1,6 @@
 
 module.exports = {
-    name: "saveSettings",
+    name: "loadSettings",
     dependencies: [],
     schema: [{
         key: 'name',
@@ -12,13 +12,12 @@ module.exports = {
 
         var core = this;
 
-        return ({ data, label, key }, promise) => {
-          var parsed = JSON.stringify(data, null, 4);
-          core.request.post('/saveFile', { fileName: label, text: parsed, dir: key }).then( ({ response, results, error }) => {
+        return (data, promise) => {
+          core.request.post('/loadFile').then( ({ response, results, error }) => {
               if (results.success) {
                 let notify = {
-                    title: core.translate(`${label} saved`),
-                    text: results.msg,
+                    title: 'loaded',
+                    text: '',
                     alertKind: 'success'
                 }
                 core.emit('notify',notify);

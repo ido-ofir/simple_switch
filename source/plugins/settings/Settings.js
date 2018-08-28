@@ -4,6 +4,7 @@ module.exports = {
     actions: [
       require('./actions/getConfiguration'),
       require('./actions/saveFile'),
+      require('./actions/loadFile'),
     ],
     modules: [
 
@@ -21,7 +22,9 @@ module.exports = {
         var _options = {
           BaseApi: 'http://some.ip.for/api',
           getInitialFiles: (callback) => {
-            core.plugins.Settings.run('getConfiguration').then((config)=>{
+            core.plugins.Settings.run('getConfiguration').then(( data )=>{
+              console.debug('data > ', data);
+              let { config } = data;
               if (config) {
                 core.plugins.Settings.set(['config'], config)
                 if (config.hasOwnProperty('theme')) {

@@ -1,4 +1,4 @@
 module.exports = {
-  "theme": require('./theme.js'),
+  "theme": require('./theme/default.json'),
   // "icons": require('./icons.js'),
 }

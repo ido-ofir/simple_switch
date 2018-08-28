@@ -1,8 +1,14 @@
 
-import { Typography, AppBar, Button, Paper, Tabs, IconButton, Tab, Icon } from '@material-ui/core';
+import {
+  Typography, AppBar, Toolbar, IconButton,
+  Paper, Tabs, Tab,
+  Icon, Menu, MenuItem,
+  Divider
+} from '@material-ui/core';
 
 import brace from 'brace';
 import AceEditor from 'react-ace';
+
 import 'brace/mode/javascript';
 import 'brace/mode/json';
 import 'brace/theme/kr_theme';
@@ -60,6 +66,7 @@ module.exports = {
 
                 return {
                     error: null,
+                    anchorEl: null,
                     tabValue: 0,
                     activeTab: { key: 'theme', label: 'theme' },
                     tabs: [{
@@ -115,16 +122,28 @@ module.exports = {
               core.plugins.Settings.run('saveSettings', activeTab)
             },
 
+            handleLoad(){
+              core.plugins.Settings.run('loadSettings')
+            },
+
+            handleSaveMenu(e){
+              this.setState({ anchorEl: e.currentTarget })
+            },
+
+            handleCloseSaveMenu(e){
+              this.setState({ anchorEl: null })
+            },
+
             render() {
                 let { config } = this.props;
-                let { tabValue, tabs, activeTab } = this.state;
+                let { tabValue, anchorEl, tabs, activeTab } = this.state;
                 return (
 
                     <div id={'root.settings'} style={{ height: '100%', width: '100%', display: 'flex',  flexDirection: 'column' }}>
 
-                        <AppBar position="static" color="default">
+                        <AppBar position="static" color="default" style={{ flexDirection : 'row', height: 40 }}>
                             <Tabs
-                                style={{ minHeight: 40, maxHeight: 40, height: 40}}
+                                style={{ minHeight: 40, maxHeight: 40, height: '100%', width: '100%' }}
                                 value={tabValue}
                                 onChange={this.handleChange}
                                 indicatorColor="primary"
@@ -136,6 +155,14 @@ module.exports = {
                                     _.map(tabs, this.renderTab)
                                 }
                             </Tabs>
+
+
+                          <IconButton
+                                  style={{ height: 40, width: 40 }}
+                                  size={ 'small' }
+                                  onClick={ this.handleSaveMenu }>
+                            <Icon style={{ cursor: 'pointer', marginRight: 5 }} >{ core.icons('more') }</Icon>
+                          </IconButton>
                         </AppBar>
 
                         <div style={ styles.tabContent }>
@@ -143,12 +170,18 @@ module.exports = {
                                 this.getTabContent(tabs[tabValue])
                             }
                         </div>
+                        <Menu
+                          MenuListProps={{ style: { width: 220 }, dense: true }}
+                          anchorEl={anchorEl}
+                          open={ Boolean(anchorEl) }
+                          onClose={ this.handleCloseSaveMenu } >
+                          <MenuItem style={ styles.menuItem } onClick={ this.handleSave }>  {  core.translate('Save')+' '+activeTab.label }</MenuItem>
+                          <MenuItem style={ styles.menuItem } onClick={this.handleCloseSaveMenu}>  {  core.translate('Save as') }</MenuItem>
+                          <Divider style={{ marginBottom: 5 }}/>
+                          <MenuItem style={ styles.menuItem } onClick={this.handleLoad}>  {  core.translate('Load') }</MenuItem>
 
-                        <Button variant="contained" size="small" aria-label="Save" onClick={ this.handleSave } style={{
-                          position: 'absolute', bottom: '15px', right: '15px', height: '35px' }}>
-                          <Icon style={{ fontSize: 16, cursor: 'pointer', marginRight: 5 }} >{ core.icons('save') }</Icon>
-                          {  core.translate('Save')+' '+activeTab.label }
-                        </Button>
+                        </Menu>
+
                     </div>
                 )
 
@@ -168,7 +201,12 @@ let styles = {
     overflow: 'auto',
     display: 'flex',
     justifyContent: 'center'
-
+  },
+  menuItem: {
+    height: 'auto',
+    padding: '5px 5px 5px 24px',
+    fontSize: '12px',
+    height: '20px',
   }
 }
                       {/* <AceEditor

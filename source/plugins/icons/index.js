@@ -3,6 +3,7 @@ module.exports = {
     tree: {
         menu: 'menu',
         home: 'home',
+        more: 'more_vert',
         folder: 'folder',
         addFolder: 'create_new_folder',
         folderShared: 'folder_shared',
@@ -63,7 +64,7 @@ module.exports = {
         email: 'email',
         like: 'thumb_up',
         pdfFile: 'fas fa-file-pdf',
-        
+
         // social icons - material don't have ones, so we use FontAwesome
 
         defaultIcon: 'fa fa-globe',
