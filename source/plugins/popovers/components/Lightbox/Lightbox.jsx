@@ -75,7 +75,7 @@ module.exports = {
                         zIndex:  1500,
                         width:  '100%', 
                         height: '100%',
-                        background: '#000000bb',// core.theme('transparent.lightbox'),
+                        background: core.theme('transparent.black_75'),
                         overflow: 'hidden',
                         ...rootStyle
                     },
@@ -92,7 +92,7 @@ module.exports = {
                         flexDirection: 'row',
                         width: '100%', 
                         height: '100%',
-                        color: '#ffffff', //core.theme('colors.white'),
+                        color: core.theme('colors.white'),
                         ...bodyStyle
                     },
                     children: {

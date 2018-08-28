@@ -32,7 +32,7 @@ module.exports = {
             styles(s) {
                 let styles = {
                     root: {
-                        background: core.theme('colors.primary'),
+                        background: core.theme('backgrounds.primary'),
                         position: 'relative',
                     },
                     toolbar: {
@@ -59,39 +59,6 @@ module.exports = {
                         marginRight: 15,
                         marginTop: '-5px',
                     },
-                    textLogo:{
-                        fontSize: 22,
-                        marginTop: '-2px',
-                        fontWeight: '400',
-                        fontVariantCaps: 'all-petite-caps',
-                    },
-                    searchesWrap: {
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center'
-                    },
-                    bulkSearchButton: {
-                        fontSize: 15,
-                        fontWeight: 400,
-                        minWidth: 148,
-                        padding: '5px 8px',
-                        height: '32px',
-                        minHeight: '32px',
-                        color: core.theme('colors.white'),
-                        backgroundColor: core.theme('backgrounds.blue'),
-                        margin: '0px 0 0 15px',
-                        whiteSpace: 'nowrap',
-                        borderRadius: 2,
-                    },
-                    bulkSearchIcon: {
-                        marginRight: 5,
-                    },
-                    userMenu: {
-                        marginRight: 5,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }
                 }
 
                 return(styles[s]);
@@ -104,7 +71,6 @@ module.exports = {
                     <AppBar id={'AppBar.root'} position={ 'static' } style={ this.styles('root') }>
                         <Toolbar disableGutters={ true } variant={ 'dense' } style={ this.styles('toolbar') }>
                             <div id={'AppBar.left'} style={ this.styles('left') }>
-
                                 <div id={'AppBar.logoWrap'} style={ this.styles('logosWrap') }>
                                     <img src='/resources/images/simpleSwitchLogo.png' style={ this.styles('imgLogo') } />
                                     {/*

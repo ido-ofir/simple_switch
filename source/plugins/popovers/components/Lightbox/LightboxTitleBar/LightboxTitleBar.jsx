@@ -33,7 +33,7 @@ module.exports = {
 
                 let styles = {
                     root: {
-                        background: '#01579b', //core.theme('colors.primary'),
+                        background: core.theme('backgrounds.primary'),
                         position: 'relative',
                         paddingLeft: 15,
                         ...titleRootStyle,
@@ -61,10 +61,10 @@ module.exports = {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: '#ffffff', //core.theme('colors.white'),
+                        color: core.theme('colors.white'),
                     },
                     iconStyle: { 
-                        color: '#ffffff', //core.theme('colors.white'),
+                        color: core.theme('colors.white'),
                         cursor: 'pointer',
                         fontSize: 24,
                     },

@@ -37,11 +37,11 @@ module.exports = {
 
             componentDidMount() {
                 document.addEventListener("keydown", this.keyboardKeyHandle);
-                document.addEventListener("onkeydown", this.keyboardKeyHandle);
+                document.addEventListener("onkeydown", this.keyboardKeyHandle); // for non alphanumeric keys
             },
             
             componentWillUnmount() {
-                document.removeEventListener("keydown", this.keyboardKeyHandle);
+                document.removeEventListener("keydown", this.keyboardKeyHandle); 
                 document.removeEventListener("onkeydown", this.keyboardKeyHandle);
             },
 
@@ -64,7 +64,7 @@ module.exports = {
                         position: 'absolute',
                         top: 0,
                         right: 0,
-                        backgroundColor: '#00000066', //core.theme('transparent.black_40'),
+                        backgroundColor: core.theme('transparent.black_40'),
                         borderRadius: 3,
                         padding: "3px",
                         display: "flex",
@@ -78,8 +78,8 @@ module.exports = {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        color: '#ffffff', //core.theme('colors.white'),
-                        textShadow: "0px 0px 1px black",
+                        color: core.theme('colors.white'),
+                        textShadow: "0px 0px 1px #000",
                     },
                     action: {
                         borderRadius: 3,
@@ -113,7 +113,7 @@ module.exports = {
                         bottom: 33,
                         left: 0,
                         right: 0,
-                        backgroundColor: '#000000cc', //core.theme('transparent.black_80'),
+                        backgroundColor: core.theme('transparent.black_80'),
                         borderRadius: 2,
                         overflowX: 'hidden',
                         overflowY: 'hidden',
@@ -128,7 +128,7 @@ module.exports = {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        backgroundColor: '#ffffffd9', //core.theme('transparent.white_85'),
+                        backgroundColor: core.theme('transparent.white_85'),
                     },
                     thumbnailImage: {
                         cursor: 'pointer',
@@ -141,13 +141,13 @@ module.exports = {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: '#ffffff', //core.theme('colors.white'),
+                        color: core.theme('colors.white'),
                     },
                     iconStyle: { 
-                        color: '#ffffff', //core.theme('colors.white'),
+                        color: core.theme('colors.white'),
                         cursor: 'pointer',
                         fontSize: 75,
-                        textShadow: "0px 0px 1px black",
+                        textShadow: `0px 0px 1px ${core.theme('colors.black')}`,
                     },
                     prevArrow: {
                         display: (noThumbnails) ? 'none' : "flex",
@@ -171,10 +171,10 @@ module.exports = {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: '#ffffff', //core.theme('colors.white'),
+                        color: core.theme('colors.white'),
                     },
                     downloadIcon: { 
-                        color: '#ffffff', //core.theme('colors.white'),
+                        color: core.theme('colors.white'),
                         cursor: 'pointer',
                         fontSize: 24,
                         textShadow: "0px 0px 1px black",
@@ -193,7 +193,7 @@ module.exports = {
                         justifyContent: "center",
                         fontSize: 8,
                         zIndex: 2, 
-                        color: '#ffffff', //core.theme('colors.white')
+                        color: core.theme('colors.white')
                     }
                 }
                 return(styles[s]);
@@ -300,14 +300,28 @@ module.exports = {
             getImageDownloadName(image, selected_idx) {
 
                 let urlSplit = image.url.split('.');
-                let imgExtention = urlSplit[urlSplit.length - 1];
-                if (imgExtention.length > 3) imgExtention = 'jpg';
+                let imgExtention = image.mimetype ? image.mimetype : urlSplit[urlSplit.length - 1];
+                let type = '';
+
+                if ( !image.type ) type = 'image';
+                else {
+                    switch (image.type) {
+                        case 'video' :
+                            type = 'video';
+                            break;
+                        case '' :
+                        case 'image' :
+                        default:
+                            type = 'image';
+                            break;
+                    }
+                }
 
                 let imageName = image.name;
 
                 if ( !imageName || _.isEmpty(imageName) ) { imageName = core.translate('Gallery'); }
 
-                return `${imageName}-${core.translate('Image')}-${selected_idx+1}.${imgExtention}`;
+                return `${imageName}-${core.translate(type)}-${selected_idx+1}.${imgExtention}`;
             },
 
             imageErrorHandler(elementID) {
