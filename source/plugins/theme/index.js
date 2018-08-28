@@ -8,7 +8,7 @@ module.exports = {
     tree: {
         // theme: {
             colors: {
-                primary: '#01579b',
+                // primary: '#01579b',
                 // lightPrimary: '#2b73ab',
                 // error: "#ff0000",
                 // secondary: '#2979ff',
@@ -71,8 +71,6 @@ module.exports = {
             //     nav: '#333333',
             //     item: '#ebebeb',
             //     superLightGrey: '#fafafa',
-            //     lightbox: '#000000bb', //transparent
-            //     black04: '#00000066', //transparent
             //     flash: '#d5ffdf',
             //     drop: colors.green['200'],
             // },
@@ -87,7 +85,9 @@ module.exports = {
             // transparent: {
             //     white: '#ffffffe0',
             //     white_85: '#ffffffd9',
+            //     black_40: '#00000066',
             //     black_80: '#000000cc',
+            //     lightbox: '#000000bb',
             // },
             //
             // circle:{

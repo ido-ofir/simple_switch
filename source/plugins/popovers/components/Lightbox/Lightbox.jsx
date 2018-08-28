@@ -75,7 +75,7 @@ module.exports = {
                         zIndex:  1500,
                         width:  '100%', 
                         height: '100%',
-                        background: core.theme('backgrounds.lightbox'),
+                        background: '#000000bb',// core.theme('transparent.lightbox'),
                         overflow: 'hidden',
                         ...rootStyle
                     },
@@ -92,7 +92,7 @@ module.exports = {
                         flexDirection: 'row',
                         width: '100%', 
                         height: '100%',
-                        color: core.theme('colors.white'),
+                        color: '#ffffff', //core.theme('colors.white'),
                         ...bodyStyle
                     },
                     children: {
@@ -181,7 +181,9 @@ module.exports = {
                     newState = { title, info, children, rootStyle, innerStyle, bodyStyle, childrenStyle, showLightbox: true };
                 }
 
-                this.setState( newState );
+                this.setState( newState, ()=>{
+                    core.tree.set(['plugins', 'popovers','lightboxOpen'], true);
+                } );
             },
 
             closeLightbox() {
@@ -196,7 +198,9 @@ module.exports = {
                     showLightbox: false,
                 }
                 
-                this.setState(emptyState);
+                this.setState( emptyState, ()=>{
+                    core.tree.set(['plugins', 'popovers','lightboxOpen'], false);
+                } );
             },
             
             render() {

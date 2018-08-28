@@ -64,7 +64,7 @@ module.exports = {
                         position: 'absolute',
                         top: 0,
                         right: 0,
-                        backgroundColor: core.theme('backgrounds.black04'),
+                        backgroundColor: '#00000066', //core.theme('transparent.black_40'),
                         borderRadius: 3,
                         padding: "3px",
                         display: "flex",
@@ -78,7 +78,8 @@ module.exports = {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        color: core.theme('colors.white'),
+                        color: '#ffffff', //core.theme('colors.white'),
+                        textShadow: "0px 0px 1px black",
                     },
                     action: {
                         borderRadius: 3,
@@ -108,16 +109,17 @@ module.exports = {
                         alignItems: "center",
                         height: 150,
                         position: "absolute",
+                        padding: 10,
                         bottom: 33,
                         left: 0,
                         right: 0,
-                        backgroundColor: core.theme('transparent.black_80'),
+                        backgroundColor: '#000000cc', //core.theme('transparent.black_80'),
                         borderRadius: 2,
                         overflowX: 'hidden',
                         overflowY: 'hidden',
                     },
                     thumbnail: {
-                        marginRight: 15,
+                        margin: '0px 10px',
                         borderRadius: 4,
                         position: "relative",
                         height: 100,
@@ -126,7 +128,7 @@ module.exports = {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        backgroundColor: core.theme('transparent.white_85'),
+                        backgroundColor: '#ffffffd9', //core.theme('transparent.white_85'),
                     },
                     thumbnailImage: {
                         cursor: 'pointer',
@@ -139,12 +141,13 @@ module.exports = {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: core.theme('colors.white'),
+                        color: '#ffffff', //core.theme('colors.white'),
                     },
                     iconStyle: { 
-                        color: core.theme('colors.white'),
+                        color: '#ffffff', //core.theme('colors.white'),
                         cursor: 'pointer',
                         fontSize: 75,
+                        textShadow: "0px 0px 1px black",
                     },
                     prevArrow: {
                         display: (noThumbnails) ? 'none' : "flex",
@@ -168,12 +171,13 @@ module.exports = {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: core.theme('colors.white'),
+                        color: '#ffffff', //core.theme('colors.white'),
                     },
                     downloadIcon: { 
-                        color: core.theme('colors.white'),
+                        color: '#ffffff', //core.theme('colors.white'),
                         cursor: 'pointer',
                         fontSize: 24,
+                        textShadow: "0px 0px 1px black",
                     },
                     sourceWrap: {
                         right: 0,
@@ -189,7 +193,7 @@ module.exports = {
                         justifyContent: "center",
                         fontSize: 8,
                         zIndex: 2, 
-                        color: core.theme('colors.white')
+                        color: '#ffffff', //core.theme('colors.white')
                     }
                 }
                 return(styles[s]);
@@ -207,155 +211,7 @@ module.exports = {
             },
             
             defaultGallery() {
-
-                let defaultPath = '/resources/images/default_gallery';
-                return [
-                    { 
-                        id: '19487501bat_metal', 
-                        name: 'bat_metal', 
-                        url: `${defaultPath}/bat_metal.jpg`,
-                        info: { 
-                            title: 'bat_metal', 
-                            body: 'This is a example for bat_metal info body text.' 
-                        } 
-                    }, { 
-                        id: '19487502beach_party2', 
-                        name: 'beach_party 2', 
-                        url: `${defaultPath}/beach_party 2.jpg`,
-                        info: { 
-                            title: 'beach_party 2', 
-                            body: 'This is a example for beach_party 2 info body text.' 
-                        } 
-                    }, { 
-                        id: '19487503beach_party', 
-                        name: 'beach_party', 
-                        url: `${defaultPath}/beach_party.jpg`,
-                        info: { 
-                            title: 'beach_party', 
-                            body: 'This is a example for beach_party info body text.' 
-                        } 
-                    }, { 
-                        id: '19487504ff_x20_008', 
-                        name: 'ff_x20_008', 
-                        url: `${defaultPath}/ff_x20_008.JPG`,
-                        info: { 
-                            title: 'ff_x20_008', 
-                            body: 'This is a example for ff_x20_008 info body text.' 
-                        } 
-                    }, { 
-                        id: '19487505happy-people', 
-                        name: 'happy-people', 
-                        url: `${defaultPath}/happy-people.png`,
-                        info: { 
-                            title: 'happy-people', 
-                            body: 'This is a example for happy-people info body text.' 
-                        } 
-                    }, { 
-                        id: '19487506happy-people-wallpaper-mobile', 
-                        name: 'happy-people-wallpaper-mobile', 
-                        url: `${defaultPath}/happy-people-wallpaper-mobile.jpg`,
-                        info: { 
-                            title: 'happy-people-wallpaper-mobile', 
-                            body: 'This is a example for happy-people-wallpaper-mobile info body text.' 
-                        } 
-                    }, { 
-                        id: '19487507images', 
-                        name: 'images', 
-                        url: `${defaultPath}/images.jpg`,
-                        info: { 
-                            title: 'images', 
-                            body: 'This is a example for images info body text.' 
-                        } 
-                    }, { 
-                        id: '19487508IMG_20170616_214324', 
-                        name: 'IMG_20170616_214324', 
-                        url: `${defaultPath}/IMG_20170616_214324.jpeg`,
-                        info: { 
-                            title: 'IMG_20170616_214324', 
-                            body: 'This is a example for IMG_20170616_214324 info body text.' 
-                        } 
-                    }, { 
-                        id: '19487509lamp', 
-                        name: 'lamp', 
-                        url: `${defaultPath}/lamp.jpg`,
-                        info: { 
-                            title: 'lamp', 
-                            body: 'This is a example for lamp info body text.' 
-                        } 
-                    }, { 
-                        id: '19487510milla_jovovich', 
-                        name: 'milla_jovovich', 
-                        url: `${defaultPath}/milla_jovovich.jpg`,
-                        info: { 
-                            title: 'milla_jovovich', 
-                            body: 'This is a example for milla_jovovich info body text.' 
-                        } 
-                    }, { 
-                        id: '19487511papers.co-ni17-red-rose-flower-spring-happy-33-iphone6-wallpaper', 
-                        name: 'papers.co-ni17-red-rose-flower-spring-happy-33-iphone6-wallpaper', 
-                        url: `${defaultPath}/papers.co-ni17-red-rose-flower-spring-happy-33-iphone6-wallpaper.jpg`,
-                        info: { 
-                            title: 'papers.co-ni17-red-rose-flower-spring-happy-33-iphone6-wallpaper', 
-                            body: 'This is a example for papers.co-ni17-red-rose-flower-spring-happy-33-iphone6-wallpaper info body text.' 
-                        } 
-                    }, { 
-                        id: '19487512sun_set', 
-                        name: 'sun_set', 
-                        url: `${defaultPath}/sun_set.jpg`,
-                        info: { 
-                            title: 'sun_set', 
-                            body: 'This is a example for sun_set info body text.' 
-                        } 
-                    }, { 
-                        id: '19487513teen_titans', 
-                        name: 'teen_titans', 
-                        url: `${defaultPath}/teen_titans.jpg`,
-                        info: { 
-                            title: 'teen_titans', 
-                            body: 'This is a example for teen_titans info body text.' 
-                        } 
-                    }, { 
-                        id: '19487514the_trooper', 
-                        name: 'the_trooper', 
-                        url: `${defaultPath}/the_trooper.jpg`,
-                        info: { 
-                            title: 'the_trooper', 
-                            body: 'This is a example for the_trooper info body text.' 
-                        } 
-                    }, { 
-                        id: '19487515wallpaper.wiki-Free-Desktop-Happy-Pictures-HD-PIC-WPE008150', 
-                        name: 'wallpaper.wiki-Free-Desktop-Happy-Pictures-HD-PIC-WPE008150', 
-                        url: `${defaultPath}/wallpaper.wiki-Free-Desktop-Happy-Pictures-HD-PIC-WPE008150.jpg`,
-                        info: { 
-                            title: 'wallpaper.wiki-Free-Desktop-Happy-Pictures-HD-PIC-WPE008150', 
-                            body: 'This is a example for wallpaper.wiki-Free-Desktop-Happy-Pictures-HD-PIC-WPE008150 info body text.' 
-                        } 
-                    }, { 
-                        id: '19487516Wallpapers-flower-pink-love-garden-nature', 
-                        name: 'Wallpapers-flower-pink-love-garden-nature', 
-                        url: `${defaultPath}/Wallpapers-flower-pink-love-garden-nature.jpg`,
-                        info: { 
-                            title: 'Wallpapers-flower-pink-love-garden-nature', 
-                            body: 'This is a example for Wallpapers-flower-pink-love-garden-nature info body text.' 
-                        } 
-                    }, { 
-                        id: '19487517x100s-moore-farms-passion-flower-0107-2013', 
-                        name: 'x100s-moore-farms-passion-flower-0107-2013', 
-                        url: `${defaultPath}/x100s-moore-farms-passion-flower-0107-2013.jpg`,
-                        info: { 
-                            title: 'x100s-moore-farms-passion-flower-0107-2013', 
-                            body: 'This is a example for x100s-moore-farms-passion-flower-0107-2013 info body text.' 
-                        } 
-                    }, { 
-                        id: '19487518xenia', 
-                        name: 'xenia', 
-                        url: `${defaultPath}/xenia.jpg`,
-                        info: { 
-                            title: 'xenia', 
-                            body: 'This is a example for xenia info body text.' 
-                        } 
-                    }, 
-                ]
+                return require('./defaultGallery.js');
             },
 
             getSourceIcon(image, size = 'big') {
@@ -547,6 +403,8 @@ module.exports = {
                 let imgId = image.id;
                 let elementID = `Gallery.Image.id_${imgId}`;
 
+
+
                 return(
                     <div id={'Gallery.renderPicture'} style={ this.styles('pictureWrap') }>
                         <img id={ elementID}
@@ -560,8 +418,9 @@ module.exports = {
 
             renderThumbnailMap(image, key) {
                 let {selectedId} = this.state;
-                let imageURL = image.url;
                 
+                let thumbSRC = (image.thumbnail) ? image.thumbnail : image.url;
+
                 let imageID = image.id;
                 
                 const thumbClick = () => {
@@ -575,17 +434,13 @@ module.exports = {
                 let elementID = `ThumbnailImage.id_${key}`;
 
                 if ( imageID === selectedId && document.getElementById(elementID) ) {
-                    document.getElementById(elementID).scrollIntoView({
-                        block: 'end',
-                        behavior: 'smooth',
-                        inline: 'center'
-                    });
+                    setTimeout(() => { document.getElementById(elementID).scrollIntoView({ block: 'end', behavior: 'smooth', inline: 'center'}); }, 0);
                 };
 
                 return(
                     <div id={`Thumbnail.id_${key}`} key={key} style={ thumbnailWrapStyle } onClick={ thumbClick }>
                         <img id={ elementID }
-                            src={ imageURL } 
+                            src={ thumbSRC } 
                             onError={ ()=>{ this.imageErrorHandler(elementID) }}
                             style={ this.styles('thumbnailImage') }
                         />
@@ -636,7 +491,7 @@ module.exports = {
                     <div id={'Gallery.actionButtons'} style={ this.styles('actionButtons')}>
                         { this.renderCounter() }
                         { this.renderDownload() }
-                        { this.renderInfo() }
+                        {/* { this.renderInfo() } */}
                     </div>
                 )
             },

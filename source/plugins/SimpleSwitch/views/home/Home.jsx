@@ -144,6 +144,58 @@ module.exports = {
                 );
             },
 
+            renderPopup() {
+                return(
+                    <div id={'renderPopup'}>
+                        <Typography>
+                            I am a <a href="/#/home" onClick={ this.openPopup }>popup</a>
+                        </Typography>
+                    </div>
+                );
+            },
+
+            renderLightbox() {
+                return(
+                    <div id={'renderLightbox'}>
+                        <Typography>
+                            I am a <a href="/#/home" onClick={ this.openLightbox }>lightbox</a>
+                        </Typography>
+                    </div>
+                );
+            },
+
+            renderLightboxGallery() {
+                return(
+                    <div id={'renderLightboxGallery'}>
+                        <Typography>
+                            I am a <a href="/#/home" onClick={ this.openGallery }>gallery</a> at lightbox
+                        </Typography>
+                    </div>
+                );
+            },
+
+            renderLocalGallery() {
+                return(
+                    <div id={'renderLocalGallery'}>
+                        <Typography>
+                            <span>I am a local <a href="/#/home" onClick={ this.toggleLocalGallery }>gallery</a></span>
+                        </Typography>
+                        { this.renderGallery() }
+                    </div>
+                );
+            },
+
+            renderLocalOneItemGallery() {
+                return(
+                    <div id={'renderLocalOneItemGallery'}>
+                        <Typography>
+                            <span>I am a one item local <a href="/#/home" onClick={ this.toggleOneItemLocalGallery }>gallery</a></span>
+                        </Typography>
+                        { this.renderOneItemGallery() }
+                    </div>
+                );
+            },
+
             render() {
 
                 return (
@@ -152,24 +204,12 @@ module.exports = {
                         <Typography>
                             I am the home of your template!
                         </Typography>
-                        <Typography>
-                            I am a <a href="/#/home" onClick={ this.openPopup }>popup</a>
-                        </Typography>
-                        <Typography>
-                            I am a <a href="/#/home" onClick={ this.openLightbox }>lightbox</a>
-                        </Typography>
+                        { this.renderPopup() }
+                        { this.renderLightbox() }
                         &nbsp;<br/>
-                        <Typography>
-                            I am a <a href="/#/home" onClick={ this.openGallery }>gallery</a> at lightbox
-                        </Typography>
-                        <Typography>
-                            <span>I am a local <a href="/#/home" onClick={ this.toggleLocalGallery }>gallery</a></span>
-                        </Typography>
-                        <Typography>
-                            <span>I am a one item local <a href="/#/home" onClick={ this.toggleOneItemLocalGallery }>gallery</a></span>
-                        </Typography>
-                        { this.renderGallery() }
-                        { this.renderOneItemGallery() }
+                        { this.renderLightboxGallery() }
+                        { this.renderLocalGallery() }
+                        { this.renderLocalOneItemGallery() }
                         &nbsp;<br/>
                         <span>123</span>
                     </div>

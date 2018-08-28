@@ -69,8 +69,8 @@ module.exports = {
                         top: (hasTitle) ? 50 : 0,
                         bottom: 0,
                         overflow: 'hidden',
-                        background: core.theme('colors.white'),
-                        color: core.theme('colors.gray3'),
+                        background: '#ffffff', //core.theme('colors.white'),
+                        color: '#999999', //core.theme('colors.gray3'),
                         zIndex: 100,
                         transition: 'transform 0.25s ease-in-out',
                         ...infoWrapStyle
