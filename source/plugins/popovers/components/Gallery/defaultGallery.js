@@ -127,7 +127,7 @@ module.exports = [
         id: '25091980020',
         name: 'small 3pg',
         type: 'video',
-        mimeType: '3pg',
+        mimeType: '3gp',
         url: `${defaultPath}/small.3gp`,
         thumbnail: `${defaultPath}/small_thumb.png`,
         info: 'This is a example for small.3gp info body text.'

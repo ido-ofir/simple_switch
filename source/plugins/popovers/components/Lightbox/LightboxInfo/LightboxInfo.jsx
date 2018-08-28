@@ -49,7 +49,7 @@ module.exports = {
             },
 
             handleShowInfo(data) {
-                let { infoWrapStyle, infoInnerStyle, infoChildren, hasTitle } = data;
+                // let { infoWrapStyle, infoInnerStyle, infoChildren, hasTitle } = data;
 
                 this.setState({showInfo: true});
             },
@@ -95,7 +95,7 @@ module.exports = {
                 return (
                     <div id={'LightboxInfo.root'} style={ this.styles('root') }>
                         <div id={'LightboxInfo.inner'} style={ this.styles('inner') } >
-                        {infoChildren}
+                            {infoChildren}
                         </div>
                     </div>
                 )

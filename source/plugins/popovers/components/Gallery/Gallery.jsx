@@ -1,4 +1,4 @@
-import { Icon, IconButton } from '@material-ui/core/';
+import { Icon, IconButton, CircularProgress } from '@material-ui/core/';
 
 module.exports = {
     name: "Gallery",
@@ -28,6 +28,7 @@ module.exports = {
                 return {
                     selectedId: defaultGallery[0].id,
                     gallery: defaultGallery,
+                    downloading: false,
                 };
             },
 
@@ -46,7 +47,7 @@ module.exports = {
             },
 
             styles(s) {
-                let {gallery} = this.state;
+                let {gallery, downloading} = this.state;
                 let noThumbnails = gallery.length === 1;
 
                 let styles = {
@@ -89,7 +90,7 @@ module.exports = {
                         justifyContent: "center",
                         cursor: 'pointer',
                     },
-                    pictureWrap: {
+                    mediaWrap: {
                         height: (noThumbnails) ? '100%' : `calc(100% - 180px)`,
                         position: "relative",
                         paddingBottom: 15,
@@ -166,6 +167,7 @@ module.exports = {
                         height: 'calc(100% - 180px)',
                     },
                     renderDownloadButton: {
+                        pointer: (downloading) ? 'wait' : 'pointer',
                         height: 30,
                         width: 30,
                         display: 'flex',
@@ -173,11 +175,16 @@ module.exports = {
                         justifyContent: 'center',
                         color: core.theme('colors.white'),
                     },
+                    downloadWaiting: { 
+                        color: core.theme('colors.white'),
+                        cursor: 'wait',
+                        textShadow: `0px 0px 1px ${core.theme('colors.black')}`,
+                    },
                     downloadIcon: { 
                         color: core.theme('colors.white'),
                         cursor: 'pointer',
                         fontSize: 24,
-                        textShadow: "0px 0px 1px black",
+                        textShadow: `0px 0px 1px ${core.theme('colors.black')}`,
                     },
                     sourceWrap: {
                         right: 0,
@@ -271,7 +278,7 @@ module.exports = {
             gotoPrevImage() {
                 let {selectedId, gallery} = this.state;
                 let max = gallery.length - 1;
-                let selected_idx = this.getImageIndex(gallery, selectedId);
+                let selected_idx = this.getMediaIndex(gallery, selectedId);
                 let idx = (selected_idx === 0) ? max : selected_idx - 1;
                 
                 this.setState({selectedId: gallery[idx].id});
@@ -280,13 +287,13 @@ module.exports = {
             gotoNextImage() {
                 let {selectedId, gallery} = this.state;
                 let max = gallery.length - 1;
-                let selected_idx = this.getImageIndex(gallery, selectedId);
+                let selected_idx = this.getMediaIndex(gallery, selectedId);
                 let idx = (selected_idx === max) ? 0 : selected_idx + 1;
                 
                 this.setState({selectedId: gallery[idx].id});
             },
 
-            getImageIndex( gallery, givenID ) {
+            getMediaIndex( gallery, givenID ) {
                 let imageIndex = -1;
 
                 for (let i = 0; i < gallery.length; i++) {
@@ -297,15 +304,15 @@ module.exports = {
                 return imageIndex;
             },
 
-            getImageDownloadName(image, selected_idx) {
+            getImageDownloadName(media, selected_idx) {
 
-                let urlSplit = image.url.split('.');
-                let imgExtention = image.mimetype ? image.mimetype : urlSplit[urlSplit.length - 1];
+                let urlSplit = media.url.split('.');
+                let imgExtention = media.mimetype ? media.mimetype : urlSplit[urlSplit.length - 1];
                 let type = '';
 
-                if ( !image.type ) type = 'image';
+                if ( !media.type ) type = 'image';
                 else {
-                    switch (image.type) {
+                    switch (media.type) {
                         case 'video' :
                             type = 'video';
                             break;
@@ -317,23 +324,23 @@ module.exports = {
                     }
                 }
 
-                let imageName = image.name;
+                let mediaName = media.name;
 
-                if ( !imageName || _.isEmpty(imageName) ) { imageName = core.translate('Gallery'); }
+                if ( !mediaName || _.isEmpty(mediaName) ) { mediaName = core.translate('Gallery'); }
 
-                return `${imageName}-${core.translate(type)}-${selected_idx+1}.${imgExtention}`;
+                return `${mediaName}-${core.translate(type)}-${selected_idx+1}.${imgExtention}`;
             },
 
-            imageErrorHandler(elementID) {
+            mediaErrorHandler(elementID) {
                 document.getElementById(`${elementID}`)
                         .setAttribute('src', '/resources/images/placeholder-image.png');
             },
 
             renderDownload() {
-                let {gallery, selectedId} = this.state;
+                let {gallery, selectedId, downloading} = this.state;
                 let title = core.translate('Download this image');
 
-                let selected_idx = this.getImageIndex(gallery, selectedId);
+                let selected_idx = this.getMediaIndex(gallery, selectedId);
                 if( !gallery || !gallery[selected_idx] || !gallery[selected_idx].url ) return null;
                 
                 let image = gallery[selected_idx];
@@ -346,29 +353,43 @@ module.exports = {
                             text: core.translate('Unable to download the current image'),
                             alertKind: 'error'
                         });
+                        this.setState({downloading: false});
                     }
-                    let xhr = new XMLHttpRequest();
-                    xhr.responseType = 'blob';
-                    xhr.onload = () => {
-                        if (xhr.status === 404) { return error(); } 
-                        let alink = document.createElement('a');
-                            alink.href = window.URL.createObjectURL(xhr.response);
-                            alink.download = this.getImageDownloadName(image, selected_idx);
-                            alink.style.display = 'none';
-                            alink.onError = error;
-                        document.body.appendChild(alink);
-                            alink.click();
-                        document.body.removeChild(alink);
-                    };
-                    xhr.open('GET', imageURL);
-                    xhr.onError = error;
-                    xhr.send();
+                    this.setState({downloading: true}, ()=>{
+                        let xhr = new XMLHttpRequest();
+                        xhr.responseType = 'blob';
+                        xhr.onload = () => {
+                            if (xhr.status === 404) { return error(); } 
+                            let alink = document.createElement('a');
+                                alink.href = window.URL.createObjectURL(xhr.response);
+                                alink.download = this.getImageDownloadName(image, selected_idx);
+                                alink.style.display = 'none';
+                                alink.onError = error;
+                            document.body.appendChild(alink);
+                                alink.click();
+                            document.body.removeChild(alink);
+                        };
+                        xhr.open('GET', imageURL);
+                        xhr.onError = error;
+                        xhr.onreadystatechange = ()=>{ if (xhr.readyState === 4) { this.setState({downloading: false}); } }
+                        xhr.send();
+                    });
                 };
+
+                let downloadIcon = (downloading) ? 
+                                    <CircularProgress style={ this.styles('downloadWaiting') } size={20} thickness={2.0} variant={'indeterminate'}/> :
+                                    <Icon title={ title } style={ this.styles('downloadIcon')}>{ core.icons('download') }</Icon>;
 
                 return (
                     <div id={'Gallery.download'} style={ this.styles('action') } >
-                        <IconButton  key={ 'ImageDownload' } style={this.styles('renderDownloadButton')} onClick={ download } >
-                            <Icon title={ title } style={ this.styles('downloadIcon')}>{ core.icons('download') }</Icon>
+                        <IconButton
+                            disabled={downloading}
+                            disableRipple={downloading}
+                            key={ 'ImageDownload' }
+                            style={this.styles('renderDownloadButton')}
+                            onClick={ download }
+                        >
+                            { downloadIcon }
                         </IconButton>
                     </div>
                 );
@@ -396,7 +417,7 @@ module.exports = {
                 if (!gallery || !gallery.length) return null;
 
                 let gallerySize = gallery.length;
-                let selected_idx = this.getImageIndex(gallery, selectedId);
+                let selected_idx = this.getMediaIndex(gallery, selectedId);
 
                 return(
                     <div id={'Gallery.counter'} style={ this.styles('counter') } >
@@ -405,27 +426,27 @@ module.exports = {
                 );
             },
 
-            renderPicture() {
+            renderMedia() {
                 let {gallery, selectedId} = this.state;
 
-                let selected_idx = this.getImageIndex(gallery, selectedId);
+                let selected_idx = this.getMediaIndex(gallery, selectedId);
 
                 if( !gallery || !gallery[selected_idx] || !gallery[selected_idx].url ) return null;
 
-                let image = gallery[selected_idx];
-                let imageURL = image.url;
-                let imgId = image.id;
+                let media = gallery[selected_idx];
+                let mediaURL = media.url;
+                let imgId = media.id;
                 let elementID = `Gallery.Image.id_${imgId}`;
 
+                let mediaRender = <img id={ elementID} src={ mediaURL } style={ this.styles('picture') } onError={ ()=>{ this.mediaErrorHandler(elementID) } }/>;
 
+                if ( media.type && media.mimeType && media.type === 'video' ) {
+                    mediaRender = <video controls height={800} style={ {maxHeight: '100%'} } src={ mediaURL } type={ `video/${media.mimeType}` }/>;
+                };
 
                 return(
-                    <div id={'Gallery.renderPicture'} style={ this.styles('pictureWrap') }>
-                        <img id={ elementID}
-                             src={ imageURL }
-                             onError={ ()=>{ this.imageErrorHandler(elementID) } }
-                             style={ this.styles('picture') } 
-                        />
+                    <div id={'Gallery.renderMedia'} style={ this.styles('mediaWrap') }>
+                        { mediaRender }
                     </div>
                 );
             },
@@ -455,7 +476,7 @@ module.exports = {
                     <div id={`Thumbnail.id_${key}`} key={key} style={ thumbnailWrapStyle } onClick={ thumbClick }>
                         <img id={ elementID }
                             src={ thumbSRC } 
-                            onError={ ()=>{ this.imageErrorHandler(elementID) }}
+                            onError={ ()=>{ this.mediaErrorHandler(elementID) }}
                             style={ this.styles('thumbnailImage') }
                         />
                         { this.getSourceIcon(image, 'thumb') }
@@ -520,7 +541,7 @@ module.exports = {
                         { this.renderActionButtons() }
                         { this.renderPrevPicture() }
                         { this.renderNextPicture() }
-                        { this.renderPicture() }
+                        { this.renderMedia() }
                         { this.renderThumbs() }
                     </div>
                 )

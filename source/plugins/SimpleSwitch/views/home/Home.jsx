@@ -30,16 +30,19 @@ module.exports = {
                 path: PropTypes.array,
                 testEdit: PropTypes.bool,
             },
+
             getDefaultProps(){
                 return {
 
                 };
             },
+
             componentDidMount() {
                 this.isUnmounted = false;
                 // setTimeout(()=>{
                 // }, 5000)
             },
+
             componentWillUnmount() {
                 this.isUnmounted = true;
 
@@ -51,6 +54,21 @@ module.exports = {
                     showLocalGallery: false,
                     showOneItemLocalGallery: false,
                 };
+            },
+
+            styles(s) {
+                let styles = {
+                    root: {
+                        height: '100%',
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        padding: 15,
+                        overflowX: "auto",
+                    },
+                }
+                
+                return(styles[s]);
             },
 
             openPopup(){
@@ -82,12 +100,12 @@ module.exports = {
 
             toggleLocalGallery() {
                 let {showLocalGallery} = this.state;
-                this.setState({showLocalGallery: !showLocalGallery, showOneItemLocalGallery: false});
+                this.setState({showLocalGallery: !showLocalGallery});
             },
 
             toggleOneItemLocalGallery() {
                 let {showOneItemLocalGallery} = this.state;
-                this.setState({showOneItemLocalGallery: !showOneItemLocalGallery, showLocalGallery: false});
+                this.setState({showOneItemLocalGallery: !showOneItemLocalGallery});
             },
 
             renderGallery() {
@@ -200,7 +218,7 @@ module.exports = {
 
                 return (
 
-                    <div id={'root.home'} style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', padding: 15 }}>
+                    <div id={'root.home'} style={ this.styles('root')}>
                         <Typography>
                             I am the home of your template!
                         </Typography>
