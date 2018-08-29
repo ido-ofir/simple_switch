@@ -6,7 +6,7 @@ module.exports = {
     name: "ColorBox",
     description: '',
     propTypes: {},
-    dependencies: ['SimpleSwitch.helper', 'Settings.ColorPicker', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel'],
+    dependencies: ['SimpleSwitch.Helper', 'Settings.ColorPicker', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel'],
 
     get(Helper, ColorPicker, Loader, ExpandingPanel) {
 

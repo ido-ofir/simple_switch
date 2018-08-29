@@ -41,14 +41,10 @@ module.exports = {
 
             componentWillMount () {
                 core.plugins.Settings.getInitialFiles(()=>{
-                  core.plugins.SimpleSwitch.run('getLanguage').then(()=>{
-                    this.setState({start:true});
-                  }).catch( ()=>{
-                    this.setState({start:true});
-                  });
+                    this.getLanguage();
                 });
 
-
+                this.getDataExample();
             },
 
             componentDidMount() {
@@ -63,31 +59,26 @@ module.exports = {
                 this.setState({ error: err && err.toString() })
             },
 
+            getLanguage(){
+                core.plugins.SimpleSwitch.run('getLanguage').then(()=>{
+                    this.setState({start:true});
+                  }).catch( ()=>{
+                    this.setState({start:true});
+                });
+            },
+
+            getDataExample(){
+                core.plugins.SimpleSwitch.run('getDataEx').then((modifyData)=>{
+                   console.log('modifyData--> ',modifyData);
+                  }).catch( ()=>{
+                   console.log('2--> ',2);                    
+                });
+            },
+
             handleNav(route){
               core.plugins.router.to('/'+route);
               this.setState({ activeView: route })
 
-            },
-
-            searchFromNav(){  // not done! only tamplate
-                let search = core.plugins.router.get('search');
-                if(search){
-                    core.plugins.router.remove('search');
-
-                    let params = {
-                        a: search,
-                        loc: ''
-                    }
-
-                    core.plugins.SimpleSwitch.run('search', params).then( (result) => {
-
-
-                    }).catch(()=>{
-
-
-                    })
-
-                }
             },
 
             handleLoggedIn(){
@@ -97,14 +88,6 @@ module.exports = {
 
             onNavigation(route){
                 this.setState({activeView:route.name});
-
-                // if(route.name === 'home'){
-                //     let selectedItemId = core.plugins.router.get('selectedItemId');
-                //     core.emit('selectItem',{id:selectedItemId});
-                //    // this.searchFromNav();
-                // } else {
-                //     core.plugins.SimpleSwitch.set(['checkForTabsLoader'],0);
-                // }
             },
 
             addNotification({title, text, alertKind}){

@@ -12,7 +12,7 @@ module.exports = {
     name: "ThemeEditor",
     description: '',
     propTypes: {},
-    dependencies: ['SimpleSwitch.helper', 'SimpleSwitch.NoResults', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel', 'Settings.ColorBox'],
+    dependencies: ['SimpleSwitch.Helper', 'SimpleSwitch.NoResults', 'SimpleSwitch.Loader', 'SimpleSwitch.ExpandingPanel', 'Settings.ColorBox'],
     bindings: {
       config: ['config'],
     },

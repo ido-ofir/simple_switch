@@ -1,5 +1,5 @@
 module.exports = {
-    name: "helper",
+    name: "Helper",
     dependencies: [],
 
     get() {

@@ -5,7 +5,7 @@ module.exports = {
   name: "CountrySelect",
   description: '',
   propTypes: {},
-  dependencies: ['SimpleSwitch.helper'],
+  dependencies: ['SimpleSwitch.Helper'],
 
   get(Helper) {
 

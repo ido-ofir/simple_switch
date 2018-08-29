@@ -3,7 +3,7 @@ import { Icon, IconButton, CircularProgress } from '@material-ui/core/';
 module.exports = {
     name: "Gallery",
     description: '',
-    dependencies: ['SimpleSwitch.helper'],
+    dependencies: ['SimpleSwitch.Helper'],
 
     get(Helper) {
         var core = this;

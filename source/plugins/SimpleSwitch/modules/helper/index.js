@@ -1,13 +1,13 @@
 
-module.exports = require('./helper.js');
+module.exports = require('./Helper.js');
 
 if(module.hot) {
-    module.hot.accept('./helper.js', function() {
+    module.hot.accept('./Helper.js', function() {
 
-        var helper = require('./helper.js');
+        var Helper = require('./Helper.js');
         
-        core.injector.revoke(helper.name);
-        core.Module(helper);
+        core.injector.revoke(Helper.name);
+        core.Module(Helper);
         core.emit('hotUpdate');
 
     });

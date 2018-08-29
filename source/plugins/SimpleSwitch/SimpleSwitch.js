@@ -4,10 +4,14 @@ module.exports = {
     actions: [
         require('./actions/getLanguage'),
         require('./actions/logIn'),
+        require('./actions/getDataEx'),
     ],
     modules: [
-        require('./modules/helper'),
+        require('./modules/Helper'),
         require('./modules/rules'),
+
+        require('./modules/dataModels/DataModelsEntry'),
+        require('./modules/dataModels/constructors/Basic'),
     ],
     components: [
         require('./components/ActionButton'),

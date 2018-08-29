@@ -10,7 +10,7 @@ module.exports = {
     name: "ActionButton",
     description: '',
     propTypes: {},
-    dependencies: ['SimpleSwitch.helper'],
+    dependencies: ['SimpleSwitch.Helper'],
 
     get(Helper) {
 
