@@ -10,7 +10,6 @@ var app = express();
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-var encoding = "utf8";
 
 const logger = winston.createLogger({
   transports: [
@@ -18,6 +17,8 @@ const logger = winston.createLogger({
     new winston.transports.File({ filename: 'simple_switch_combined.log' })
   ]
 });
+
+var encoding = "utf8";
 var walker, walkerOptions;
 
 module.exports = {
@@ -43,43 +44,92 @@ module.exports = {
   },
 
   load: (res, configPath) => {
-    walker = klaw(configPath);
-    var files = [], directories = [];
-    walker.on('data', item => {
-            if (item.stats.isDirectory()) {
-              directories.push( path.basename(item.path) )
-            } //else files.push( files.push(path.basename(item.path)) );
-          })
-          .on('end', () => {
-            // console.debug('files > ', files);
-            directories = directories.filter( dir => { return dir !== 'config' })
-            console.debug('directories > ', directories);
-            // files.map((file)=>{
-                // var dir = item.split('\\');
-                // var lastItem = dir[dir.length -1];
-                //
-                // if (lastItem && lastItem.indexOf('.js') > -1) {
-                //   console.log('lastItem => ', lastItem);
-                // }
-            // })
-            // logger.log({
-            //   level: 'info',
-            //   data: items
-            // });
-            res.status(200).send({ success: true, msg: 'load succesfully !' })
-          }) // => [ ... array of files]
+    var config = {};
 
+    function start(_path, callback){
+      var directories = [], newfiles = [], filePath, dirs;
+      walker = klaw(_path);
 
-    // let jsonFile = `${path}/${req.body.dir}/modified_${req.body.fileName}.json`;
-    //
-    // fs.writeFile(jsonFile, req.body.text, encoding, (err) => {
-    //     if (err) {
-    //       res.status(400).send(err)
-    //       throw err;
-    //       return;
-    //     }
-    //     res.status(201).send({ success: true, msg: 'The file was succesfully saved!' })
-    //
-    // });
+      walker.on('data', item => {
+        if (item.stats.isDirectory()) {
+          directories.push( path.basename(item.path) )
+        }
+      })
+      .on('error', (err, item) => {
+        res.status(400).send({ success: false, msg: err.message });
+      })
+      .on('end', () => {
+        dirs = createDir(directories);
+        if (callback) callback(dirs);
+      })
+    };
+
+    function createDir(directories){
+      directories = directories.filter( dir => { return dir !== 'config' });
+      directories.map( dir => {
+        config = {
+          ...config,
+          [dir]: {}
+        }
+      });
+      return config;
+    };
+
+    function getFile(key, _path, resolve) {
+      var files = [], extracted, fileName, promises = [];
+      walker = klaw(_path);
+      walker.on('data', item => {
+        if (item.stats.isFile()) {
+          fileName = path.basename(item.path);
+          files.push(item.path)
+        }
+      })
+      .on('end', () => {
+        resolve({ key, files });
+      })
+    };
+
+    function reafFile(key, filePath, resolve){
+      var files = [], extracted, fileName = path.basename(filePath);
+      walker = klaw(filePath);
+      walker.on('data', item => {
+        if (item.stats.isFile()) {
+          fs.readFile(item.path, (err, data)=>{
+            extracted = JSON.parse(data.toString());
+            return resolve({ key, modified: fileName.indexOf('modified') > -1, data: extracted,  fileName: fileName  });
+          });
+        }
+      });
+    };
+
+    start(configPath, (dirs)=>{
+      var filePath, promises = [], filePromises = [];
+      for (var idx in dirs) {
+          filePath = configPath+idx;
+          promises.push(
+            new Promise ( (resolve, reject) => {
+              getFile(idx, filePath, resolve);
+            })
+          )
+      }
+
+      Promise.all(promises).then( results => {
+        var filePath, idx;
+        for (let i = 0; i < results.length; i++) {
+          for (let x = 0; x < results[i].files.length; x++) {
+            filePath = results[i].files[x];
+            idx = results[i].key;
+            filePromises.push(
+              new Promise ( (resolve, reject) => {
+                reafFile(idx, filePath, resolve);
+              })
+            )
+          }
+        }
+        Promise.all(filePromises).then( _fileResults => {
+          res.status(200).send({ success: true, msg: 'loaded succesfully !', data: _fileResults })
+        });
+      })
+    });
   },
 }
