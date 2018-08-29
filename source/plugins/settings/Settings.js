@@ -19,6 +19,7 @@ module.exports = {
     ],
 
     init(definition, done) {
+
         var _options = {
           BaseApi: 'http://some.ip.for/api',
           getInitialFiles: (callback) => {

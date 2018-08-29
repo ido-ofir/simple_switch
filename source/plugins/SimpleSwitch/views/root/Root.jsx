@@ -62,7 +62,9 @@ module.exports = {
 
             getLanguage(){
                 core.plugins.SimpleSwitch.run('getLanguage').then(()=>{
+                      
                     this.setState({start:true});
+
                   }).catch( ()=>{
                     this.setState({start:true});
                 });

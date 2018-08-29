@@ -13,7 +13,7 @@ module.exports = {
     extend: {
         translate(key, defaultValue, args){
             return core.plugins.translate.modules.Translate.translate(key, defaultValue, args)
-        },
+        }
     },
 
     init(def, done){
