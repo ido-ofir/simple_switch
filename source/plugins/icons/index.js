@@ -85,6 +85,8 @@ module.exports = {
         'windows live': 'fab fa-windows',
         'yahoo! profile': 'fab fa-yahoo',
 
+        // Gallery Icons
+        circle: 'fiber_manual_record',
 
     },
     extend: {

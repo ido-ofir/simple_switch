@@ -3,9 +3,9 @@ import { Icon, IconButton, CircularProgress } from '@material-ui/core/';
 module.exports = {
     name: "Gallery",
     description: '',
-    dependencies: ['SimpleSwitch.Helper'],
+    dependencies: ['popovers.Thumbnails', 'popovers.GalleryDots'],
 
-    get(Helper) {
+    get(Thumbnails, GalleryDots) {
         var core = this;
         var { React, PropTypes } = core.imports;
 
@@ -29,6 +29,16 @@ module.exports = {
                     selectedId: defaultGallery[0].id,
                     gallery: defaultGallery,
                     downloading: false,
+                    
+                    // selector: '', // '' or 'dots' or 'thumbnails'
+                    // selector: 'dots', // '' or 'dots' or 'thumbnails'
+                    selector: 'thumbnails', // '' or 'dots' or 'thumbnails'
+
+                    showArrows: true,
+                    showSelector: true,
+                    showCounter: true,
+                    showDownload: true,
+                    showInfo: false,
                 };
             },
 
@@ -47,8 +57,12 @@ module.exports = {
             },
 
             styles(s) {
-                let {gallery, downloading} = this.state;
-                let noThumbnails = gallery.length === 1;
+                let {gallery, downloading, selector, showSelector, showArrows} = this.state;
+                let noThumbnails = Boolean(!showSelector || gallery.length === 1);
+                let noArrows = Boolean(!showArrows || gallery.length === 1);
+                let SELECTOR_HEIGHT = (selector === 'dots') ? 39
+                                    : (selector === 'thumbnails') ? 150
+                                    : 0;
 
                 let styles = {
                     root: {
@@ -91,11 +105,17 @@ module.exports = {
                         cursor: 'pointer',
                     },
                     mediaWrap: {
-                        height: (noThumbnails) ? '100%' : `calc(100% - 180px)`,
+                        height: (noThumbnails) ? '100%' : `calc(100% - ${SELECTOR_HEIGHT+30}px)`,
                         position: "relative",
-                        paddingBottom: 15,
+                        paddingBottom: 45,
                         marginLeft: 'auto',
                         marginRight: 'auto',
+                    },
+                    audioWrap: {
+                        display: 'flex',
+                        alignItems: 'center',
+                        height: '100%',
+                        width: '500px',
                     },
                     picture: {
                         maxHeight: "100%",
@@ -108,33 +128,25 @@ module.exports = {
                     thumbnailsRow: {
                         display: "flex",
                         alignItems: "center",
-                        height: 150,
+                        height: SELECTOR_HEIGHT,
                         position: "absolute",
-                        padding: 10,
                         bottom: 33,
                         left: 0,
                         right: 0,
-                        backgroundColor: core.theme('transparent.black_80'),
-                        borderRadius: 2,
                         overflowX: 'hidden',
                         overflowY: 'hidden',
                     },
-                    thumbnail: {
-                        margin: '0px 10px',
-                        borderRadius: 4,
-                        position: "relative",
-                        height: 100,
-                        width: 130,
-                        minWidth: 130,
+                    dotsRow: {
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: core.theme('transparent.white_85'),
-                    },
-                    thumbnailImage: {
-                        cursor: 'pointer',
-                        maxHeight: "100%",
-                        maxWidth: "100%",
+                        height: SELECTOR_HEIGHT,
+                        width: '100%',
+                        position: "absolute",
+                        bottom: 33,
+                        left: 0,
+                        right: 0,
+                        overflowX: 'hidden',
+                        overflowY: 'hidden',
                     },
                     buttonStyle: {
                         height: 80,
@@ -151,20 +163,20 @@ module.exports = {
                         textShadow: `0px 0px 1px ${core.theme('colors.black')}`,
                     },
                     prevArrow: {
-                        display: (noThumbnails) ? 'none' : "flex",
+                        display: (noArrows) ? 'none' : "flex",
                         alignItems: "center",
                         position: 'absolute',
                         left: 0,
                         zIndex: 1,
-                        height: 'calc(100% - 180px)',
+                        height: (noThumbnails) ? '100%' : `calc(100% - ${SELECTOR_HEIGHT+30}px)`,
                     },
                     nextArrow: {
-                        display: (noThumbnails) ? 'none' : "flex",
+                        display: (noArrows) ? 'none' : "flex",
                         alignItems: "center",
                         position: 'absolute',
                         right: 0,
                         zIndex: 1,
-                        height: 'calc(100% - 180px)',
+                        height: (noThumbnails) ? '100%' : `calc(100% - ${SELECTOR_HEIGHT+30}px)`,
                     },
                     renderDownloadButton: {
                         pointer: (downloading) ? 'wait' : 'pointer',
@@ -186,22 +198,6 @@ module.exports = {
                         fontSize: 24,
                         textShadow: `0px 0px 1px ${core.theme('colors.black')}`,
                     },
-                    sourceWrap: {
-                        right: 0,
-                        bottom: 0,
-                        position: "absolute",
-                    },
-                    sourceIcon: {
-                        position: "absolute",
-                        right: 3,
-                        bottom: 3,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 8,
-                        zIndex: 2, 
-                        color: core.theme('colors.white')
-                    }
                 }
                 return(styles[s]);
             },
@@ -219,40 +215,6 @@ module.exports = {
             
             defaultGallery() {
                 return require('./defaultGallery.js');
-            },
-
-            getSourceIcon(image, size = 'big') {
-            //     let socialNetwork = (image && !_.isEmpty(image) && image.sources && !_.isEmpty(image.sources)) ? image.sources[0].name.toLowerCase() : false;
-            //         socialNetwork = Helper.modifySocialNames(socialNetwork);
-
-            //     let icon = socialNetwork ? core.icons(socialNetwork) : false;
-            //     if (!icon) return null;
-
-            //     let iFont, iBorder, iMargin;
-            //     if (size === 'thumb') {
-            //         iFont = 10;
-            //         iBorder = 30;
-            //         iMargin = 0;
-            //     }
-            //     else {
-            //         iFont = 26;
-            //         iBorder = 60;
-            //         iMargin = 2;
-            //     }
-
-            //     let iconStyle = {...this.styles('sourceIcon'), fontSize: iFont, margin: iMargin, };
-                
-            //     let wrapStyle = {...this.styles('sourceWrap'),
-            //         borderBottom: `${iBorder}px solid ${core.theme('socialNetwork.'+socialNetwork)}`,
-            //         borderLeft: `${iBorder}px solid transparent`,
-            //     };
-
-            //     return (
-            //         <div>
-            //             <div id={ 'socialIcon.wrap' } style={ wrapStyle }/>
-            //             <Icon style={ iconStyle } className={icon} />
-            //         </div>
-            //    );
             },
 
             keyboardKeyHandle(event) {
@@ -332,16 +294,147 @@ module.exports = {
             },
 
             mediaErrorHandler(elementID, type='image') {
-                document.getElementById(`${elementID}`)
-                        .setAttribute('src', `/resources/images/placeholder-${type}.png`);
+                if (document.getElementById(`${elementID}`))
+                    document.getElementById(`${elementID}`)
+                            .setAttribute('src', `/resources/images/placeholder-${type}.png`);
+            },
+
+            renderMedia() {
+                let {gallery, selectedId} = this.state;
+
+                let selected_idx = this.getMediaIndex(gallery, selectedId);
+
+                if( !gallery || !gallery[selected_idx] || !gallery[selected_idx].url ) return null;
+
+                let media = gallery[selected_idx];
+                let mediaURL = media.url;
+                let mediaId = media.id;
+                let mediaType = (media.type) ? media.type : 'image';
+                let elementID = `Gallery.Image.id_${mediaId}`;
+
+                let mediaRender = <img id={ elementID} src={ mediaURL } style={ this.styles('picture') } onError={ ()=>{ this.mediaErrorHandler(elementID, mediaType) } }/>;
+
+                if ( media.type && media.mimeType && media.type === 'video' ) {
+                    mediaRender = <video 
+                                    controls 
+                                    height={800} 
+                                    style={ {maxHeight: '100%'} } 
+                                    src={ mediaURL } 
+                                    type={ `video/${media.mimeType}` } 
+                                    onError={ ()=>{ this.mediaErrorHandler(elementID, mediaType) } }
+                                  />;
+                } else if ( media.type && media.mimeType && media.type === 'audio' ) {
+                    mediaRender = <div id={'Gallery.audioWrap'} style={ this.styles('audioWrap') }>
+                                    <audio 
+                                        controls 
+                                        style={{width: '100%'}}
+                                        src={ mediaURL } 
+                                        type={ `video/${media.mimeType}` } 
+                                        onError={ ()=>{ this.mediaErrorHandler(elementID, mediaType) } }
+                                    />
+                                  </div>;
+                };
+
+                return(
+                    <div id={'Gallery.renderMedia'} style={ this.styles('mediaWrap') }>
+                        { mediaRender }
+                    </div>
+                );
+            },
+
+            updateSelected(selectedId) {
+                this.setState({selectedId});
+            },
+            
+            buildThumbnailsGallery() {
+                let {gallery,} = this.state;
+                let thumbList = [];
+                for (let i = 0; i < gallery.length; i++) {
+                    const media = gallery[i];
+                    thumbList.push({
+                        id: media.id,
+                        url: (media.thumbnail) ? media.thumbnail : media.url,
+                        type: (media.type) ? media.type : 'image',
+                    });
+                }
+
+                return thumbList;
+            },
+            
+            buildDotsGallery() {
+                let {gallery,} = this.state;
+                let dotsList = [];
+                for (let i = 0; i < gallery.length; i++) {
+                    const media = gallery[i];
+                    dotsList.push({
+                        id: media.id,
+                    });
+                }
+
+                return dotsList;
+            },
+
+            renderSelector() {
+                let {selectedId, selector} = this.state;
+                
+                switch (selector) {
+                    case 'dots':
+                        return (
+                            <div id={'Gallery.selectorRow'} style={ this.styles('dotsRow') } >
+                                <GalleryDots 
+                                    selectedId={ selectedId }
+                                    dotsGallery={ this.buildDotsGallery() }
+                                    updateSelected={ this.updateSelected }
+                                />
+                            </div>
+                        );
+                    case 'thumbnails':
+                        return (
+                            <div id={'Gallery.selectorRow'} style={ this.styles('thumbnailsRow') } >
+                                <Thumbnails 
+                                    selectedId={ selectedId }
+                                    thumbnailsGallery={ this.buildThumbnailsGallery() }
+                                    updateSelected={ this.updateSelected }
+                                />
+                            </div>
+                        );
+                    default:
+                        return null;
+                }
+                
+            },
+
+            renderPrevPicture() {
+                let title = core.translate('Previous picture');
+
+                return (
+                    <div id={'Gallery.prev'} style={ this.styles('prevArrow')}>
+                        <IconButton id={'Gallery.buttonPrev'} style={ this.styles('buttonStyle')} onClick={ this.gotoPrevImage }>
+                            <Icon key={ 'navigatePreviousPicture' } title={ title } style={ this.styles('iconStyle')}>{ core.icons('navigatePrevious') }</Icon>
+                        </IconButton>
+                    </div>
+                );
+            },
+
+            renderNextPicture() {
+                let title = core.translate('Next picture');
+
+                return (
+                    <div id={'Gallery.next'} style={ this.styles('nextArrow')}>
+                        <IconButton id={'Gallery.buttonNext'} style={ this.styles('buttonStyle')} onClick={ this.gotoNextImage }>
+                            <Icon key={ 'navigateNextPicture' } title={ title } style={ this.styles('iconStyle')}>{ core.icons('navigateNext') }</Icon>
+                        </IconButton>
+                    </div>
+                );
             },
 
             renderDownload() {
-                let {gallery, selectedId, downloading} = this.state;
+                let {gallery, selectedId, downloading, showDownload} = this.state;
+
                 let title = core.translate('Download this image');
 
                 let selected_idx = this.getMediaIndex(gallery, selectedId);
-                if( !gallery || !gallery[selected_idx] || !gallery[selected_idx].url ) return null;
+                if( !showDownload || !gallery || !gallery[selected_idx] || !gallery[selected_idx].url ) return null;
                 
                 let image = gallery[selected_idx];
                 let imageURL = image.url;
@@ -396,6 +489,10 @@ module.exports = {
             },
 
             renderInfo() {
+                let {showInfo} = this.state;
+
+                if (!showInfo) return null;
+
                 let title = core.translate('About this image');
 
                 const about = () => {
@@ -412,9 +509,9 @@ module.exports = {
             },
 
             renderCounter() {
-                let {gallery, selectedId} = this.state;
+                let {gallery, selectedId, showCounter} = this.state;
 
-                if (!gallery || !gallery.length) return null;
+                if ( !showCounter || !gallery || !gallery.length) return null;
 
                 let gallerySize = gallery.length;
                 let selected_idx = this.getMediaIndex(gallery, selectedId);
@@ -426,122 +523,16 @@ module.exports = {
                 );
             },
 
-            renderMedia() {
-                let {gallery, selectedId} = this.state;
-
-                let selected_idx = this.getMediaIndex(gallery, selectedId);
-
-                if( !gallery || !gallery[selected_idx] || !gallery[selected_idx].url ) return null;
-
-                let media = gallery[selected_idx];
-                let mediaURL = media.url;
-                let mediaId = media.id;
-                let mediaType = (media.type) ? media.type : 'image';
-                let elementID = `Gallery.Image.id_${mediaId}`;
-
-                let mediaRender = <img id={ elementID} src={ mediaURL } style={ this.styles('picture') } onError={ ()=>{ this.mediaErrorHandler(elementID, mediaType) } }/>;
-
-                if ( media.type && media.mimeType && media.type === 'video' ) {
-                    mediaRender = <video 
-                                    controls 
-                                    height={800} 
-                                    style={ {maxHeight: '100%'} } 
-                                    src={ mediaURL } 
-                                    type={ `video/${media.mimeType}` } 
-                                    onError={ ()=>{ this.mediaErrorHandler(elementID, mediaType) } }
-                                  />;
-                } else if ( media.type && media.mimeType && media.type === 'audio' ) {
-                    mediaRender = <audio 
-                                    controls 
-                                    src={ mediaURL } 
-                                    type={ `video/${media.mimeType}` } 
-                                    onError={ ()=>{ this.mediaErrorHandler(elementID, mediaType) } }
-                                  />;
-                };
-
-                return(
-                    <div id={'Gallery.renderMedia'} style={ this.styles('mediaWrap') }>
-                        { mediaRender }
-                    </div>
-                );
-            },
-
-            renderThumbnailMap(media, key) {
-                let {selectedId} = this.state;
-                
-                let thumbSRC = (media.thumbnail) ? media.thumbnail : media.url;
-
-                let mediaID = media.id;
-                
-                const thumbClick = () => {
-                    this.setState({selectedId: mediaID});
-                };
-
-                let thumbnailWrapStyle = this.styles('thumbnail');
-                    thumbnailWrapStyle.border = (mediaID === selectedId) 
-                                                ? `3px solid ${core.theme('colors.primary')}` 
-                                                : `3px solid transparent`;
-                let elementID = `ThumbnailImage.id_${key}`;
-
-                if ( mediaID === selectedId && document.getElementById(elementID) ) {
-                    setTimeout(() => { document.getElementById(elementID).scrollIntoView({ block: 'end', behavior: 'smooth', inline: 'center'}); }, 0);
-                };
-
-                return(
-                    <div id={`Thumbnail.id_${key}`} key={key} style={ thumbnailWrapStyle } onClick={ thumbClick }>
-                        <img id={ elementID }
-                            src={ thumbSRC } 
-                            onError={ ()=>{ this.mediaErrorHandler(elementID, media.type) }}
-                            style={ this.styles('thumbnailImage') }
-                        />
-                        { this.getSourceIcon(media, 'thumb') }
-                    </div>
-                );
-            },
-
-            renderThumbs() {
-                let {gallery} = this.state;
-                if( !gallery || _.isEmpty(gallery) || gallery.length === 1 ) { return null; }
-
-                let thumbGallery = gallery;
-
-                return(
-                    <div id={'Gallery.ThumbnailsRow'} style={ this.styles('thumbnailsRow') } >
-                        { thumbGallery.map( this.renderThumbnailMap )}
-                    </div>
-                );
-            },
-
-            renderPrevPicture() {
-                let title = core.translate('Previous picture');
-
-                return (
-                    <div id={'Gallery.prev'} style={ this.styles('prevArrow')}>
-                        <IconButton id={'Gallery.buttonPrev'} style={ this.styles('buttonStyle')} onClick={ this.gotoPrevImage }>
-                            <Icon key={ 'navigatePreviousPicture' } title={ title } style={ this.styles('iconStyle')}>{ core.icons('navigatePrevious') }</Icon>
-                        </IconButton>
-                    </div>
-                );
-            },
-
-            renderNextPicture() {
-                let title = core.translate('Next picture');
-
-                return (
-                    <div id={'Gallery.next'} style={ this.styles('nextArrow')}>
-                        <IconButton id={'Gallery.buttonNext'} style={ this.styles('buttonStyle')} onClick={ this.gotoNextImage }>
-                            <Icon key={ 'navigateNextPicture' } title={ title } style={ this.styles('iconStyle')}>{ core.icons('navigateNext') }</Icon>
-                        </IconButton>
-                    </div>
-                );
-            },
-
             renderActionButtons() {
+                let {showCounter, showDownload, showInfo} = this.state;
+
+                if (!showCounter && !showDownload && !showInfo ) return null;
+
                 return(
                     <div id={'Gallery.actionButtons'} style={ this.styles('actionButtons')}>
                         { this.renderCounter() }
                         { this.renderDownload() }
-                        {/* { this.renderInfo() } */}
+                        { this.renderInfo() }
                     </div>
                 )
             },
@@ -557,7 +548,7 @@ module.exports = {
                         { this.renderPrevPicture() }
                         { this.renderNextPicture() }
                         { this.renderMedia() }
-                        { this.renderThumbs() }
+                        { this.renderSelector() }
                     </div>
                 )
             }

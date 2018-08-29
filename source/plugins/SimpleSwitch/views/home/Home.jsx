@@ -153,10 +153,7 @@ module.exports = {
                             id: '19487501bat_metal', 
                             name: 'bat_metal', 
                             url: '/resources/images/default_gallery/bat_metal.jpg',
-                            info: { 
-                                title: 'bat_metal', 
-                                body: 'This is a example for bat_metal info body text.' 
-                            }
+                            info: 'This is a example for bat_metal info body text.',
                         }]}/>
                     </div>
                 );
