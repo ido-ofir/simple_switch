@@ -18,8 +18,9 @@ module.exports = {
         'SimpleSwitch.Login',
         'SimpleSwitch.Loader',
         'Settings.Settings',
+        'router.Router',
     ],
-    get(AppBar,Nav, Notify, Popup, Caution, Lightbox, Login, Loader, Settings) {
+    get(AppBar,Nav, Notify, Popup, Caution, Lightbox, Login, Loader, Settings, Router) {
 
         var core = this;
         var { React, PropTypes } = core.imports;
@@ -127,7 +128,6 @@ module.exports = {
             render() {
                 let { navIsOpen, activeView, start } = this.state;
                 let { isLoggedIn } = this.props;
-                let { Router } = core.plugins.router;
 
                 let authToken = localStorage.getItem('authToken');
                 let currentUser = (localStorage.currentUser) ? JSON.parse(localStorage.getItem('currentUser')) : {};

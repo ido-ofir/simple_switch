@@ -125,6 +125,7 @@ function Route(urlArray, parent, router) {
 
 Route.prototype = {
     query: {},
+    
     to(urlString, queryObject, silent, newTab) {
         var route = this;
         var router = this.router;
@@ -159,6 +160,7 @@ Route.prototype = {
         }
         return router.toRoute(root, silent, newTab);
     },
+
     get(string) {
         if (!string) return Route.prototype.query;
         if (Array.isArray(string)) {
@@ -166,6 +168,7 @@ Route.prototype = {
         }
         return find(Route.prototype.query, string.split('.'));
     },
+
     set(path, any, silent) {
         var array = path.split('.');
         var query = set(Route.prototype.query, array, any);
@@ -193,6 +196,7 @@ Route.prototype = {
         }
         if (modified) this.render(true);
     },
+
     render(silent) {
         this.router.toRoute(this.router.route, silent);
     }
