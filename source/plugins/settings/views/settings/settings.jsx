@@ -175,9 +175,12 @@ module.exports = {
                           anchorEl={anchorEl}
                           open={ Boolean(anchorEl) }
                           onClose={ this.handleCloseSaveMenu } >
+
                           <MenuItem style={ styles.menuItem } onClick={ this.handleSave }>  {  core.translate('Save')+' '+activeTab.label }</MenuItem>
                           <MenuItem style={ styles.menuItem } onClick={this.handleCloseSaveMenu}>  {  core.translate('Save as') }</MenuItem>
-                          <Divider style={{ marginBottom: 5 }}/>
+
+                          <Divider style={{ margin: '5px 0' }} />
+
                           <MenuItem style={ styles.menuItem } onClick={this.handleLoad}>  {  core.translate('Load') }</MenuItem>
 
                         </Menu>

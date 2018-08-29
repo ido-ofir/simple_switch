@@ -22,8 +22,9 @@ module.exports = {
         var _options = {
           BaseApi: 'http://some.ip.for/api',
           getInitialFiles: (callback) => {
-            core.plugins.Settings.run('getConfiguration').then(( data )=>{
-              console.debug('data > ', data);
+              // core.plugins.Settings.run('getConfiguration')
+            core.plugins.Settings.run('loadSettings').then(( data )=>{
+              // console.debug('data > ', data);
               let { config } = data;
               if (config) {
                 core.plugins.Settings.set(['config'], config)

@@ -1,5 +1,10 @@
 {
     "colors": {
-        "primary": "red"
+        "black": "#da2626",
+        "dark": "#e0d3d3",
+        "gray": "#999999",
+        "secondary": "#2979ff",
+        "primary": "#01579b",
+        "white": "#ffffff"
     }
 }
