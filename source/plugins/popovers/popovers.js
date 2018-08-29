@@ -8,6 +8,8 @@ module.exports = {
     components: [
         require('./components/Caution'),
         require('./components/Gallery'),
+        require('./components/Gallery/GalleryDots'),
+        require('./components/Gallery/Thumbnails'),
         require('./components/Lightbox'),
         require('./components/Lightbox/LightboxInfo'),
         require('./components/Lightbox/LightboxTitleBar'),

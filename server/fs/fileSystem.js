@@ -90,13 +90,16 @@ module.exports = {
     };
 
     function reafFile(key, filePath, resolve){
-      var files = [], extracted, fileName = path.basename(filePath);
+      var files = [], extracted, modified = false, fileName = path.basename(filePath);
       walker = klaw(filePath);
       walker.on('data', item => {
         if (item.stats.isFile()) {
           fs.readFile(item.path, (err, data)=>{
+
             extracted = JSON.parse(data.toString());
-            return resolve({ key, modified: fileName.indexOf('modified') > -1, data: extracted,  fileName: fileName  });
+            modified = fileName.indexOf('default') !== 0;
+            
+            return resolve({ key, modified: modified, data: extracted, fileName: fileName });
           });
         }
       });

@@ -21,13 +21,11 @@ module.exports = {
                     text: results.msg,
                     alertKind: 'success'
                 }
-                core.emit('notify',notify);
-                // console.log('label => ', label);
-                // console.log('data => ', data);
-                // console.log('key => ', key);
-                core.plugins.Settings.set(['config', label], data)
-                console.debug('core.plugins.Settings.get() > ', core.plugins.Settings.get());
+                core.emit('notify',notify); 
+
+                core.plugins.Settings.set(['config', label], data);
                 core.tree.set(['plugins', key], data);
+                core.tree.commit();
 
               }
           });

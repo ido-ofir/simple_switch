@@ -6,7 +6,7 @@ module.exports = [
         name: 'bat_metal',
         url: `${defaultPath}/bat_metal.jpg`,
         thumbnail: `${defaultPath}/bat_metal.jpg`,
-        info: 'This is a example for bat_metal info body text.'
+        info: 'This is a example for bat_metal info body text.',
     }, {
         id: '25091980001',
         name: 'beach_party 2',
@@ -121,24 +121,24 @@ module.exports = [
         type: 'video',
         mimeType: 'mp4',
         url: `${defaultPath}/big_buck_bunny.mp4`,
-        // thumbnail: `${defaultPath}/big_buck_bunny_thumb.png`,
+        thumbnail: `${defaultPath}/big_buck_bunny_thumb.png`,
         info: 'This is a example for big_buck_bunny info body text.'
-// }, {
-//     id: '25091980020',
-//     name: 'small 3pg',
-//     type: 'video',
-//     mimeType: '3gp',
-//     url: `${defaultPath}/small.3gp`,
-//     thumbnail: `${defaultPath}/small_thumb.png`,
-//     info: 'This is a example for small.3gp info body text.'
-// }, {
-//     id: '25091980021',
-//     name: 'Stephane Legar - Comme Ci Comme ça (Music Video)  סטפן לגר - קומסי קומסה',
-//     type: 'video',
-//     mimeType: 'flv',
-//     url: `${defaultPath}/Stephane Legar - Comme Ci Comme ça (Music Video)  סטפן לגר - קומסי קומסה.flv`,
-//     thumbnail: `${defaultPath}/Stephane Legar - Comme Ci Comme ça (Music Video)  סטפן לגר - קומסי קומסה_thumb.png`,
-//     info: 'This is a example for Stephane Legar - Comme Ci Comme ça (Music Video)  סטפן לגר - קומסי קומסה info body text.'
+    }, {
+        id: '25091980020',
+        name: 'big_buck_bunny',
+        type: 'video',
+        mimeType: 'mp4',
+        url: `${defaultPath}/big_bunny.mp4`,
+        thumbnail: `${defaultPath}/big_bunny_thumb.png`,
+        info: 'This is a example for big_buck_bunny info body text.'
+    }, {
+        id: '25091980021',
+        name: 'scull_on_fire',
+        type: 'image',
+        mimeType: 'gif',
+        url: `${defaultPath}/scull_on_fire.gif`,
+        thumbnail: `${defaultPath}/scull_on_fire.gif`,
+        info: 'This is a example for scull_on_fire info body text.'
     }, {
         id: '25091980022',
         name: 'stephane-legar-comme-ci-comme-ca',
