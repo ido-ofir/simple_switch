@@ -26,7 +26,12 @@ module.exports = {
               // core.plugins.Settings.run('getConfiguration')
             core.plugins.Settings.run('loadSettings').then(( data )=>{
               // console.debug('data > ', data);
-              let { config } = data;
+              let { config, menu } = data;
+
+              if (menu) {
+                core.plugins.Settings.set(['fileMenu'], menu)
+              }
+
               if (config) {
                 core.plugins.Settings.set(['config'], config)
                 if (config.hasOwnProperty('theme')) {

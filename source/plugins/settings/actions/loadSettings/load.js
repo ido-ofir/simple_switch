@@ -21,6 +21,8 @@ module.exports = {
 
         return (data, promise) => {
           var config = {};
+          var menu = {};
+
           core.request.post('/loadSettings').then( ({ response, results, error }) => {
 
             if (error && error.data) {
@@ -35,11 +37,11 @@ module.exports = {
             else if (results && results.success) {
               let { data } = results;
               _.map(data, configItem => {
-                config[configItem.key] = {}
-                config[configItem.key] = getConfigData(config, configItem)
+                config[configItem.key] = {};
+                config[configItem.key] = getConfigData(config, configItem);
               });
-              promise.resolve({config})
-              // console.debug('config > ', config);
+              menu = _.groupBy(data, 'key');
+              promise.resolve({ config, menu })
             }
           });
         };

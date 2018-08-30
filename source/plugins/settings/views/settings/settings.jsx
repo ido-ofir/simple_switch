@@ -1,9 +1,8 @@
 
 import {
   Typography, AppBar, Toolbar, IconButton,
-  Paper, Tabs, Tab,
-  Icon, Menu, MenuItem,
-  Divider
+  Paper, Tabs, Tab, Icon, Menu, Divider,
+  MenuItem, MenuList, Popper
 } from '@material-ui/core';
 
 import brace from 'brace';
@@ -20,6 +19,7 @@ module.exports = {
     propTypes: {},
     bindings: {
       config: ['config'],
+      fileMenu: ['fileMenu'],
     },
     dependencies: [],
 
@@ -67,6 +67,7 @@ module.exports = {
                 return {
                     error: null,
                     anchorEl: null,
+                    menuAnchorEl: null,
                     tabValue: 0,
                     activeTab: { key: 'theme', label: 'theme' },
                     tabs: [{
@@ -126,17 +127,45 @@ module.exports = {
               core.plugins.Settings.run('loadSettings')
             },
 
-            handleSaveMenu(e){
+            openSaveMenu(e){
               this.setState({ anchorEl: e.currentTarget })
             },
 
-            handleCloseSaveMenu(e){
+            closeSaveMenu(e){
               this.setState({ anchorEl: null })
             },
 
+            openInnerMenu(e){
+              this.setState({ menuAnchorEl: e.currentTarget })
+            },
+            closeInnerMenu(e){
+              this.setState({ menuAnchorEl: null })
+            },
+
+            renderInnerMenu(tabLabel, fileMenu){
+              if (!fileMenu || !tabLabel) return null;
+              let files = fileMenu[tabLabel];
+              return (
+                <Paper style={{ width: 220 }}>
+                {
+                  _.map(files, (file, idx)=>{
+                    return (<MenuItem key={ idx } style={ styles.menuItem } onClick={ this.closeMenus }>  {  file.fileName }</MenuItem>)
+                  })
+                }
+                {/*
+                  <MenuItem style={ styles.menuItem } onClick={ this.handleSave }>  {  core.translate('Save')+' '+tabLabel }</MenuItem>
+                  <MenuItem style={ styles.menuItem } onClick={this.closeSaveMenu}>  {  core.translate('Save as') }</MenuItem>
+                */}
+                </Paper>
+              )
+            },
+            closeMenus(){
+              this.closeSaveMenu();
+              this.closeInnerMenu();
+            },
             render() {
-                let { config } = this.props;
-                let { tabValue, anchorEl, tabs, activeTab } = this.state;
+                let { config, fileMenu } = this.props;
+                let { tabValue, anchorEl, tabs, activeTab, menuAnchorEl } = this.state;
                 return (
 
                     <div id={'root.settings'} style={{ height: '100%', width: '100%', display: 'flex',  flexDirection: 'column' }}>
@@ -160,7 +189,7 @@ module.exports = {
                           <IconButton
                                   style={{ height: 40, width: 40 }}
                                   size={ 'small' }
-                                  onClick={ this.handleSaveMenu }>
+                                  onClick={ this.openSaveMenu }>
                             <Icon style={{ cursor: 'pointer', marginRight: 5 }} >{ core.icons('more') }</Icon>
                           </IconButton>
                         </AppBar>
@@ -174,14 +203,27 @@ module.exports = {
                           MenuListProps={{ style: { width: 220 }, dense: true }}
                           anchorEl={anchorEl}
                           open={ Boolean(anchorEl) }
-                          onClose={ this.handleCloseSaveMenu } >
+                          onClose={ this.closeSaveMenu } >
 
                           <MenuItem style={ styles.menuItem } onClick={ this.handleSave }>  {  core.translate('Save')+' '+activeTab.label }</MenuItem>
-                          <MenuItem style={ styles.menuItem } onClick={this.handleCloseSaveMenu}>  {  core.translate('Save as') }</MenuItem>
+                          <MenuItem style={ styles.menuItem } onClick={this.closeSaveMenu}>  {  core.translate('Save as') }</MenuItem>
 
                           <Divider style={{ margin: '5px 0' }} />
 
-                          <MenuItem style={ styles.menuItem } onClick={this.handleLoad}>  {  core.translate('Load') }</MenuItem>
+                          <MenuItem style={ styles.menuItem } onClick={this.handleLoad } onMouseEnter={ this.openInnerMenu } onMouseLeave={ this.closeInnerMenu }>
+                          {  core.translate('Load') }
+                            <Popper
+                                  onMouseLeave={ this.closeInnerMenu }
+                                  anchorEl={menuAnchorEl}
+                                  open={ Boolean(menuAnchorEl) }
+                                  style={{ zIndex: 1301 }}
+                                  placement={ 'left-end' }
+                                  onClose={ this.closeInnerMenu }>
+
+                                  { this.renderInnerMenu(activeTab.label, fileMenu) }
+
+                            </Popper>
+                          </MenuItem>
 
                         </Menu>
 
