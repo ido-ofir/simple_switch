@@ -55,7 +55,7 @@ module.exports = {
                         overflow: 'hidden'
                     },
                     imgLogo: {
-                        width: 125,
+                        width: 44,
                         marginRight: 15,
                         marginTop: '-5px',
                     },
@@ -72,7 +72,7 @@ module.exports = {
                         <Toolbar disableGutters={ true } variant={ 'dense' } style={ this.styles('toolbar') }>
                             <div id={'AppBar.left'} style={ this.styles('left') }>
                                 <div id={'AppBar.logoWrap'} style={ this.styles('logosWrap') }>
-                                    <img src='/resources/images/simpleSwitchLogo.png' style={ this.styles('imgLogo') } />
+                                    <img src='/resources/images/simpleSwitch.png' style={ this.styles('imgLogo') } />
                                     {/*
                                     <div style={ this.styles('textLogo') }>{core.translate('appbar.SimpleSwitch', 'Simple Switch')}</div>
                                   */}
