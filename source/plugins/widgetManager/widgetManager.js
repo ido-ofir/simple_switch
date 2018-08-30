@@ -1,5 +1,5 @@
 module.exports = {
-    name: 'SimpleSwitch',
+    name: 'widgetManager',
     tree: require('./tree.js'),
     actions: [],
     modules: [],
