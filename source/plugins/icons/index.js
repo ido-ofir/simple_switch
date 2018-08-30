@@ -65,6 +65,17 @@ module.exports = {
         email: 'email',
         like: 'thumb_up',
         pdfFile: 'fas fa-file-pdf',
+        filter_1: 'filter_1',
+        filter_1: 'filter_2',
+        filter_1: 'filter_3',
+        filter_1: 'filter_4',
+        filter_1: 'filter_5',
+        filter_1: 'filter_6',
+        filter_1: 'filter_7',
+        filter_1: 'filter_8',
+        filter_1: 'filter_9',
+        school: 'school',
+
 
         // social icons - material don't have ones, so we use FontAwesome
 

@@ -14,4 +14,9 @@ module.exports = [
         label: 'Settings',
         component: 'Settings.Settings'
     },
+    {
+        name: 'cssexamples',
+        label: 'CssExamples',
+        component: 'SimpleSwitch.CssExamples'
+    },
 ]

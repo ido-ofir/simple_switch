@@ -28,7 +28,8 @@ module.exports = {
     views: [
         require('./views/login'),
         require('./views/root'),
-        require('./views/home')
+        require('./views/home'),
+        require('./views/cssexamples')
     ],
 
     init(definition, done) {
