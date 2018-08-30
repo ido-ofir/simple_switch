@@ -24,10 +24,10 @@ module.exports = {
             },
 
             openPopup(data) {
-                let {title, body, bodyStyle, okButton} = data;
+                let {title, body, bodyStyle, okButton, buttons, modalStyle} = data;
                 let {btnTitle, btnFunc} = okButton;
 
-                core.emit('Popup', {title, body, bodyStyle, btnTitle, btnFunc});
+                core.emit('Popup', {title, body, bodyStyle, btnTitle, btnFunc, buttons, modalStyle});
             },
 
             Caution(text,title,func) {
@@ -43,7 +43,7 @@ module.exports = {
                 if (!data || _.isEmpty(data)) return core.emit('Lightbox.open');
 
                 let { children, rootStyle, innerStyle, bodyStyle, childrenStyle } = data;
-                
+
                 let lightInfo = (data.info && !_.isEmpty(data.info)) ? data.info : undefined;
 
                 let lightTitle = (data.title && !_.isEmpty(data.title)) ? data.title : {hasInfo: Boolean(data.info !== 'none') };
