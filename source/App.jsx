@@ -21,10 +21,10 @@ core.plugin([
     require('./plugins/icons'),
     require('./plugins/request'),
     require('./plugins/router'),
-    require('./plugins/SimpleSwitch'),
-    require('./plugins/gallery'),
     require('./plugins/popovers'),
+    require('./plugins/gallery'),
     require('./plugins/widgetManager'),
+    require('./plugins/SimpleSwitch'),
 ])
 
 core.require(['SimpleSwitch.Root'], (Root) => {

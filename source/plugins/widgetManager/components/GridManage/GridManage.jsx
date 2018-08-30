@@ -1,11 +1,15 @@
-module.exports = {
-    name: 'Manager',
-    dependencies: [],
+import { Responsive, WidthProvider } from 'react-grid-layout';
 
+module.exports = {
+    name: 'GridManage',
+    dependencies: [],
+    
     get() {
         var core = this;
         var { React, PropTypes } = core.imports;
-
+        
+        const ResponsiveReactGridLayout = WidthProvider(Responsive);
+        
         return {
 
             propsTypes: {

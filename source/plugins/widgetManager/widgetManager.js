@@ -2,7 +2,9 @@ module.exports = {
     name: 'widgetManager',
     tree: require('./tree.js'),
     actions: [],
-    modules: [],
+    modules: [
+        require('./components/GridManage'),
+    ],
     components: [],
 
     init(definition, done) {
