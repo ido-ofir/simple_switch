@@ -23,9 +23,6 @@ var configPath = args['-cp'] || args['--config-path'];
 var helpArgs = args['-h'] || args['--help'];
 // else configPath = 'source/plugins/settings/config/';
 
-// app.post('/getConfigFile', (req, res) => {
-//   res.send({ config, results: [] });
-// });
 
 function help() {
   console.log(`
@@ -36,7 +33,7 @@ Node Server:
 --config-path, -cp                  configuration folder, relative to 'root' folder,
                                     exapmle: source/path/to/config.
                                     this app usage: source/plugins/settings/config/
-    `);
+  `);
   process.exit();
 };
 
@@ -55,14 +52,10 @@ app.post('/loadSettings', (req, res) => {
 });
 
 app.post('/loadFile', (req, res) => {
-  fsTools.load(res, configPath);
+  fsTools.loadFile(req, res, configPath);
 });
 
 app.listen(4000, ()=> {
-  if (configPath) {
-    // console.info(`Config Path > ${configPath}`);
-    console.log('4000')
-  } else {
-    help()
-  }
+  if (configPath) console.log('4000')
+  else help()
 })

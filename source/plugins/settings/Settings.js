@@ -5,6 +5,7 @@ module.exports = {
       require('./actions/saveSettings'),
       require('./actions/loadSettings'),
       require('./actions/saveFile'),
+      require('./actions/loadFile'),
     ],
 
     modules: [

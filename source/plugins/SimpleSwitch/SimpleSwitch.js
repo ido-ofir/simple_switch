@@ -34,8 +34,7 @@ module.exports = {
 
     init(definition, done) {
         var _simpleOptions = {
-            BaseApi: 'http://some.ip.for/api',
-
+            BaseApi: 'http://some.ip.for/api'
         };
 
         done(_simpleOptions);

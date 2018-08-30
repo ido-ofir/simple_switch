@@ -1,10 +1,10 @@
 {
     "colors": {
-        "black": "#50e3c2",
-        "dark": "#12deb3",
-        "gray": "#50e3c2",
-        "secondary": "#50e3c2",
-        "primary": "#50e3c2",
+        "black": "#000000",
+        "dark": "#da6262",
+        "gray": "#000000",
+        "secondary": "#bd10e0",
+        "primary": "#f92525",
         "white": "#ffffff"
     },
     "backgrounds": {

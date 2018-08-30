@@ -1,9 +1,9 @@
 {
     "colors": {
         "black": "#000000",
-        "dark": "#000000",
+        "dark": "#da6262",
         "gray": "#000000",
-        "secondary": "#000000",
+        "secondary": "#bd10e0",
         "primary": "#f92525",
         "white": "#ffffff"
     },

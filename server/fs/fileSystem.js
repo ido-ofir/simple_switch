@@ -109,7 +109,7 @@ module.exports = {
       })
     };
 
-    function reafFile(key, filePath, resolve){
+    function readFile(key, filePath, resolve){
       var files = [], extracted, modified = false, fileName = path.basename(filePath);
       walker = klaw(filePath);
       walker.on('data', item => {
@@ -117,7 +117,7 @@ module.exports = {
           fs.readFile(item.path, (err, data)=>{
 
             extracted = JSON.parse(data.toString());
-            modified = fileName.indexOf('default') !== 0;
+            modified = fileName.indexOf('modified') > -1;
 
             return resolve({ key, modified: modified, data: extracted, fileName: fileName });
           });
@@ -144,7 +144,7 @@ module.exports = {
             idx = results[i].key;
             filePromises.push(
               new Promise ( (resolve, reject) => {
-                reafFile(idx, filePath, resolve);
+                readFile(idx, filePath, resolve);
               })
             )
           }
@@ -155,4 +155,54 @@ module.exports = {
       })
     });
   },
+
+  loadFile: (req, res, configPath)=>{
+    console.log('req.body => ', req.body);
+    function start(_path, resolve){
+      klaw(_path)
+        .on('readable', function () {
+          let item
+          while ((item = this.read())) {
+            // do something with the file
+            console.log('item => ', item);
+          }
+        })
+        .on('error', (err, item) => {
+          console.log(err.message)
+          console.log(item.path) // the file the error occurred on
+        })
+        .on('end', () => console.dir(items))
+    };
+    // function getFile(key, _path, resolve) {
+    //   var files = [], extracted, fileName, promises = [];
+    //   walker = klaw(_path);
+    //   walker.on('data', item => {
+    //     if (item.stats.isFile()) {
+    //       fileName = path.basename(item.path);
+    //       files.push(item.path)
+    //     }
+    //   })
+    //   .on('end', () => {
+    //     resolve({ key, files });
+    //   })
+    // };
+    //
+    // function readFile(key, filePath, resolve){
+    //   var files = [], extracted, modified = false, fileName = path.basename(filePath);
+    //   walker = klaw(filePath);
+    //   walker.on('data', item => {
+    //     if (item.stats.isFile()) {
+    //       fs.readFile(item.path, (err, data)=>{
+    //
+    //         extracted = JSON.parse(data.toString());
+    //         modified = fileName.indexOf('modified') > -1;
+    //
+    //         return resolve({ key, modified: modified, data: extracted, fileName: fileName });
+    //       });
+    //     }
+    //   });
+    // };
+
+    // start(configPath)
+  }
 }

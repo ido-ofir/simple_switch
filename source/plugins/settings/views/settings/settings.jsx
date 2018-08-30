@@ -115,7 +115,7 @@ module.exports = {
                       nested: _.map(items, (nestedItem)=>{
                         return {
                           label: nestedItem.fileName,
-                          onClick: null
+                          onClick: () => { this.handleLoadFile(nestedItem.fileName) }
                         }
                       })
                     }
@@ -125,7 +125,12 @@ module.exports = {
               }
 
             },
+            handleLoadFile(fileName){
+              console.log('fileName => ', fileName);
+              let { activeTab } = this.state;
+              core.plugins.Settings.run('loadFile', { fileName, dir: activeTab.key });
 
+            },
             setTabData({ key, label }, config){
                 let { tabs } = this.state;
                 if (config) {
