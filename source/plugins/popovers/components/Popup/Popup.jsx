@@ -21,12 +21,14 @@ module.exports = {
                 return {
                     open: false,
                     title: core.translate('noTitle', 'No Title'),
-                    body: ( 
+                    body: (
                         <div>{core.translate('noContent', 'No Content')}</div>
                     ),
                     bodyStyle: {},
-                    btnTitle: core.translate('ok','Ok'), 
+                    btnTitle: core.translate('ok','Ok'),
                     btnFunc: ()=>{console.log('No action')},
+                    showButtons: true,
+                    buttons: []
                 };
             },
 
@@ -46,25 +48,25 @@ module.exports = {
                     return
                 }
 
-                let {title, body, bodyStyle, btnTitle, btnFunc } = popupData;
+                let {title, body, bodyStyle, btnTitle, btnFunc, showButtons, buttons, modalStyle } = popupData;
 
-                this.setState({ title, body, bodyStyle, btnTitle, btnFunc });
+                this.setState({ title, body, bodyStyle, btnTitle, btnFunc, showButtons, buttons , modalStyle });
                 this.setState({ open: true });
             },
 
             handleClose() {
-                popupHandler.clearData();  
+                popupHandler.clearData();
                 this.setState({ open: false });
             },
 
             okFunc(data){
                 let { btnFunc } = this.state;
-                
+
                 btnFunc(data);
             },
 
             styles(s, isDisabled) {
-                let {bodyStyle} = this.state;
+                let {bodyStyle, btnTitle} = this.state;
                 let styles = {
                     root: {
                         minWidth: 500,
@@ -89,7 +91,6 @@ module.exports = {
                         minHeight: 30,
                         maxHeight: 30,
                         width: 72,
-                        marginRight: 10,
                         color: core.theme('colors.subHeader'),
                         pedding: 0,
                         fontSize: 12,
@@ -98,46 +99,50 @@ module.exports = {
 
                     buttonsCont: {
                         display: 'flex',
-                        justifyContent: 'flex-end',
+                        justifyContent: 'space-between',
                         alignItems: 'center',
                         // margin: 20
                         position: 'absolute',
                         bottom: '15px',
                         right: '15px',
+                        left: '15px',
                     },
-                    popHeader: { 
-                        padding: '0 15px', 
+                    popHeader: {
+                        padding: '0 15px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        height: 40,  
+                        height: 40,
                         background: core.theme('colors.primary')
                     }
 
                 }
                 return(styles[s]);
             },
-            
+
             renderButtons(popup){
-                let { btnTitle } = this.state;
+                let { btnTitle, showButtons, buttons } = this.state;
                 return (
                     <div style={this.styles('buttonsCont')} >
                         <Button onClick={ this.handleClose } style={this.styles('cancelButton')} color="secondary">
                             { core.translate('Cancel') }
                         </Button>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+
+                        { (buttons) ? buttons : null }
                         {
                             (!btnTitle) ? null :
                             <Button onClick={ ()=>{ this.okFunc(popup.data) } } style={this.styles('okButton', popup.disable)} disabled={popup.disable} autoFocus>
                                 { btnTitle }
                             </Button>
                         }
+                        </div>
                     </div>
                 );
             },
 
             render() {
-                let {title, body } = this.state;
-
+                let {title, body , buttons, modalStyle} = this.state;
                 return core.bind(['plugins', 'popovers', 'popup'], (popup)=>{
 
                     return (
@@ -145,10 +150,10 @@ module.exports = {
                             open={this.state.open || false}
                             onClose={this.handleClose}
                             maxWidth={false}
-                            PaperProps={{ square: true, style: { borderRadius: 2, height: 360 } }}
+                            PaperProps={{ square: true, style: { borderRadius: 2, height: 360, ...modalStyle } }}
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description">
-                           <DialogTitle  
+                           <DialogTitle
                                 disableTypography={ true }
                                 style={ this.styles('popHeader') } id="alert-dialog-title">
                                 <Typography style={{ fontWeight: 500, fontSize: 13, color: core.theme('colors.white'), textTransform: 'uppercase', margin: 0, fontWeight: 600 }} >
@@ -169,7 +174,7 @@ module.exports = {
 
                 });
 
-              
+
             }
         };
     }

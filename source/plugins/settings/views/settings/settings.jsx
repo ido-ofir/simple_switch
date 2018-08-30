@@ -2,7 +2,7 @@
 import {
   Typography, AppBar, Toolbar, IconButton,
   Paper, Tabs, Tab, Icon, Menu, Divider,
-  MenuItem, MenuList, Popper
+  MenuItem, MenuList, Popper, Button
 } from '@material-ui/core';
 
 import brace from 'brace';
@@ -21,9 +21,9 @@ module.exports = {
       config: ['config'],
       fileMenu: ['fileMenu'],
     },
-    dependencies: ['SimpleSwitch.NestedMenu'],
+    dependencies: ['SimpleSwitch.NestedMenu', 'Settings.SavePopup'],
 
-    get(NestedMenu) {
+    get(NestedMenu, SavePopup) {
 
         var core = this;
 
@@ -40,17 +40,11 @@ module.exports = {
 
                 };
             },
-            componentWillMount() {
-              // core.plugins.Settings.getInitialFiles();
-              //   core.tree.set(['plugins', 'theme'], config.theme);
-              //   core.plugins.Settings.set(['config'], config)
-              // });
-            },
 
             componentDidMount() {
                 this.isUnmounted = false;
                 if (this.props.config) this.setTabData(this.state.activeTab, this.props.config)
-                if (this.props.fileMenu) this.setMenu(nextProps.fileMenu);
+                if (this.props.fileMenu) this.setMenu(this.props.fileMenu, this.state.activeTab);
 
             },
 
@@ -63,7 +57,7 @@ module.exports = {
                   this.setTabData(this.state.activeTab, nextProps.config)
                 }
                 if (nextProps.fileMenu && (!_.isEqual(nextProps.fileMenu, this.props.fileMenu))) {
-                  this.setMenu(nextProps.fileMenu)
+                  this.setMenu(nextProps.fileMenu, this.state.activeTab)
                 }
             },
 
@@ -73,6 +67,7 @@ module.exports = {
                     error: null,
                     anchorEl: null,
                     menuAnchorEl: null,
+                    fileNameError: true,
                     tabValue: 0,
                     activeTab: { key: 'theme', label: 'theme' },
                     tabs: [{
@@ -91,7 +86,7 @@ module.exports = {
                       label: core.translate('Save'),
                     },{
                       divider: false,
-                      onClick: null,
+                      onClick: this.openSavePopup,
                       label: core.translate('Save as')+'...',
                     },{
                       divider: true
@@ -109,9 +104,8 @@ module.exports = {
                 return <Tab key={ i } label={ tab.label } style={{ minHeight: 40, maxHeight: 40, height: 40 }}/>
             },
 
-            setMenu(fileMenu){
-              let { menuList, activeTab } = this.state;
-
+            setMenu(fileMenu, activeTab){
+              let { menuList } = this.state;
               if (fileMenu) {
                 let items = fileMenu[activeTab.label];
                 let newMenuList = _.map(menuList, (item)=>{
@@ -146,10 +140,6 @@ module.exports = {
                 }
             },
 
-            handleConfigChange(){
-
-            },
-
             getTabContent({ key, label }){
                 let { activeTab } = this.state;
                 let { data, ui } = activeTab;
@@ -159,12 +149,55 @@ module.exports = {
 
             handleChange(event, tabValue) {
                 this.setState({ tabValue });
-                this.setTabData(this.state.tabs[tabValue], this.props.config)
+                this.setTabData(this.state.tabs[tabValue], this.props.config);
+                this.setMenu(this.props.fileMenu, this.state.tabs[tabValue])
             },
 
             handleSave(){
               let { activeTab } = this.state;
               core.plugins.Settings.run('saveSettings', activeTab)
+            },
+
+            handleSaveAs(){
+              let { fileNameToSave } = this.state;
+              let fname = fileNameToSave && fileNameToSave.length ? fileNameToSave.trim() : null;
+              if (fname) {
+                fname = fname.replace(' ', '_');
+
+              } else {
+                let notify = {
+                    title: 'File Name Error ',
+                    text: 'Invalid file name',
+                    alertKind: 'error'
+                }
+                core.emit('notify',notify);
+                return;
+              }
+            },
+
+            handleFileName(fileName){
+              this.setState({ fileNameToSave: fileName })
+            },
+
+            openSavePopup(){
+              core.plugins.popovers.openPopup({
+                  title: core.translate('Save new file'),
+                  body: <SavePopup handleFileName={ this.handleFileName } />,
+                  modalStyle: { height: 200 },
+                  bodyStyle: { minWidth: 400, minHeight: 'unset', padding: '0px 22px' },
+                  buttons:[
+                    <Button key={ 'set' } onClick={ this.handleSaveAs } style={{ ...styles.button  }} >
+                      { core.translate('Save file and set') }
+                    </Button>,
+                    <Button key={ 'save' } onClick={ this.handleSaveAs } style={{ ...styles.button  }} >
+                      { core.translate('Save file') }
+                    </Button>
+                  ],
+                  okButton: {
+                      btnTitle: null,
+                      btnFunc: null
+                  }
+              });
             },
 
             handleLoad(){
@@ -193,15 +226,7 @@ module.exports = {
                                     _.map(tabs, this.renderTab)
                                 }
                             </Tabs>
-                            <NestedMenu list={ menuList }/>
-                            {/*
-                          <IconButton
-                                  style={{ height: 40, width: 40 }}
-                                  size={ 'small' }
-                                  onClick={ this.openSaveMenu }>
-                            <Icon style={{ cursor: 'pointer', marginRight: 5 }} >{ core.icons('more') }</Icon>
-                          </IconButton>
-                        */}
+                            <NestedMenu list={ menuList } />
                         </AppBar>
 
                         <div style={ styles.tabContent }>
@@ -209,37 +234,6 @@ module.exports = {
                                 this.getTabContent(tabs[tabValue])
                             }
                         </div>
-                        {/*
-                        <Menu
-                          MenuListProps={{ style: { width: 220, borderRadius: 0 }, dense: true }}
-                          anchorEl={anchorEl}
-                          style={{ borderRadius: 0 }}
-                          open={ Boolean(anchorEl) }
-                          onClose={ this.closeSaveMenu } >
-
-                          <MenuItem style={ styles.menuItem } onClick={ this.handleSave }>  {  core.translate('Save')+' '+activeTab.label }</MenuItem>
-                          <MenuItem style={ styles.menuItem } onClick={this.closeSaveMenu}>  {  core.translate('Save as') }</MenuItem>
-
-                          <Divider style={{ margin: '5px 0' }} />
-
-                          <MenuItem style={ styles.menuItem } onClick={this.handleLoad } onMouseEnter={ this.openInnerMenu } onMouseLeave={ this.closeInnerMenu }>
-                          {  core.translate('Load') }
-                            <Icon style={{ position: 'absolute', right: 5, color: core.theme('colors.dark') }}>{ core.icons('arrow_right') }</Icon>
-                            <Popper
-                                  onMouseLeave={ this.closeInnerMenu }
-                                  anchorEl={menuAnchorEl}
-                                  open={ Boolean(menuAnchorEl) }
-                                  style={{ zIndex: 1301 }}
-                                  placement={ 'left-start' }
-                                  onClose={ this.closeInnerMenu }>
-
-                                  { this.renderInnerMenu(activeTab.label, fileMenu) }
-
-                            </Popper>
-                          </MenuItem>
-
-                        </Menu>
-                      */}
 
                     </div>
                 )
@@ -261,11 +255,13 @@ let styles = {
     display: 'flex',
     justifyContent: 'center'
   },
-  menuItem: {
-    height: 'auto',
-    padding: '5px 5px 5px 24px',
-    fontSize: '12px',
-    height: '20px',
+  button: {
+    minHeight: 30,
+    maxHeight: 30,
+    width: 'auto',
+    pedding: 0,
+    fontSize: 12,
+    borderRadius: 2
   }
 }
                       {/* <AceEditor
