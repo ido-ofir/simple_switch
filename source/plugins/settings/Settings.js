@@ -3,8 +3,8 @@ module.exports = {
     tree: require('./tree.js'),
     actions: [
       require('./actions/getConfiguration'),
-      require('./actions/saveFile'),
-      require('./actions/loadFile'),
+      require('./actions/saveSettings'),
+      require('./actions/loadSettings'),
     ],
     modules: [
 

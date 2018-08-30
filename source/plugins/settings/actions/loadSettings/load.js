@@ -21,7 +21,7 @@ module.exports = {
 
         return (data, promise) => {
           var config = {};
-          core.request.post('/loadFile').then( ({ response, results, error }) => {
+          core.request.post('/loadSettings').then( ({ response, results, error }) => {
 
             if (error && error.data) {
               let notify = {

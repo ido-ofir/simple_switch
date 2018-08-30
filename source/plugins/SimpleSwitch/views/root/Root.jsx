@@ -62,7 +62,7 @@ module.exports = {
 
             getLanguage(){
                 core.plugins.SimpleSwitch.run('getLanguage').then(()=>{
-                      
+
                     this.setState({start:true});
 
                   }).catch( ()=>{
@@ -72,9 +72,9 @@ module.exports = {
 
             getDataExample(){
                 core.plugins.SimpleSwitch.run('getDataEx').then((modifyData)=>{
-                   console.log('modifyData--> ',modifyData);
+                   // console.log('modifyData--> ',modifyData);
                   }).catch( ()=>{
-                   console.log('2--> ',2);                    
+                   // console.log('2--> ',2);                    
                 });
             },
 

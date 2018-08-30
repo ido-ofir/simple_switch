@@ -17,11 +17,11 @@ app.post('/getConfigFile', (req, res) => {
   res.send({ config, results: [] });
 });
 
-app.post('/saveFile', (req, res) => {
+app.post('/saveSettings', (req, res) => {
   fsTools.save(req, res, configPath);
 });
 
-app.post('/loadFile', (req, res) => {
+app.post('/loadSettings', (req, res) => {
   fsTools.load(res, configPath);
 });
 
