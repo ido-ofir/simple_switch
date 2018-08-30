@@ -28,6 +28,7 @@ module.exports = {
         close: 'close',
         navigatePrevious: 'keyboard_arrow_left',
         navigateNext: 'keyboard_arrow_right',
+        arrow_right: 'arrow_right',
         collapseClose: 'keyboard_arrow_down',
         collapseOpen: 'keyboard_arrow_up',
         dropDown: 'arrow_drop_down',

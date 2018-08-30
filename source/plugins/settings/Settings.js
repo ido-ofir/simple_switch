@@ -6,13 +6,16 @@ module.exports = {
       require('./actions/saveSettings'),
       require('./actions/loadSettings'),
     ],
+    
     modules: [
 
     ],
+
     components: [
         require('./components/ColorBox'),
         require('./components/ColorPicker'),
     ],
+
     views: [
         require('./views/settings'),
         require('./views/ThemeEditor'),

@@ -30,7 +30,7 @@ module.exports = {
     //   Directory: req.body.dir
     // });
 
-    let jsonFile = `${configPath}/${req.body.dir}/modified_${req.body.fileName}.json`;
+    let jsonFile = `${configPath}/${req.body.dir}/modified.json`;
 
     fs.writeFile(jsonFile, req.body.text, encoding, (err) => {
         if (err) {
@@ -98,7 +98,7 @@ module.exports = {
 
             extracted = JSON.parse(data.toString());
             modified = fileName.indexOf('default') !== 0;
-            
+
             return resolve({ key, modified: modified, data: extracted, fileName: fileName });
           });
         }

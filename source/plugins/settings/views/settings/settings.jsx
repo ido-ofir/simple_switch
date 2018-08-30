@@ -21,9 +21,9 @@ module.exports = {
       config: ['config'],
       fileMenu: ['fileMenu'],
     },
-    dependencies: [],
+    dependencies: ['SimpleSwitch.NestedMenu'],
 
-    get() {
+    get(NestedMenu) {
 
         var core = this;
 
@@ -50,6 +50,8 @@ module.exports = {
             componentDidMount() {
                 this.isUnmounted = false;
                 if (this.props.config) this.setTabData(this.state.activeTab, this.props.config)
+                if (this.props.fileMenu) this.setMenu(nextProps.fileMenu);
+
             },
 
             componentWillUnmount() {
@@ -59,6 +61,9 @@ module.exports = {
             componentWillReceiveProps(nextProps) {
                 if (nextProps.config && (!_.isEqual(nextProps.config, this.props.config))) {
                   this.setTabData(this.state.activeTab, nextProps.config)
+                }
+                if (nextProps.fileMenu && (!_.isEqual(nextProps.fileMenu, this.props.fileMenu))) {
+                  this.setMenu(nextProps.fileMenu)
                 }
             },
 
@@ -79,6 +84,23 @@ module.exports = {
                         label: 'icons',
                         key: 'icons',
                         data: null
+                    }],
+                    menuList: [{
+                      divider: false,
+                      onClick: this.handleSave,
+                      label: core.translate('Save'),
+                    },{
+                      divider: false,
+                      onClick: null,
+                      label: core.translate('Save as')+'...',
+                    },{
+                      divider: true
+                    },{
+                      divider: false,
+                      onClick: null,
+                      label: core.translate('Load file'),
+                      nested: true
+
                     }]
                 };
             },
@@ -87,8 +109,30 @@ module.exports = {
                 return <Tab key={ i } label={ tab.label } style={{ minHeight: 40, maxHeight: 40, height: 40 }}/>
             },
 
-            setTabData({ key, label }, config){
+            setMenu(fileMenu){
+              let { menuList, activeTab } = this.state;
 
+              if (fileMenu) {
+                let items = fileMenu[activeTab.label];
+                let newMenuList = _.map(menuList, (item)=>{
+                  if (item.nested) {
+                    return {
+                      ...item,
+                      nested: _.map(items, (nestedItem)=>{
+                        return {
+                          label: nestedItem.fileName,
+                          onClick: null
+                        }
+                      })
+                    }
+                  } else return item
+                });
+                this.setState({ menuList: newMenuList })
+              }
+
+            },
+
+            setTabData({ key, label }, config){
                 let { tabs } = this.state;
                 if (config) {
                     let activeTab = null;
@@ -98,7 +142,7 @@ module.exports = {
                             activeTab = tabs[i];
                         }
                     }
-                    this.setState({ tabs, activeTab })
+                    this.setState({ tabs, activeTab });
                 }
             },
 
@@ -127,45 +171,10 @@ module.exports = {
               core.plugins.Settings.run('loadSettings')
             },
 
-            openSaveMenu(e){
-              this.setState({ anchorEl: e.currentTarget })
-            },
-
-            closeSaveMenu(e){
-              this.setState({ anchorEl: null })
-            },
-
-            openInnerMenu(e){
-              this.setState({ menuAnchorEl: e.currentTarget })
-            },
-            closeInnerMenu(e){
-              this.setState({ menuAnchorEl: null })
-            },
-
-            renderInnerMenu(tabLabel, fileMenu){
-              if (!fileMenu || !tabLabel) return null;
-              let files = fileMenu[tabLabel];
-              return (
-                <Paper style={{ width: 220 }}>
-                {
-                  _.map(files, (file, idx)=>{
-                    return (<MenuItem key={ idx } style={ styles.menuItem } onClick={ this.closeMenus }>  {  file.fileName }</MenuItem>)
-                  })
-                }
-                {/*
-                  <MenuItem style={ styles.menuItem } onClick={ this.handleSave }>  {  core.translate('Save')+' '+tabLabel }</MenuItem>
-                  <MenuItem style={ styles.menuItem } onClick={this.closeSaveMenu}>  {  core.translate('Save as') }</MenuItem>
-                */}
-                </Paper>
-              )
-            },
-            closeMenus(){
-              this.closeSaveMenu();
-              this.closeInnerMenu();
-            },
             render() {
+
                 let { config, fileMenu } = this.props;
-                let { tabValue, anchorEl, tabs, activeTab, menuAnchorEl } = this.state;
+                let { tabValue, anchorEl, tabs, activeTab, menuAnchorEl, menuList } = this.state;
                 return (
 
                     <div id={'root.settings'} style={{ height: '100%', width: '100%', display: 'flex',  flexDirection: 'column' }}>
@@ -184,14 +193,15 @@ module.exports = {
                                     _.map(tabs, this.renderTab)
                                 }
                             </Tabs>
-
-
+                            <NestedMenu list={ menuList }/>
+                            {/*
                           <IconButton
                                   style={{ height: 40, width: 40 }}
                                   size={ 'small' }
                                   onClick={ this.openSaveMenu }>
                             <Icon style={{ cursor: 'pointer', marginRight: 5 }} >{ core.icons('more') }</Icon>
                           </IconButton>
+                        */}
                         </AppBar>
 
                         <div style={ styles.tabContent }>
@@ -199,9 +209,11 @@ module.exports = {
                                 this.getTabContent(tabs[tabValue])
                             }
                         </div>
+                        {/*
                         <Menu
-                          MenuListProps={{ style: { width: 220 }, dense: true }}
+                          MenuListProps={{ style: { width: 220, borderRadius: 0 }, dense: true }}
                           anchorEl={anchorEl}
+                          style={{ borderRadius: 0 }}
                           open={ Boolean(anchorEl) }
                           onClose={ this.closeSaveMenu } >
 
@@ -212,12 +224,13 @@ module.exports = {
 
                           <MenuItem style={ styles.menuItem } onClick={this.handleLoad } onMouseEnter={ this.openInnerMenu } onMouseLeave={ this.closeInnerMenu }>
                           {  core.translate('Load') }
+                            <Icon style={{ position: 'absolute', right: 5, color: core.theme('colors.dark') }}>{ core.icons('arrow_right') }</Icon>
                             <Popper
                                   onMouseLeave={ this.closeInnerMenu }
                                   anchorEl={menuAnchorEl}
                                   open={ Boolean(menuAnchorEl) }
                                   style={{ zIndex: 1301 }}
-                                  placement={ 'left-end' }
+                                  placement={ 'left-start' }
                                   onClose={ this.closeInnerMenu }>
 
                                   { this.renderInnerMenu(activeTab.label, fileMenu) }
@@ -226,6 +239,7 @@ module.exports = {
                           </MenuItem>
 
                         </Menu>
+                      */}
 
                     </div>
                 )

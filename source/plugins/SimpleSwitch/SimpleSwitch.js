@@ -22,7 +22,8 @@ module.exports = {
         require('./components/IconPopover'),
         require('./components/Loader'),
         require('./components/Nav'),
-        require('./components/NoResults')
+        require('./components/NoResults'),
+        require('./components/NestedMenu')
     ],
     views: [
         require('./views/login'),
