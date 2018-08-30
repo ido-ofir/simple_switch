@@ -10,11 +10,40 @@ app.use('/', express.static(path.resolve(__dirname, '../')));
 
 var fsTools = require('./fs/fileSystem.js');
 var config = require('../source/plugins/settings/config/config');
-var configPath = 'source/plugins/settings/config/';
+var configPath;// = 'source/plugins/settings/config/';
+// pass -cp to node server command
+var args = {};
+for (var i = 0; i < process.argv.length; i++) {
+  if (process.argv[i].indexOf('-') === 0) {
+    args[process.argv[i]] = process.argv[i + 1] || true;
+  }
+}
 
+var configPath = args['-cp'] || args['--config-path'];
+var helpArgs = args['-h'] || args['--help'];
+// else configPath = 'source/plugins/settings/config/';
 
-app.post('/getConfigFile', (req, res) => {
-  res.send({ config, results: [] });
+// app.post('/getConfigFile', (req, res) => {
+//   res.send({ config, results: [] });
+// });
+
+function help() {
+  console.log(`
+Node Server:
+
+--help, -h                          This help doc.
+
+--config-path, -cp                  configuration folder, relative to 'root' folder,
+                                    exapmle: source/path/to/config.
+                                    this app usage: source/plugins/settings/config/
+    `);
+  process.exit();
+};
+
+if (helpArgs) help()
+
+app.post('/saveFile', (req, res) => {
+  fsTools.saveFile(req, res, configPath);
 });
 
 app.post('/saveSettings', (req, res) => {
@@ -25,6 +54,15 @@ app.post('/loadSettings', (req, res) => {
   fsTools.load(res, configPath);
 });
 
+app.post('/loadFile', (req, res) => {
+  fsTools.load(res, configPath);
+});
+
 app.listen(4000, ()=> {
+  if (configPath) {
+    // console.info(`Config Path > ${configPath}`);
     console.log('4000')
+  } else {
+    help()
+  }
 })

@@ -18,34 +18,54 @@ const logger = winston.createLogger({
   ]
 });
 
+/** winston logger usage:
+// logger.log({
+//   level: 'info',
+//   Name: req.body.fileName,
+//   Body: req.body.text,
+//   Directory: req.body.dir
+// });
+
+**/
+
 var encoding = "utf8";
 var walker, walkerOptions;
 
 module.exports = {
   save: (req, res, configPath) => {
-    // logger.log({
-    //   level: 'info',
-    //   Name: req.body.fileName,
-    //   Body: req.body.text,
-    //   Directory: req.body.dir
-    // });
 
     let jsonFile = `${configPath}/${req.body.dir}/modified.json`;
 
-    fs.writeFile(jsonFile, req.body.text, encoding, (err) => {
+    fs.writeFile(jsonFile, req.body.fileData, encoding, (err) => {
         if (err) {
           res.status(400).send(err)
           throw err;
           return;
         }
         res.status(201).send({ success: true, msg: 'The file was succesfully saved!' })
+    });
+  },
 
+  saveFile: (req, res, configPath) => {
+
+    let jsonFile = `${configPath}/${req.body.dir}/${req.body.fileName}.json`;
+
+    fs.writeFile(jsonFile, req.body.fileData, encoding, (err) => {
+        if (err) {
+          res.status(400).send(err)
+          throw err;
+          return;
+        }
+        res.status(201).send({ success: true, msg: `The file ${req.body.fileName}  was succesfully saved!` })
     });
   },
 
   load: (res, configPath) => {
     var config = {};
-
+    if (!configPath || typeof configPath == 'undefined' ) {
+      res.status(500).send({ success: false, msg: 'missing config path!' })
+      return;
+    }
     function start(_path, callback){
       var directories = [], newfiles = [], filePath, dirs;
       walker = klaw(_path);

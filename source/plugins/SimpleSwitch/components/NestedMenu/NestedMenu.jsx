@@ -66,11 +66,16 @@ module.exports = {
               this.closeInnerMenu();
             },
 
+            itemClick(item){
+              if (item.onClick) item.onClick();
+              setTimeout(this.closeMenus, 250)
+            },
+
             renderMenuItem(item, idx){
               if (!item) return null;
               if (item.divider) return ( <Divider key={ idx } style={{ margin: '5px 0' }} /> );
               if (item.nested && item.nested.length) return this.renderNestedItem(item, idx);
-              return (<MenuItem key={ idx } style={ styles.menuItem } onClick={ item.onClick }>  { item.label }</MenuItem>)
+              return (<MenuItem key={ idx } style={ styles.menuItem } onClick={ () => { this.itemClick(item) } }>  { item.label }</MenuItem>)
             },
 
             getPosition(){

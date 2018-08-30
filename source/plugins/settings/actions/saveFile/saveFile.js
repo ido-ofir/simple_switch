@@ -1,6 +1,6 @@
 
 module.exports = {
-    name: "saveSettings",
+    name: "saveFile",
     dependencies: [],
     schema: [{
         key: 'name',
@@ -12,21 +12,28 @@ module.exports = {
 
         var core = this;
 
-        return ({ data, label, key }, promise) => {
-          var parsed = JSON.stringify(data, null, 4);
-          core.request.post('/saveSettings', { fileName: label, text: parsed, dir: key }).then( ({ response, results, error }) => {
+        return (data, promise) => {
+          let { fileName, fileData, dir, set } = data;
+          var parsed = JSON.stringify(fileData, null, 4);
+
+          core.request.post('/saveFile', {
+            fileName: fileName,
+            fileData: parsed,
+            dir: dir
+          }).then( ({ response, results, error }) => {
               if (results.success) {
                 let notify = {
-                    title: core.translate(`${label} saved`),
-                    text: results.msg,
-                    alertKind: 'success'
+                    title: results.msg,
+                    text: core.translate(`${fileName} saved`),
+                    alertKind: 'info'
                 }
-                core.emit('notify',notify);
-
-                core.plugins.Settings.set(['config', label], data);
-                core.tree.set(['plugins', key], data);
-                core.tree.commit();
-
+                core.emit('notify', notify);
+                if (set) core.plugins.Settings.run('saveSettings', data).then((results)=>{
+                  promise.resolve(results.success);
+                });
+                else {
+                  promise.resolve(results.success);
+                }
               }
           });
         };

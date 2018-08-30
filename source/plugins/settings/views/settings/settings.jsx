@@ -101,7 +101,7 @@ module.exports = {
             },
 
             renderTab(tab, i){
-                return <Tab key={ i } label={ tab.label } style={{ minHeight: 40, maxHeight: 40, height: 40 }}/>
+                return (<Tab key={ i } label={ tab.label } style={{ minHeight: 40, maxHeight: 40, height: 40 }}/>);
             },
 
             setMenu(fileMenu, activeTab){
@@ -155,14 +155,29 @@ module.exports = {
 
             handleSave(){
               let { activeTab } = this.state;
-              core.plugins.Settings.run('saveSettings', activeTab)
+              let data = {
+                fileData: activeTab.data,
+                dir: activeTab.key,
+              }
+
+              core.plugins.Settings.run('saveSettings', data);
             },
 
-            handleSaveAs(){
+            handleSaveAs(set){
               let { fileNameToSave } = this.state;
+              let { activeTab } = this.state;
+
               let fname = fileNameToSave && fileNameToSave.length ? fileNameToSave.trim() : null;
               if (fname) {
-                fname = fname.replace(' ', '_');
+                fname = fname.split(' ').join('_');
+                let saveData = {
+                  fileName: fname,
+                  fileData: activeTab.data,
+                  dir: activeTab.key,
+                  set: set
+                }
+
+                core.plugins.Settings.run('saveFile', saveData).then(()=>{ core.emit('Popup.close') });
 
               } else {
                 let notify = {
@@ -186,10 +201,10 @@ module.exports = {
                   modalStyle: { height: 200 },
                   bodyStyle: { minWidth: 400, minHeight: 'unset', padding: '0px 22px' },
                   buttons:[
-                    <Button key={ 'set' } onClick={ this.handleSaveAs } style={{ ...styles.button  }} >
+                    <Button key={ 'set' } onClick={ () => { this.handleSaveAs(true) } } style={{ ...styles.button  }} >
                       { core.translate('Save file and set') }
                     </Button>,
-                    <Button key={ 'save' } onClick={ this.handleSaveAs } style={{ ...styles.button  }} >
+                    <Button key={ 'save' } onClick={ () => { this.handleSaveAs(false) } } style={{ ...styles.button  }} >
                       { core.translate('Save file') }
                     </Button>
                   ],

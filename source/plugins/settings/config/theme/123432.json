@@ -2,7 +2,7 @@
     "colors": {
         "black": "#000000",
         "dark": "#000000",
-        "gray": "#000000",
+        "gray": "#ebd8d8",
         "secondary": "#000000",
         "primary": "#f92525",
         "white": "#ffffff"
