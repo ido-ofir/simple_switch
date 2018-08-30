@@ -3,9 +3,9 @@ import { Icon, IconButton, CircularProgress } from '@material-ui/core/';
 module.exports = {
     name: "Gallery",
     description: '',
-    dependencies: ['popovers.Thumbnails', 'popovers.GalleryDots'],
+    dependencies: ['gallery.Thumbnails', 'gallery.GalleryDots', 'gallery.Arrow'],
 
-    get(Thumbnails, GalleryDots) {
+    get(Thumbnails, GalleryDots, Arrow) {
         var core = this;
         var { React, PropTypes } = core.imports;
 
@@ -15,35 +15,51 @@ module.exports = {
             },
 
             getDefaultProps(){
-                return {};
+                let defaultGallery = require('../../defaultGallery.js');
+                // let defaultGallery = [
+                //     {
+                //         id: '25091980001',
+                //         name: '',
+                //         type: 'image',
+                //         mimeType: 'png',
+                //         url: '/resources/images/placeholder-image.png',
+                //         thumbnail: '/resources/images/placeholder-image.png',
+                //         info: 'This is a empty gallery info body text.'
+                //     }
+                // ];
+
+                return {
+                    selectedId: defaultGallery[0].id,
+                    gallery: defaultGallery,
+                    flags: {
+                        selector: 'thumbnails', // '' or 'dots' or 'thumbnails'
+                        showArrows: true,
+                        showSelector: true,
+                        showCounter: true,
+                        showDownload: true,
+                        showInfo: false,
+                    },
+                };
             },
 
+            getInitialState() {
+                return {
+                    selectedId: 0,
+                    downloading: false,
+                };
+            },
+            
             componentWillReceiveProps(nextProps) {
                 this.setStateFromProps(nextProps);
             },
 
-            getInitialState() {
-                let defaultGallery = this.defaultGallery();
-                
-                return {
-                    selectedId: defaultGallery[0].id,
-                    gallery: defaultGallery,
-                    downloading: false,
-                    
-                    // selector: '', // '' or 'dots' or 'thumbnails'
-                    // selector: 'dots', // '' or 'dots' or 'thumbnails'
-                    selector: 'thumbnails', // '' or 'dots' or 'thumbnails'
-
-                    showArrows: true,
-                    showSelector: true,
-                    showCounter: true,
-                    showDownload: true,
-                    showInfo: false,
-                };
-            },
-
             componentWillMount() {
                 this.setStateFromProps(this.props);
+            },
+
+            setStateFromProps(props) {
+                let {selectedId} = props;
+                this.setState({selectedId});
             },
 
             componentDidMount() {
@@ -57,9 +73,12 @@ module.exports = {
             },
 
             styles(s) {
-                let {gallery, downloading, selector, showSelector, showArrows} = this.state;
+                let {downloading} = this.state;
+                let {gallery, flags} = this.props;
+                let {selector, showSelector} = flags;
+
                 let noThumbnails = Boolean(!showSelector || gallery.length === 1);
-                let noArrows = Boolean(!showArrows || gallery.length === 1);
+
                 let SELECTOR_HEIGHT = (selector === 'dots') ? 39
                                     : (selector === 'thumbnails') ? 150
                                     : 0;
@@ -163,7 +182,7 @@ module.exports = {
                         textShadow: `0px 0px 1px ${core.theme('colors.black')}`,
                     },
                     prevArrow: {
-                        display: (noArrows) ? 'none' : "flex",
+                        display: "flex",
                         alignItems: "center",
                         position: 'absolute',
                         left: 0,
@@ -171,7 +190,7 @@ module.exports = {
                         height: (noThumbnails) ? '100%' : `calc(100% - ${SELECTOR_HEIGHT+30}px)`,
                     },
                     nextArrow: {
-                        display: (noArrows) ? 'none' : "flex",
+                        display: "flex",
                         alignItems: "center",
                         position: 'absolute',
                         right: 0,
@@ -200,59 +219,6 @@ module.exports = {
                     },
                 }
                 return(styles[s]);
-            },
-
-            setStateFromProps(props) {
-                let {selectedId, gallery} = props;
-                let defaultGallery = this.defaultGallery();
-                let newId = (selectedId) ? selectedId
-                            : (gallery) ? gallery[0].id
-                              : defaultGallery[0].id;
-                let newGallery = (gallery) ? gallery : defaultGallery;
-
-                this.setState({selectedId: newId, gallery: newGallery});
-            },
-            
-            defaultGallery() {
-                return require('./defaultGallery.js');
-            },
-
-            keyboardKeyHandle(event) {
-
-                switch (event.keyCode) {
-                    case 27: // Esc
-                        core.emit('Lightbox.close');
-                        break;
-                    case 37: // Left Arrow
-                        this.gotoPrevImage();
-                        break;
-                    case 39: // Right Arrow
-                        this.gotoNextImage();
-                        break;
-                
-                    default:
-                        // console.log( 'event.keyCode --> ', event.keyCode );
-                        break;
-                }
-
-            },
-
-            gotoPrevImage() {
-                let {selectedId, gallery} = this.state;
-                let max = gallery.length - 1;
-                let selected_idx = this.getMediaIndex(gallery, selectedId);
-                let idx = (selected_idx === 0) ? max : selected_idx - 1;
-                
-                this.setState({selectedId: gallery[idx].id});
-            },
-
-            gotoNextImage() {
-                let {selectedId, gallery} = this.state;
-                let max = gallery.length - 1;
-                let selected_idx = this.getMediaIndex(gallery, selectedId);
-                let idx = (selected_idx === max) ? 0 : selected_idx + 1;
-                
-                this.setState({selectedId: gallery[idx].id});
             },
 
             getMediaIndex( gallery, givenID ) {
@@ -293,47 +259,66 @@ module.exports = {
                 return `${mediaName}-${core.translate(type)}-${selected_idx+1}.${imgExtention}`;
             },
 
-            mediaErrorHandler(elementID, type='image') {
-                if (document.getElementById(`${elementID}`))
-                    document.getElementById(`${elementID}`)
+            // MEDIA RENDERS
+            mediaErrorHandler(elementID, type) {
+                if (document.getElementById(elementID))
+                    document.getElementById(elementID)
                             .setAttribute('src', `/resources/images/placeholder-${type}.png`);
             },
 
+            renderImage(image, elementID) {
+                return (
+                    <img 
+                        id={ image.id} 
+                        src={ image.url } 
+                        style={ this.styles('picture') } 
+                        onError={ ()=>{ this.mediaErrorHandler(elementID, 'image') } }
+                    />
+                );
+            },
+
+            renderVideo(video, elementID) {
+                return (
+                    <video 
+                        controls 
+                        height={800} 
+                        style={ {maxHeight: '100%'} } 
+                        src={ video.url } 
+                        type={ `video/${video.mimeType}` } 
+                        onError={ ()=>{ this.mediaErrorHandler(elementID, 'video') } }
+                    />
+                );
+            },
+
+            renderAudio(audio, elementID) {
+                return (
+                    <div id={'Gallery.audioWrap'} style={ this.styles('audioWrap') }>
+                        <audio 
+                            controls 
+                            style={{width: '100%'}}
+                            src={ audio.url } 
+                            type={ `video/${audio.mimeType}` } 
+                            onError={ ()=>{ this.mediaErrorHandler(elementID, 'audio') } }
+                        />
+                    </div>
+                );
+            },
+
             renderMedia() {
-                let {gallery, selectedId} = this.state;
+                let {selectedId} = this.state;
+                let {gallery} = this.props;
 
                 let selected_idx = this.getMediaIndex(gallery, selectedId);
 
                 if( !gallery || !gallery[selected_idx] || !gallery[selected_idx].url ) return null;
 
                 let media = gallery[selected_idx];
-                let mediaURL = media.url;
-                let mediaId = media.id;
                 let mediaType = (media.type) ? media.type : 'image';
-                let elementID = `Gallery.Image.id_${mediaId}`;
+                let elementID = `Gallery.id_${media.id}`;
 
-                let mediaRender = <img id={ elementID} src={ mediaURL } style={ this.styles('picture') } onError={ ()=>{ this.mediaErrorHandler(elementID, mediaType) } }/>;
-
-                if ( media.type && media.mimeType && media.type === 'video' ) {
-                    mediaRender = <video 
-                                    controls 
-                                    height={800} 
-                                    style={ {maxHeight: '100%'} } 
-                                    src={ mediaURL } 
-                                    type={ `video/${media.mimeType}` } 
-                                    onError={ ()=>{ this.mediaErrorHandler(elementID, mediaType) } }
-                                  />;
-                } else if ( media.type && media.mimeType && media.type === 'audio' ) {
-                    mediaRender = <div id={'Gallery.audioWrap'} style={ this.styles('audioWrap') }>
-                                    <audio 
-                                        controls 
-                                        style={{width: '100%'}}
-                                        src={ mediaURL } 
-                                        type={ `video/${media.mimeType}` } 
-                                        onError={ ()=>{ this.mediaErrorHandler(elementID, mediaType) } }
-                                    />
-                                  </div>;
-                };
+                let mediaRender = ( mediaType === 'video' ) ? this.renderVideo(media, elementID):
+                                  ( mediaType === 'audio' ) ? this.renderAudio(media, elementID):
+                                                              this.renderImage(media, elementID);
 
                 return(
                     <div id={'Gallery.renderMedia'} style={ this.styles('mediaWrap') }>
@@ -342,15 +327,19 @@ module.exports = {
                 );
             },
 
+            // SELECTOR
             updateSelected(selectedId) {
                 this.setState({selectedId});
             },
             
             buildThumbnailsGallery() {
-                let {gallery,} = this.state;
+                let {gallery} = this.props;
+
                 let thumbList = [];
+
                 for (let i = 0; i < gallery.length; i++) {
                     const media = gallery[i];
+
                     thumbList.push({
                         id: media.id,
                         url: (media.thumbnail) ? media.thumbnail : media.url,
@@ -362,10 +351,13 @@ module.exports = {
             },
             
             buildDotsGallery() {
-                let {gallery,} = this.state;
+                let {gallery} = this.props;
+
                 let dotsList = [];
+
                 for (let i = 0; i < gallery.length; i++) {
                     const media = gallery[i];
+
                     dotsList.push({
                         id: media.id,
                     });
@@ -375,7 +367,9 @@ module.exports = {
             },
 
             renderSelector() {
-                let {selectedId, selector} = this.state;
+                let {selectedId} = this.state;
+                let {flags} = this.props;
+                let {selector} = flags;
                 
                 switch (selector) {
                     case 'dots':
@@ -404,32 +398,90 @@ module.exports = {
                 
             },
 
+            // ARROWS
+            keyboardKeyHandle(event) {
+
+                switch (event.keyCode) {
+                    case 27: // Esc
+                        core.emit('Lightbox.close');
+                        break;
+                    case 37: // Left Arrow
+                        this.gotoPrevImage();
+                        break;
+                    case 39: // Right Arrow
+                        this.gotoNextImage();
+                        break;
+                
+                    default:
+                        // console.log( 'event.keyCode --> ', event.keyCode );
+                        break;
+                }
+
+            },
+
+            gotoPrevImage() {
+                let {selectedId} = this.state;
+                let {gallery} = this.props;
+
+                let max = gallery.length - 1;
+                let selected_idx = this.getMediaIndex(gallery, selectedId);
+                let idx = (selected_idx === 0) ? max : selected_idx - 1;
+                
+                this.setState({selectedId: gallery[idx].id});
+            },
+
+            gotoNextImage() {
+                let {selectedId} = this.state;
+                let {gallery} = this.props;
+
+                let max = gallery.length - 1;
+                let selected_idx = this.getMediaIndex(gallery, selectedId);
+                let idx = (selected_idx === max) ? 0 : selected_idx + 1;
+                
+                this.setState({selectedId: gallery[idx].id});
+            },
+
             renderPrevPicture() {
-                let title = core.translate('Previous picture');
+                let {gallery, flags} = this.props;
+                let {selector,showArrows, showSelector} = flags;
+                
+                if (!showArrows || gallery.length === 1) return null;
+                
+                let noThumbnails = Boolean(!showSelector || gallery.length === 1);
+                let SELECTOR_HEIGHT = (selector === 'dots') ? 39
+                                    : (selector === 'thumbnails') ? 150
+                                    : 0;
+
+                let arrowHeight = (noThumbnails) ? '100%' : `calc(100% - ${SELECTOR_HEIGHT+30}px)`;
 
                 return (
-                    <div id={'Gallery.prev'} style={ this.styles('prevArrow')}>
-                        <IconButton id={'Gallery.buttonPrev'} style={ this.styles('buttonStyle')} onClick={ this.gotoPrevImage }>
-                            <Icon key={ 'navigatePreviousPicture' } title={ title } style={ this.styles('iconStyle')}>{ core.icons('navigatePrevious') }</Icon>
-                        </IconButton>
-                    </div>
+                    <Arrow direction={'prev'} label={core.translate('Previous Item')} action={this.gotoPrevImage} style={{root:{left:0, height:arrowHeight}}}/>
                 );
             },
 
             renderNextPicture() {
-                let title = core.translate('Next picture');
+                let {gallery, flags} = this.props;
+                let {selector,showArrows, showSelector} = flags;
+                
+                if (!showArrows || gallery.length === 1) return null;
+
+                let noThumbnails = Boolean(!showSelector || gallery.length === 1);
+                let SELECTOR_HEIGHT = (selector === 'dots') ? 39
+                                    : (selector === 'thumbnails') ? 150
+                                    : 0;
+
+                let arrowHeight = (noThumbnails) ? '100%' : `calc(100% - ${SELECTOR_HEIGHT+30}px)`;
 
                 return (
-                    <div id={'Gallery.next'} style={ this.styles('nextArrow')}>
-                        <IconButton id={'Gallery.buttonNext'} style={ this.styles('buttonStyle')} onClick={ this.gotoNextImage }>
-                            <Icon key={ 'navigateNextPicture' } title={ title } style={ this.styles('iconStyle')}>{ core.icons('navigateNext') }</Icon>
-                        </IconButton>
-                    </div>
+                    <Arrow direction={'next'} label={core.translate('Next Item')} action={this.gotoNextImage} style={{root:{right:0, height:arrowHeight}}}/>
                 );
             },
 
+            // ACTIONS
             renderDownload() {
-                let {gallery, selectedId, downloading, showDownload} = this.state;
+                let {selectedId, downloading} = this.state;
+                let {gallery, flags} = this.props;
+                let {showDownload} = flags;
 
                 let title = core.translate('Download this image');
 
@@ -489,7 +541,8 @@ module.exports = {
             },
 
             renderInfo() {
-                let {showInfo} = this.state;
+                let {flags} = this.props;
+                let {showInfo} = flags;
 
                 if (!showInfo) return null;
 
@@ -509,7 +562,9 @@ module.exports = {
             },
 
             renderCounter() {
-                let {gallery, selectedId, showCounter} = this.state;
+                let {selectedId} = this.state;
+                let {gallery, flags} = this.props;
+                let {showCounter} = flags;
 
                 if ( !showCounter || !gallery || !gallery.length) return null;
 
@@ -524,7 +579,7 @@ module.exports = {
             },
 
             renderActionButtons() {
-                let {showCounter, showDownload, showInfo} = this.state;
+                let {showCounter, showDownload, showInfo} = this.props.flags;
 
                 if (!showCounter && !showDownload && !showInfo ) return null;
 
@@ -538,8 +593,8 @@ module.exports = {
             },
 
             render() {
+                let {gallery} = this.props;
 
-                let {gallery} = this.state;
                 if(!gallery || _.isEmpty(gallery)) return null;
 
                 return (

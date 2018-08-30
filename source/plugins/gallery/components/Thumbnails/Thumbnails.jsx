@@ -1,5 +1,3 @@
-import { Icon, IconButton, CircularProgress } from '@material-ui/core/';
-
 module.exports = {
     name: "Thumbnails",
     description: '',
@@ -106,7 +104,8 @@ module.exports = {
             },
 
             thumbErrorHandler(elementID, type='image') {
-                document.getElementById(`${elementID}`)
+                if (document.getElementById(`${elementID}`))
+                    document.getElementById(`${elementID}`)
                         .setAttribute('src', `/resources/images/placeholder-${type}.png`);
             },
 
