@@ -26,6 +26,8 @@ module.exports = {
         event: 'event_note',
         person: 'person',
         close: 'close',
+        navigateUp: 'keyboard_arrow_up',
+        navigateDown: 'keyboard_arrow_down',
         navigatePrevious: 'keyboard_arrow_left',
         navigateNext: 'keyboard_arrow_right',
         arrow_right: 'arrow_right',

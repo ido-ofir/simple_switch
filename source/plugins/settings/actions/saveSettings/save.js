@@ -12,20 +12,24 @@ module.exports = {
 
         var core = this;
 
-        return ({ data, label, key }, promise) => {
-          var parsed = JSON.stringify(data, null, 4);
-          core.request.post('/saveSettings', { fileName: label, text: parsed, dir: key }).then( ({ response, results, error }) => {
+        return (data, promise) => {
+          let { fileData, dir } = data;
+
+          var parsed = JSON.stringify(fileData, null, 4);
+          core.request.post('/saveSettings', { fileData: parsed, dir: dir }).then( ({ response, results, error }) => {
               if (results.success) {
+
                 let notify = {
-                    title: core.translate(`${label} saved`),
+                    title: core.translate(`${dir} saved`),
                     text: results.msg,
                     alertKind: 'success'
                 }
                 core.emit('notify',notify);
 
-                core.plugins.Settings.set(['config', label], data);
-                core.tree.set(['plugins', key], data);
+                core.plugins.Settings.set(['config', dir], fileData);
+                core.tree.set(['plugins', dir], fileData);
                 core.tree.commit();
+                promise.resolve(results.success);
 
               }
           });

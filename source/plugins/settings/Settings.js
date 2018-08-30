@@ -2,11 +2,12 @@ module.exports = {
     name: 'Settings',
     tree: require('./tree.js'),
     actions: [
-      require('./actions/getConfiguration'),
       require('./actions/saveSettings'),
       require('./actions/loadSettings'),
+      require('./actions/saveFile'),
+      require('./actions/loadFile'),
     ],
-    
+
     modules: [
 
     ],
@@ -14,6 +15,7 @@ module.exports = {
     components: [
         require('./components/ColorBox'),
         require('./components/ColorPicker'),
+        require('./components/SavePopup'),
     ],
 
     views: [

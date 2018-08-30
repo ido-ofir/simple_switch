@@ -1,3 +1,8 @@
 {
-    "save":"save"
+    "save":"save",
+
+    "error": "error",
+    "success": "check_circle",
+    "info": "info",
+    "warning": "warning"
 }

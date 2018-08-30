@@ -66,11 +66,16 @@ module.exports = {
               this.closeInnerMenu();
             },
 
+            itemClick(item){
+              if (item.onClick) item.onClick();
+              setTimeout(this.closeMenus, 250)
+            },
+
             renderMenuItem(item, idx){
               if (!item) return null;
               if (item.divider) return ( <Divider key={ idx } style={{ margin: '5px 0' }} /> );
               if (item.nested && item.nested.length) return this.renderNestedItem(item, idx);
-              return (<MenuItem key={ idx } style={ styles.menuItem } onClick={ item.onClick }>  { item.label }</MenuItem>)
+              return (<MenuItem key={ idx } style={ styles.menuItem } onClick={ () => { this.itemClick(item) } }>  { item.label }</MenuItem>)
             },
 
             getPosition(){
@@ -78,7 +83,7 @@ module.exports = {
               var windowWidth = window.innerWidth;
               var defaultPos = 'right-start';
               if (!nestingItem) return;
-              
+
               var pos = nestingItem.getBoundingClientRect()
               if (pos.right > (windowWidth/2)) {
                 defaultPos = 'left-start'
@@ -111,7 +116,7 @@ module.exports = {
             renderInnerMenu(items){
               if (!items || !items.length) return null;
               return (
-                <Paper elevation={ 5 } style={{ width: 220 }}>
+                <Paper elevation={ 5 } style={{ width: 220, padding: '8px 0' }}>
                 {
                   _.map(items, this.renderMenuItem)
                 }

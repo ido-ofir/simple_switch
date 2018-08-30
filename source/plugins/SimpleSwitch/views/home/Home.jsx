@@ -17,7 +17,11 @@ module.exports = {
         initLoading: ['initLoading']
     },
 
+<<<<<<< HEAD
     dependencies: ['SimpleSwitch.Examples','SimpleSwitch.NoResults'],
+=======
+    dependencies: ['SimpleSwitch.NoResults','SimpleSwitch.Loader', 'gallery.Gallery'],
+>>>>>>> master
 
     get(Examples,NoResults) {
 
