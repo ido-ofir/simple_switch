@@ -4,8 +4,8 @@ module.exports = {
     actions: [],
     modules: [],
     components: [
-        require('./components/Gallery'),
         require('./components/Arrow'),
+        require('./components/Gallery'),
         require('./components/GalleryDots'),
         require('./components/Thumbnails'),
     ],

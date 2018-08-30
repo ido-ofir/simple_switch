@@ -3,9 +3,9 @@ import { Icon, IconButton } from '@material-ui/core/';
 module.exports = {
     name: "Arrow",
     description: '',
-    dependencies: ['gallery.Thumbnails', 'gallery.GalleryDots'],
+    dependencies: [],
 
-    get(Thumbnails, GalleryDots) {
+    get() {
         var core = this;
         var { React, PropTypes } = core.imports;
 

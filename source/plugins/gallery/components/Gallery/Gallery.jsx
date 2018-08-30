@@ -455,7 +455,7 @@ module.exports = {
                 let arrowHeight = (noThumbnails) ? '100%' : `calc(100% - ${SELECTOR_HEIGHT+30}px)`;
 
                 return (
-                    <Arrow direction={'prev'} label={core.translate('Previous Item')} action={this.gotoNextImage} style={{root:{left:0, height:arrowHeight}}}/>
+                    <Arrow direction={'prev'} label={core.translate('Previous Item')} action={this.gotoPrevImage} style={{root:{left:0, height:arrowHeight}}}/>
                 );
             },
 

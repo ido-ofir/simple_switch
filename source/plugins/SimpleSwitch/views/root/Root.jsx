@@ -134,16 +134,17 @@ module.exports = {
                 let authToken = localStorage.getItem('authToken');
                 let currentUser = (localStorage.currentUser) ? JSON.parse(localStorage.getItem('currentUser')) : {};
 
-                if(activeView == 'login' || !isLoggedIn) {
-                    return(
-                        <div style={ this.styles('root') }>
-                            <Login onLoggedIn={ this.handleLoggedIn }/>
-                            <Notify />
-                            <Popup />
-                        </div>
-                    );
-                }
-                else return(
+                // if(activeView == 'login' || !isLoggedIn) {
+                //     return(
+                //         <div style={ this.styles('root') }>
+                //             <Login onLoggedIn={ this.handleLoggedIn }/>
+                //             <Notify />
+                //             <Popup />
+                //         </div>
+                //     );
+                // }
+                // else return(
+                return (
                     <div style={ this.styles('root') }>
                         <Lightbox />
                         <AppBar user={ currentUser } />
