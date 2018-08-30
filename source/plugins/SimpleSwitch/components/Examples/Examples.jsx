@@ -2,8 +2,8 @@ import { Typography } from '@material-ui/core';
 
 module.exports = {
     name: 'Examples',
-    dependencies: ['SimpleSwitch.NoResults','SimpleSwitch.Loader', 'popovers.Gallery'],
-    get(NoResults) {
+    dependencies: ['SimpleSwitch.NoResults','SimpleSwitch.Loader', 'gallery.Gallery'],
+    get(NoResults   ) {
 
         var core = this;
         var { React, PropTypes } = core.imports;
