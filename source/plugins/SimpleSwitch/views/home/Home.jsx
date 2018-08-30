@@ -17,7 +17,7 @@ module.exports = {
         initLoading: ['initLoading']
     },
 
-    dependencies: ['SimpleSwitch.NoResults','SimpleSwitch.Loader', 'popovers.Gallery'],
+    dependencies: ['SimpleSwitch.NoResults','SimpleSwitch.Loader', 'gallery.Gallery'],
 
     get(NoResults, Loader, Gallery) {
 

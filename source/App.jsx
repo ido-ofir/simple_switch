@@ -21,6 +21,7 @@ core.plugin([
     require('./plugins/translate'),
     require('./plugins/request'),
     require('./plugins/SimpleSwitch'),
+    require('./plugins/gallery'),
     require('./plugins/router'),
     require('./plugins/popovers'),
 ])
