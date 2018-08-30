@@ -75,6 +75,7 @@ module.exports = {
         filter_1: 'filter_8',
         filter_1: 'filter_9',
         school: 'school',
+        highlight_off: 'highlight_off',
 
 
         // social icons - material don't have ones, so we use FontAwesome

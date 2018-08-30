@@ -20,12 +20,13 @@ module.exports = {
         return {
             propsTypes: {
                 text: PropTypes.string,
+                icon: PropTypes.string,
             },
 
             getDefaultProps(){
                 return {
-                    mainText: core.translate('No Results'),
-                    text: null,
+                    icon: 'highlight_off',
+                    text: 'No Results',
                     size: 3
                 };
             },
@@ -46,14 +47,14 @@ module.exports = {
             },
 
             renderNoResults(){
-                let { size, mainText } = this.props;
+                let { size, icon } = this.props;
                 let fontSize = size *6;
                 
     
                 return(
-                    <Typography style={{fontSize:fontSize ,color:core.theme('colors.gray4')}}>
-                        { mainText }
-                    </Typography>
+                    <Icon style={{ fontSize:fontSize, color:core.theme('components.noResults') }}>
+                        {icon}
+                    </Icon>
                 )
             },
 
@@ -62,9 +63,9 @@ module.exports = {
 
                 if(!text) return
                 let fontSize = size *3;
-
+                
                 return(
-                    <Typography style={{ fontSize:fontSize, color:core.theme('colors.gray6') }}>
+                    <Typography style={{ fontSize:fontSize, color:core.theme('components.noResults') }}>
                         { text }
                     </Typography>
                 )

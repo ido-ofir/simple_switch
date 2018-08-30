@@ -23,7 +23,8 @@ module.exports = {
         require('./components/Loader'),
         require('./components/Nav'),
         require('./components/NoResults'),
-        require('./components/NestedMenu')
+        require('./components/NestedMenu'),
+        require('./components/Examples'),
     ],
     views: [
         require('./views/login'),

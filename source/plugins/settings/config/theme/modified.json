@@ -14,9 +14,12 @@
     },
     "transparent": {
         "black_40": "#00000066",
-        "black_75": "#000000bf",
+        "black_75": "#000000bf", 
         "black_80": "#000000cc",
         "white_45": "#ffffff73",
         "white_85": "#ffffffd9"
+    },
+    "components":{
+        "noResults": "#808080"
     }
 }
