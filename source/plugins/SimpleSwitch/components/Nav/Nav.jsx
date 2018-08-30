@@ -92,6 +92,12 @@ module.exports = {
                               renderTopBorder: true,
                               view: 'settings'
                             },
+                            {
+                                label: core.translate('CSS'),
+                                icon: core.icons('school'),
+                                renderTopBorder: true,
+                                view: 'cssexamples'
+                            },
                         ];
 
                     case 'bottom':
